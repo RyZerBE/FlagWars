@@ -102,6 +102,17 @@ class BlockPlaceListener implements Listener {
                         $form->sendToPlayer($player);
                         break;
                     }
+                    case "spectator_position": {
+                        $settings->set("SpectatorLocation", $positionString);
+                        $settings->save();
+
+                        $player->sendMessage("§8» §r§7Spectator location set. " . str_replace(":", ", ", $positionString));
+
+                        for ($n = 1; $n <= 20; $n++) {
+                            $player->getLevel()->addParticle(new DustParticle($position->add(0, $n / 10, 0), mt_rand(), mt_rand(), mt_rand(), mt_rand()));
+                        }
+                        break;
+                    }
                 }
             }
         }

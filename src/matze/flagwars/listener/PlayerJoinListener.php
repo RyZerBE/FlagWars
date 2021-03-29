@@ -37,8 +37,7 @@ class PlayerJoinListener implements Listener {
                 break;
             }
             case $game::STATE_INGAME: {
-                $rdmPlayer = $game->getPlayers()[array_rand($game->getPlayers())];
-                $player->teleport($rdmPlayer);
+                $player->teleport($game->getMap()->getSpectatorLocation());
                 break;
             }
             case $game::STATE_RESTART: {

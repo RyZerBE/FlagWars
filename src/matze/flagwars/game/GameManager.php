@@ -8,6 +8,7 @@ use matze\flagwars\utils\AsyncExecuter;
 use matze\flagwars\utils\FileUtils;
 use matze\flagwars\utils\InstantiableTrait;
 use matze\flagwars\utils\Settings;
+use matze\flagwars\utils\TaskExecuter;
 use pocketmine\Player;
 use pocketmine\Server;
 
@@ -36,7 +37,7 @@ class GameManager {
     private $teams = [];
 
     /**
-     * @return array
+     * @return Team[]
      */
     public function getTeams(): array {
         return $this->teams;
@@ -55,6 +56,22 @@ class GameManager {
      */
     public function registerTeam(Team $team): void {
         $this->teams[$team->getName()] = $team;
+    }
+
+    /**
+     * @return Team|null
+     */
+    public function findTeam(): ?Team {
+        $result = null;
+        $teams = [];
+        foreach ($this->getTeams() as $teamName => $team) {
+            if($team->isFull()) continue;
+            $teams[$team->getName()] = count($team->getPlayers());
+        }
+        ksort($teams);
+        $teams = array_flip($teams);
+        $team = array_shift($teams);
+        return $this->getTeam($team);
     }
 
     /** @var array  */
@@ -124,7 +141,7 @@ class GameManager {
     }
 
     /**
-     * @return array
+     * @return Player[]
      */
     public function getPlayers(): array {
         $players = [];
@@ -133,6 +150,16 @@ class GameManager {
             if(!is_null($player)) $players[] = $player;
         }
         return $players;
+    }
+
+    /**
+     * @return Player[]
+     */
+    public function getSpectators(): array {
+        return array_filter(Server::getInstance()->getOnlinePlayers(),
+            function (Player $player): bool {
+                return FlagWars::getPlayer($player)->isSpectator();
+            });
     }
 
     /** @var bool  */
@@ -196,6 +223,42 @@ class GameManager {
         switch ($state) {
             case self::STATE_COUNTDOWN: {
                 $this->setCountdown(Settings::$waiting_countdown);
+                break;
+            }
+            case self::STATE_INGAME: {
+                $map = $this->getMap();
+                foreach ($this->getPlayers() as $player) {
+                    $fwPlayer = FlagWars::getPlayer($player);
+
+                    if(is_null($fwPlayer->getTeam())) {
+                        $fwPlayer->setTeam($this->findTeam());
+                    }
+                    if(is_null($fwPlayer->getTeam())) {
+                        $player->sendMessage("§c§oSomething went wrong. Team must not be null.");
+                        Server::getInstance()->dispatchCommand($player, "hub");
+                        continue;
+                    }
+                    $team = $fwPlayer->getTeam();
+                    $fwPlayer->reset();
+                    $player->setGamemode(0);
+                    $player->teleport($team->getSpawnLocation());
+                    $player->setImmobile();
+                }
+                foreach ($this->getSpectators() as $spectator) {
+                    $spectator->teleport($map->getSpectatorLocation());
+                }
+
+                TaskExecuter::submitTask(40, function (int $tick): void {
+                    foreach (GameManager::getInstance()->getPlayers() as $player) {
+                        $player->setImmobile(false);
+                    }
+                });
+
+                //todo: setup map
+                break;
+            }
+            case self::STATE_RESTART: {
+                $this->setCountdown(15);
                 break;
             }
         }
@@ -310,6 +373,10 @@ class GameManager {
             $server->loadLevel($map);
             $map = $server->getLevelByName($map);
             $this->setMap($this->getMapByName($map->getFolderName()));
+
+            foreach ($server->getOnlinePlayers() as $player) {
+                $player->sendMessage("Map: " . $this->getMap()->getName());
+            }
         });
     }
 

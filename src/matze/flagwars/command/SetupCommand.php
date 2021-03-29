@@ -69,7 +69,8 @@ class SetupCommand extends Command {
             0 => ItemUtils::addItemTag(Item::get(Item::BANNER)->setCustomName("§r§aFlaggen Position \n§7[§8Place§7]"), "flag_position", "map_setup"),
             1 => ItemUtils::addItemTag(Item::get(Item::WOOL, mt_rand(0, 15))->setCustomName("§r§aTeam Spawn Positions \n§7[§8Place§7]"), "team_spawn_positions", "map_setup"),
             2 => ItemUtils::addItemTag(Item::get(Item::MOB_SPAWNER)->setCustomName("§r§aSpawner Positions \n§7[§8Place§7]"), "spawner_positions", "map_setup"),
-            3 => ItemUtils::addItemTag(Item::get(Item::CHEST)->setCustomName("§r§aShop Positions \n§7[§8Place§7]"), "shop_positions", "map_setup")
+            3 => ItemUtils::addItemTag(Item::get(Item::CHEST)->setCustomName("§r§aShop Positions \n§7[§8Place§7]"), "shop_positions", "map_setup"),
+            4 => ItemUtils::addItemTag(Item::get(Item::STAINED_GLASS, mt_rand(0, 15))->setCustomName("§r§aSpectator Position \n§7[§8Place§7]"), "spectator_position", "map_setup"),
         ]);
     }
 }

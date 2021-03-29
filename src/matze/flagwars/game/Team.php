@@ -3,6 +3,7 @@
 namespace matze\flagwars\game;
 
 use matze\flagwars\utils\Settings;
+use pocketmine\level\Location;
 use pocketmine\Player;
 
 class Team {
@@ -83,5 +84,13 @@ class Team {
      */
     public function isFull(): bool {
         return count($this->getPlayers()) >= Settings::$players_per_team;
+    }
+
+    /**
+     * @return Location
+     */
+    public function getSpawnLocation(): Location {
+        if(is_null(GameManager::getInstance()->getMap())) return new Location();
+        return GameManager::getInstance()->getMap()->getTeamSpawnLocation($this);
     }
 }

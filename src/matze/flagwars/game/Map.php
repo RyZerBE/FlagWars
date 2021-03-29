@@ -91,10 +91,15 @@ class Map {
      * @return Location
      */
     public function getFlagLocation(): Location {
-        if(!isset($this->cache["Flag"])) $this->cache["Flag"] = [];
-        if(!isset($this->cache["Flag"]["SpawnLocation"])) {
-            $this->cache["Flag"]["SpawnLocation"] = LocationUtils::fromString($this->getSettings()->get("FlagLocation"));
-        }
-        return $this->cache["Flag"]["SpawnLocation"];
+        if(!isset($this->cache["FlagLocation"])) $this->cache["FlagLocation"] = LocationUtils::fromString($this->getSettings()->get("FlagLocation"));
+        return $this->cache["FlagLocation"];
+    }
+
+    /**
+     * @return Location
+     */
+    public function getSpectatorLocation(): Location {
+        if(!isset($this->cache["SpectatorLocation"])) $this->cache["Flag"] = LocationUtils::fromString($this->getSettings()->get("SpectatorLocation"));
+        return $this->cache["SpectatorLocation"];
     }
 }

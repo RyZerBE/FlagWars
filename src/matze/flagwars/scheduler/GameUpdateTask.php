@@ -50,6 +50,9 @@ class GameUpdateTask extends Task {
                     $player->sendTip("Time until start: " . $game->getCountdown() . str_repeat(".", $this->points));//todo: popup
                 }
                 $game->tickCountdown();
+                if($game->getCountdown() === 5) {
+                    $game->loadMap();
+                }
                 if($game->getCountdown() <= 0) {
                     $game->setState($game::STATE_INGAME);
                 }

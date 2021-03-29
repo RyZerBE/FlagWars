@@ -8,7 +8,6 @@ use matze\flagwars\game\GameManager;
 use matze\flagwars\utils\ItemUtils;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerInteractEvent;
-use pocketmine\level\sound\ClickSound;
 
 class PlayerInteractListener implements Listener {
 
@@ -35,10 +34,6 @@ class PlayerInteractListener implements Listener {
                     break;
                 }
                 case "map_selection": {
-                    if($game->getCountdown() <= 5) {
-                        $player->getLevel()->addSound(new ClickSound($player), [$player]);
-                        break;
-                    }
                     Forms::getSelectMapForm()->open($player);
                     break;
                 }
