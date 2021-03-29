@@ -2,9 +2,15 @@
 
 namespace matze\flagwars;
 
+use matze\flagwars\command\SetupCommand;
 use matze\flagwars\game\GameManager;
+use matze\flagwars\listener\BlockBreakListener;
+use matze\flagwars\listener\BlockPlaceListener;
+use matze\flagwars\listener\PlayerInteractListener;
 use matze\flagwars\listener\PlayerJoinListener;
 use matze\flagwars\listener\PlayerLoginListener;
+use matze\flagwars\listener\PlayerQuitListener;
+use matze\flagwars\scheduler\GameUpdateTask;
 use matze\flagwars\utils\Settings;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
@@ -23,6 +29,9 @@ class Loader extends PluginBase {
         GameManager::getInstance();
 
         $this->initListener();
+        $this->initCommands();
+
+        $this->getScheduler()->scheduleRepeatingTask(new GameUpdateTask(), 20);
     }
 
     /**
@@ -35,10 +44,23 @@ class Loader extends PluginBase {
     private function initListener(): void {
         $listeners = [
             new PlayerJoinListener(),
-            new PlayerLoginListener()
+            new PlayerLoginListener(),
+            new PlayerQuitListener(),
+            new PlayerInteractListener(),
+            new BlockPlaceListener(),
+            new BlockBreakListener()
         ];
         foreach ($listeners as $listener) {
             Server::getInstance()->getPluginManager()->registerEvents($listener, $this);
+        }
+    }
+
+    private function initCommands(): void {
+        $commands = [
+            new SetupCommand("setup")
+        ];
+        foreach ($commands as $command) {
+            Server::getInstance()->getCommandMap()->register("FlagWars", $command);
         }
     }
 }

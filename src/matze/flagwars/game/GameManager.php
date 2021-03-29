@@ -2,10 +2,12 @@
 
 namespace matze\flagwars\game;
 
+use matze\flagwars\FlagWars;
 use matze\flagwars\game\kits\Kit;
+use matze\flagwars\utils\AsyncExecuter;
+use matze\flagwars\utils\FileUtils;
 use matze\flagwars\utils\InstantiableTrait;
 use matze\flagwars\utils\Settings;
-use onebone\economyapi\event\Issuer;
 use pocketmine\Player;
 use pocketmine\Server;
 
@@ -19,6 +21,40 @@ class GameManager {
         foreach ($kits as $kit) {
             $this->registerKit($kit);
         }
+
+        foreach (Settings::$map_pool as $map) {
+            $this->registerMap(new Map($map));
+        }
+
+        for ($int = 1; $int <= Settings::$total_teams; $int++) {
+            $team = Settings::$teams[$int];
+            $this->registerTeam(new Team($team["Name"], $team["Color"]));
+        }
+    }
+
+    /** @var array  */
+    private $teams = [];
+
+    /**
+     * @return array
+     */
+    public function getTeams(): array {
+        return $this->teams;
+    }
+
+    /**
+     * @param string $team
+     * @return Team|null
+     */
+    public function getTeam(string $team): ?Team {
+        return $this->teams[$team] ?? null;
+    }
+
+    /**
+     * @param Team $team
+     */
+    public function registerTeam(Team $team): void {
+        $this->teams[$team->getName()] = $team;
     }
 
     /** @var array  */
@@ -36,7 +72,7 @@ class GameManager {
      * @return Kit|null
      */
     public function getKit(string $kit): ?Kit {
-        return isset($this->kits[$kit]) ? $this->kits[$kit] : null;
+        return $this->kits[$kit] ?? null;
     }
 
     /**
@@ -215,5 +251,82 @@ class GameManager {
             return;
         }
         $this->countdown--;
+    }
+
+    /** @var array  */
+    private $map_pool = [];
+
+    /**
+     * @return array
+     */
+    public function getMapPool(): array {
+        return $this->map_pool;
+    }
+
+    /**
+     * @param Map $map
+     */
+    public function registerMap(Map $map): void {
+        $this->map_pool[$map->getName()] = $map;
+    }
+
+    /**
+     * @param string $map
+     * @return Map|null
+     */
+    public function getMapByName(string $map): ?Map {
+        return $this->map_pool[$map] ?? null;
+    }
+
+    public function loadMap(): void {
+        //I hate those things....
+        $maps = [];
+        foreach ($this->getMapPool() as $mapName => $map) {
+            $maps[] = $mapName;
+        }
+        $mapVotes = [];
+        foreach ($this->getPlayers() as $player) {
+            $fwPlayer = FlagWars::getPlayer($player);
+            if(!in_array($fwPlayer->getMapVote(), $maps)) continue;
+            if(!isset($mapVotes[$fwPlayer->getMapVote()])) $mapVotes[$fwPlayer->getMapVote()] = 0;
+            $mapVotes[$fwPlayer->getMapVote()]++;
+        }
+        krsort($mapVotes);
+        $maps = [];
+        $index = 1;
+        foreach ($mapVotes as $map => $votes) {
+            if(!isset($maps[$index])) $maps[$index] = [];
+            $maps[$index][] = $map;
+        }
+        $topMaps = $maps[1];
+        $map = $topMaps[array_rand($topMaps)];
+        AsyncExecuter::submitAsyncTask(function () use ($map): void {
+            if(is_dir("worlds/" . $map)) {
+                FileUtils::delete("worlds/" . $map);
+            }
+            @mkdir("worlds/" . $map);
+            FileUtils::copy(Settings::MAPS_PATH . $map, "worlds/" . $map);
+        }, function (Server $server, $result) use ($map): void {
+            $server->loadLevel($map);
+            $map = $server->getLevelByName($map);
+            $this->setMap($this->getMapByName($map->getFolderName()));
+        });
+    }
+
+    /** @var Map|null */
+    private $map = null;
+
+    /**
+     * @return Map|null
+     */
+    public function getMap(): ?Map {
+        return $this->map;
+    }
+
+    /**
+     * @param Map|null $map
+     */
+    public function setMap(?Map $map): void {
+        $this->map = $map;
     }
 }

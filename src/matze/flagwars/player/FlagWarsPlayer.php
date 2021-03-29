@@ -5,6 +5,7 @@ namespace matze\flagwars\player;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
 use matze\flagwars\game\kits\Kit;
+use matze\flagwars\game\Team;
 use matze\flagwars\provider\FlagWarsProvider;
 use matze\flagwars\utils\AsyncExecuter;
 use matze\flagwars\utils\ItemUtils;
@@ -155,5 +156,39 @@ class FlagWarsPlayer {
      */
     public function setUnlockedKits(array $unlockedKits): void {
         $this->unlockedKits = $unlockedKits;
+    }
+
+    /** @var Team|null */
+    private $team = null;
+
+    /**
+     * @return Team|null
+     */
+    public function getTeam(): ?Team {
+        return $this->team;
+    }
+
+    /**
+     * @param Team|null $team
+     */
+    public function setTeam(?Team $team): void {
+        $this->team = $team;
+    }
+
+    /** @var string  */
+    private $mapVote = "N/A";
+
+    /**
+     * @return string
+     */
+    public function getMapVote(): string {
+        return $this->mapVote;
+    }
+
+    /**
+     * @param string $mapVote
+     */
+    public function setMapVote(string $mapVote): void {
+        $this->mapVote = $mapVote;
     }
 }

@@ -28,7 +28,7 @@ class PlayerQuitListener implements Listener {
                     break;
                 }
                 foreach (Server::getInstance()->getOnlinePlayers() as $onlinePlayer) {
-                    $onlinePlayer->sendMessage($player->getName() . " left. (" . count($game->getPlayers()) - 1 . "/" . $game->getMaxPlayers() . ")");//todo: message
+                    $onlinePlayer->sendMessage($player->getName() . " left. (" . (count($game->getPlayers()) - 1) . "/" . $game->getMaxPlayers() . ")");//todo: message
                 }
                 break;
             }
@@ -43,6 +43,7 @@ class PlayerQuitListener implements Listener {
                 break;
             }
         }
+        $game->removePlayer($player);
         FlagWars::removePlayer($player);
     }
 }

@@ -29,10 +29,10 @@ class PlayerJoinListener implements Listener {
                 if(count($game->getPlayers()) >= $game->getMaxPlayers()) {
                     return;
                 }
-
+                $game->addPlayer($player);
                 $fwPlayer->getLobbyItems();
                 foreach (Server::getInstance()->getOnlinePlayers() as $onlinePlayer) {
-                    $onlinePlayer->sendMessage($player->getName() . " joined. (" . count($game->getPlayers()) - 1 . "/" . $game->getMaxPlayers() . ")");//todo: message
+                    $onlinePlayer->sendMessage($player->getName() . " joined. (" . count($game->getPlayers()) . "/" . $game->getMaxPlayers() . ")");//todo: message
                 }
                 break;
             }

@@ -3,6 +3,7 @@
 namespace matze\flagwars\scheduler;
 
 use matze\flagwars\game\GameManager;
+use matze\flagwars\utils\Settings;
 use pocketmine\scheduler\Task;
 use pocketmine\Server;
 
@@ -20,10 +21,13 @@ class GameUpdateTask extends Task {
             $this->points = 0;
         }
         $game = GameManager::getInstance();
-        $missingPlayers = 1;
+        $missingPlayers = Settings::$players_for_start - count($game->getPlayers());
         switch ($game->getState()) {
             case $game::STATE_WAITING: {
-                Server::getInstance()->broadcastTip("§r§aWarten auf §6" . $missingPlayers . " Spieler§a" . str_repeat(".", $this->points));
+                foreach (Server::getInstance()->getOnlinePlayers() as $player) {
+                    if($player->isCreative()) continue;//For setup
+                    $player->sendTip("Missing players: " . $missingPlayers . str_repeat(".", $this->points));//todo: popup
+                }
                 if($missingPlayers > 0 && !$game->isForceStart()) {
                     break;
                 }
@@ -42,7 +46,9 @@ class GameUpdateTask extends Task {
                         break;
                     }
                 }
-                Server::getInstance()->broadcastTip("§r§aRunde startet in §6" . $game->getCountdown() . " Sekunde" . ($game->getCountdown() === 1 ? "" : "n") . "§a" . str_repeat(".", $this->points));
+                foreach (Server::getInstance()->getOnlinePlayers() as $player) {
+                    $player->sendTip("Time until start: " . $game->getCountdown() . str_repeat(".", $this->points));//todo: popup
+                }
                 $game->tickCountdown();
                 if($game->getCountdown() <= 0) {
                     $game->setState($game::STATE_INGAME);
@@ -54,7 +60,9 @@ class GameUpdateTask extends Task {
                 break;
             }
             case $game::STATE_RESTART: {
-                Server::getInstance()->broadcastTip("§r§aServer startet in §6" . $game->getCountdown() . " Sekunde" . ($game->getCountdown() === 1 ? "" : "n") . "§a neu" . str_repeat(".", $this->points));
+                foreach (Server::getInstance()->getOnlinePlayers() as $player) {
+                    $player->sendTip("Server will be stopped: " . $game->getCountdown() . str_repeat(".", $this->points));//todo: popup
+                }
                 $game->tickCountdown();
                 if($game->getCountdown() === 3) {
                     foreach (Server::getInstance()->getOnlinePlayers() as $player) {

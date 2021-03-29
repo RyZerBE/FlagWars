@@ -2,6 +2,7 @@
 
 namespace matze\flagwars\game;
 
+use matze\flagwars\utils\Settings;
 use pocketmine\Player;
 
 class Team {
@@ -64,5 +65,23 @@ class Team {
             return;
         }
         unset($this->players[$player]);
+    }
+
+    /**
+     * @param $player
+     * @return bool
+     */
+    public function isPlayer($player): bool {
+        if($player instanceof Player) {
+            $player = $player->getName();
+        }
+        return isset($this->players[$player]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isFull(): bool {
+        return count($this->getPlayers()) >= Settings::$players_per_team;
     }
 }
