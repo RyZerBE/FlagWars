@@ -3,15 +3,24 @@
 namespace matze\flagwars;
 
 use matze\flagwars\command\SetupCommand;
+use matze\flagwars\entity\FlagEntity;
+use matze\flagwars\entity\ShopEntity;
+use matze\flagwars\entity\SpawnerEntity;
 use matze\flagwars\game\GameManager;
 use matze\flagwars\listener\BlockBreakListener;
 use matze\flagwars\listener\BlockPlaceListener;
+use matze\flagwars\listener\EntityDamageListener;
+use matze\flagwars\listener\PlayerDeathListener;
+use matze\flagwars\listener\PlayerDropItemListener;
+use matze\flagwars\listener\PlayerExhaustListener;
 use matze\flagwars\listener\PlayerInteractListener;
 use matze\flagwars\listener\PlayerJoinListener;
 use matze\flagwars\listener\PlayerLoginListener;
+use matze\flagwars\listener\PlayerMoveListener;
 use matze\flagwars\listener\PlayerQuitListener;
 use matze\flagwars\scheduler\GameUpdateTask;
 use matze\flagwars\utils\Settings;
+use pocketmine\entity\Entity;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
 
@@ -30,8 +39,9 @@ class Loader extends PluginBase {
 
         $this->initListener();
         $this->initCommands();
+        $this->initEntities();
 
-        $this->getScheduler()->scheduleRepeatingTask(new GameUpdateTask(), 20);
+        $this->getScheduler()->scheduleRepeatingTask(new GameUpdateTask(), 1);
     }
 
     /**
@@ -48,7 +58,12 @@ class Loader extends PluginBase {
             new PlayerQuitListener(),
             new PlayerInteractListener(),
             new BlockPlaceListener(),
-            new BlockBreakListener()
+            new BlockBreakListener(),
+            new EntityDamageListener(),
+            new PlayerExhaustListener(),
+            new PlayerDeathListener(),
+            new PlayerDropItemListener(),
+            new PlayerMoveListener()
         ];
         foreach ($listeners as $listener) {
             Server::getInstance()->getPluginManager()->registerEvents($listener, $this);
@@ -61,6 +76,17 @@ class Loader extends PluginBase {
         ];
         foreach ($commands as $command) {
             Server::getInstance()->getCommandMap()->register("FlagWars", $command);
+        }
+    }
+
+    private function initEntities(): void {
+        $entities = [
+            SpawnerEntity::class,
+            ShopEntity::class,
+            FlagEntity::class
+        ];
+        foreach ($entities as $entity) {
+            Entity::registerEntity($entity, true);
         }
     }
 }

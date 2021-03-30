@@ -6,7 +6,6 @@ use jojoe77777\FormAPI\SimpleForm;
 use matze\flagwars\FlagWars;
 use matze\flagwars\forms\Form;
 use matze\flagwars\game\GameManager;
-use matze\flagwars\game\Map;
 use pocketmine\Player;
 
 class SelectMapForm extends Form {

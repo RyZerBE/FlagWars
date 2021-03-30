@@ -42,7 +42,7 @@ class Team {
     }
 
     /**
-     * @return array
+     * @return Player[]
      */
     public function getPlayers(): array {
         return $this->players;
@@ -92,5 +92,67 @@ class Team {
     public function getSpawnLocation(): Location {
         if(is_null(GameManager::getInstance()->getMap())) return new Location();
         return GameManager::getInstance()->getMap()->getTeamSpawnLocation($this);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAlive(): bool {
+        return count($this->getPlayers()) > 0;
+    }
+
+    /** @var bool  */
+    private $hasFlag = false;
+
+    /**
+     * @param bool $hasFlag
+     */
+    public function setHasFlag(bool $hasFlag): void {
+        $this->hasFlag = $hasFlag;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasFlag(): bool {
+        return $this->hasFlag;
+    }
+
+    /** @var int  */
+    private $flagsSaved = 0;
+
+    /**
+     * @return int
+     */
+    public function getFlagsSaved(): int {
+        return $this->flagsSaved;
+    }
+
+    public function addFlagsSaved(): void {
+        $this->flagsSaved++;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBlockMeta(): int {
+        switch (strtolower(str_replace(" ", "_", $this->getName()))) {
+            case "orange": return 1;
+            case "magenta": return 2;
+            case "light_blue": return 3;
+            case "yellow": return 4;
+            case "lime": return 5;
+            case "pink": return 6;
+            case "gray": return 7;
+            case "light_gray": return 8;
+            case "cyan": return 9;
+            case "purple": return 10;
+            case "blue": return 11;
+            case "brown": return 12;
+            case "green": return 13;
+            case "red": return 14;
+            case "black": return 15;
+            default: return 0;
+        }
     }
 }

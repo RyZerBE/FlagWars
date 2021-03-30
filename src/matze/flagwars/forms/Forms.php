@@ -2,6 +2,7 @@
 
 namespace matze\flagwars\forms;
 
+use matze\flagwars\forms\types\SelectKitForm;
 use matze\flagwars\forms\types\SelectMapForm;
 use matze\flagwars\forms\types\SelectTeamForm;
 
@@ -31,5 +32,18 @@ class Forms {
             self::$selectMapForm = new SelectMapForm();
         }
         return self::$selectMapForm;
+    }
+
+    /** @var  */
+    private static $selectKitForm = null;
+
+    /**
+     * @return Form
+     */
+    public static function getSelectKitForm(): Form {
+        if(is_null(self::$selectKitForm)) {
+            self::$selectKitForm = new SelectKitForm();
+        }
+        return self::$selectKitForm;
     }
 }

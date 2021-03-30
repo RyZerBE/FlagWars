@@ -68,16 +68,12 @@ class Map {
     /**
      * @return array
      */
-    public function getSpawnerLocations(): array {
-        $spawner = [];
-        foreach ($this->getSettings()->get("Spawner") as $location => $data) {
-            $spawner[] = LocationUtils::fromString($location);
-        }
-        return $spawner;
+    public function getSpawner(): array {
+        return $this->getSettings()->get("Spawner");
     }
 
     /**
-     * @return array
+     * @return Location[]
      */
     public function getShopLocations(): array {
         $spawner = [];
@@ -90,9 +86,16 @@ class Map {
     /**
      * @return Location
      */
-    public function getFlagLocation(): Location {
-        if(!isset($this->cache["FlagLocation"])) $this->cache["FlagLocation"] = LocationUtils::fromString($this->getSettings()->get("FlagLocation"));
-        return $this->cache["FlagLocation"];
+    public function getRandomFlagLocation(): Location {
+        if(!isset($this->cache["FlagLocations"])) {
+            $locations = [];
+            foreach ($this->getSettings()->get("FlagLocations") as $location) {
+                $locations[] = $location;
+            }
+            $this->cache["FlagLocations"] = $locations;
+        }
+        $location = $this->cache["FlagLocations"][array_rand($this->cache["FlagLocations"])];
+        return LocationUtils::fromString($location);
     }
 
     /**

@@ -40,7 +40,9 @@ class BlockPlaceListener implements Listener {
 
                 switch (ItemUtils::getItemTag($item, "map_setup")) {
                     case "flag_position": {
-                        $settings->set("FlagLocation", $positionString);
+                        $flags = $settings->get("FlagLocations", []);
+                        $flags[] = $positionString;
+                        $settings->set("FlagLocations", $flags);
                         $settings->save();
 
                         $player->sendMessage("§8» §r§7Flag location set. " . str_replace(":", ", ", $positionString));
@@ -116,5 +118,12 @@ class BlockPlaceListener implements Listener {
                 }
             }
         }
+
+        if($player->isCreative(true)) return;
+        if(!$game->isIngame()) {
+            $event->setCancelled();
+            return;
+        }
+        $game->addBlock($block);
     }
 }

@@ -4,7 +4,6 @@ namespace matze\flagwars\listener;
 
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
-use matze\flagwars\utils\Settings;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\Server;
@@ -32,7 +31,23 @@ class PlayerQuitListener implements Listener {
                 }
                 break;
             }
-            case $game::STATE_INGAME: {}
+            case $game::STATE_INGAME: {
+                if($fwPlayer->isSpectator()) {
+                    break;
+                }
+                if($fwPlayer->hasFlag()) {
+                    $fwPlayer->setHasFlag(false);
+                    $fwPlayer->getTeam()->setHasFlag(false);
+
+                    foreach (Server::getInstance()->getOnlinePlayers() as $onlinePlayer) {
+                        $onlinePlayer->sendTip("Flag lost.");
+                    }
+                }
+                foreach (Server::getInstance()->getOnlinePlayers() as $onlinePlayer) {
+                    $onlinePlayer->sendMessage($player->getName() . " left.");//todo: message
+                }
+                break;
+            }
             case $game::STATE_RESTART: {
                 if($fwPlayer->isSpectator()) {
                     break;

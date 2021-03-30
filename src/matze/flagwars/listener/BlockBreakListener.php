@@ -4,7 +4,7 @@ namespace matze\flagwars\listener;
 
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
-use matze\flagwars\utils\ItemUtils;
+use matze\flagwars\utils\Settings;
 use pocketmine\event\block\BlockBreakEvent;
 use pocketmine\event\Listener;
 
@@ -20,17 +20,18 @@ class BlockBreakListener implements Listener {
         $block = $event->getBlock();
         $item = $event->getItem();
 
-        /*
-        if(ItemUtils::hasItemTag($item, "map_setup")) {
-            $map = $game->getMapByName($player->getLevel()->getFolderName());
-            if(!is_null($map)) {
-                $settings = $map->getSettings();
-                switch (ItemUtils::getItemTag($item, "map_setup")) {
-                    case "": {
-                        break;
-                    }
-                }
-            }
-        }*/
+        if($player->isCreative(true)) return;
+        if(!$game->isIngame()) {
+            $event->setCancelled();
+            return;
+        }
+        if(in_array($block->getId(), Settings::$breakableBlocks)) {
+            return;
+        }
+        if(!$game->isBlock($block)) {
+            $event->setCancelled();
+            return;
+        }
+        $game->removeBlock($block);
     }
 }

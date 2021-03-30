@@ -31,7 +31,12 @@ class SelectTeamForm extends Form {
                 return;
             }
             $team->addPlayer($player);
+            $pTeam = $fwPlayer->getTeam();
+            if(!is_null($pTeam)) {
+                $pTeam->removePlayer($player);
+            }
             $fwPlayer->setTeam($team);
+            $fwPlayer->playSound("random.orb");
 
             $player->sendMessage("Team selected: " . $team->getColor() . $team->getName());//todo: message
         });

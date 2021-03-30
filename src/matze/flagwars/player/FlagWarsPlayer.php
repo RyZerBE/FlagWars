@@ -2,13 +2,11 @@
 
 namespace matze\flagwars\player;
 
-use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
 use matze\flagwars\game\kits\Kit;
 use matze\flagwars\game\Team;
-use matze\flagwars\provider\FlagWarsProvider;
-use matze\flagwars\utils\AsyncExecuter;
 use matze\flagwars\utils\ItemUtils;
+use pocketmine\entity\Effect;
 use pocketmine\item\Item;
 use pocketmine\network\mcpe\protocol\PlaySoundPacket;
 use pocketmine\Player;
@@ -28,6 +26,8 @@ class FlagWarsPlayer {
      */
     public function __construct(Player $player) {
         $this->player = $player;
+
+        $this->kit = GameManager::getInstance()->getKit("Sprengmeister");
     }
 
     /**
@@ -190,5 +190,23 @@ class FlagWarsPlayer {
      */
     public function setMapVote(string $mapVote): void {
         $this->mapVote = $mapVote;
+    }
+
+    /** @var bool  */
+    private $hasFlag = false;
+
+    /**
+     * @return bool
+     */
+    public function hasFlag(): bool {
+        return $this->hasFlag;
+    }
+
+    /**
+     * @param bool $hasFlag
+     */
+    public function setHasFlag(bool $hasFlag): void {
+        $this->hasFlag = $hasFlag;
+        if(!$hasFlag) $this->getPlayer()->removeEffect(Effect::SLOWNESS);
     }
 }

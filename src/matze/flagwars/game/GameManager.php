@@ -2,13 +2,27 @@
 
 namespace matze\flagwars\game;
 
+use matze\flagwars\entity\FlagEntity;
+use matze\flagwars\entity\ShopEntity;
+use matze\flagwars\entity\SpawnerEntity;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\kits\Kit;
+use matze\flagwars\game\kits\types\AthleteKit;
+use matze\flagwars\game\kits\types\BullitKit;
+use matze\flagwars\game\kits\types\CutterKit;
+use matze\flagwars\game\kits\types\DemolitionistKit;
+use matze\flagwars\game\kits\types\SpiderManKit;
+use matze\flagwars\game\kits\types\StarterKit;
+use matze\flagwars\game\kits\types\VampireKit;
 use matze\flagwars\utils\AsyncExecuter;
 use matze\flagwars\utils\FileUtils;
 use matze\flagwars\utils\InstantiableTrait;
+use matze\flagwars\utils\LocationUtils;
 use matze\flagwars\utils\Settings;
 use matze\flagwars\utils\TaskExecuter;
+use matze\flagwars\utils\Vector3Utils;
+use pocketmine\block\Block;
+use pocketmine\entity\Entity;
 use pocketmine\Player;
 use pocketmine\Server;
 
@@ -17,7 +31,13 @@ class GameManager {
 
     public function __construct() {
         $kits = [
-
+            new SpiderManKit(),
+            new StarterKit(),
+            new CutterKit(),
+            new AthleteKit(),
+            new BullitKit(),
+            new VampireKit(),
+            new DemolitionistKit()
         ];
         foreach ($kits as $kit) {
             $this->registerKit($kit);
@@ -68,6 +88,9 @@ class GameManager {
             if($team->isFull()) continue;
             $teams[$team->getName()] = count($team->getPlayers());
         }
+        if(count($teams) <= 0) {
+            return null;
+        }
         ksort($teams);
         $teams = array_flip($teams);
         $team = array_shift($teams);
@@ -78,7 +101,7 @@ class GameManager {
     private $kits = [];
 
     /**
-     * @return array
+     * @return Kit[]
      */
     public function getKits(): array {
         return $this->kits;
@@ -123,9 +146,8 @@ class GameManager {
         if($player instanceof Player) {
             $player = $player->getName();
         }
-        if(!$this->isPlayer($player)) {
-            return;
-        }
+        if(!$this->isPlayer($player)) return;
+        foreach ($this->getTeams() as $team) $team->removePlayer($player);
         unset($this->players[array_search($player, $this->players)]);
     }
 
@@ -218,50 +240,21 @@ class GameManager {
         if($this->state === $state) {
             return;
         }
-        $this->state = $state;
-
         switch ($state) {
             case self::STATE_COUNTDOWN: {
                 $this->setCountdown(Settings::$waiting_countdown);
                 break;
             }
             case self::STATE_INGAME: {
-                $map = $this->getMap();
-                foreach ($this->getPlayers() as $player) {
-                    $fwPlayer = FlagWars::getPlayer($player);
-
-                    if(is_null($fwPlayer->getTeam())) {
-                        $fwPlayer->setTeam($this->findTeam());
-                    }
-                    if(is_null($fwPlayer->getTeam())) {
-                        $player->sendMessage("§c§oSomething went wrong. Team must not be null.");
-                        Server::getInstance()->dispatchCommand($player, "hub");
-                        continue;
-                    }
-                    $team = $fwPlayer->getTeam();
-                    $fwPlayer->reset();
-                    $player->setGamemode(0);
-                    $player->teleport($team->getSpawnLocation());
-                    $player->setImmobile();
-                }
-                foreach ($this->getSpectators() as $spectator) {
-                    $spectator->teleport($map->getSpectatorLocation());
-                }
-
-                TaskExecuter::submitTask(40, function (int $tick): void {
-                    foreach (GameManager::getInstance()->getPlayers() as $player) {
-                        $player->setImmobile(false);
-                    }
-                });
-
-                //todo: setup map
+                $this->startGame();
                 break;
             }
             case self::STATE_RESTART: {
-                $this->setCountdown(15);
+                $this->stopGame();
                 break;
             }
         }
+        $this->state = $state;
     }
 
     /**
@@ -343,15 +336,15 @@ class GameManager {
 
     public function loadMap(): void {
         //I hate those things....
+        $mapVotes = [];
         $maps = [];
         foreach ($this->getMapPool() as $mapName => $map) {
+            $mapVotes[$mapName] = 0;
             $maps[] = $mapName;
         }
-        $mapVotes = [];
         foreach ($this->getPlayers() as $player) {
             $fwPlayer = FlagWars::getPlayer($player);
             if(!in_array($fwPlayer->getMapVote(), $maps)) continue;
-            if(!isset($mapVotes[$fwPlayer->getMapVote()])) $mapVotes[$fwPlayer->getMapVote()] = 0;
             $mapVotes[$fwPlayer->getMapVote()]++;
         }
         krsort($mapVotes);
@@ -372,10 +365,11 @@ class GameManager {
         }, function (Server $server, $result) use ($map): void {
             $server->loadLevel($map);
             $map = $server->getLevelByName($map);
-            $this->setMap($this->getMapByName($map->getFolderName()));
+            $game = GameManager::getInstance();
+            $game->setMap($game->getMapByName($map->getFolderName()));
 
             foreach ($server->getOnlinePlayers() as $player) {
-                $player->sendMessage("Map: " . $this->getMap()->getName());
+                $player->sendMessage("Map: " . $game->getMap()->getName());
             }
         });
     }
@@ -395,5 +389,116 @@ class GameManager {
      */
     public function setMap(?Map $map): void {
         $this->map = $map;
+    }
+
+    public function startGame(): void {
+        $map = $this->getMap();
+        $this->setCountdown(60);
+        foreach ($this->getPlayers() as $player) {
+            $fwPlayer = FlagWars::getPlayer($player);
+
+            if(is_null($fwPlayer->getTeam())) {
+                $fwPlayer->setTeam($this->findTeam());
+            }
+            if(is_null($fwPlayer->getTeam())) {
+                $player->sendMessage("§c§oSomething went wrong. Team must not be null.");
+                Server::getInstance()->dispatchCommand($player, "hub");
+                continue;
+            }
+            $team = $fwPlayer->getTeam();
+            $team->addPlayer($player);
+            $fwPlayer->reset();
+            $player->setGamemode(0);
+            $player->teleport($team->getSpawnLocation());
+            $player->setImmobile();
+
+            $kit = $fwPlayer->getKit();
+            if(!is_null($kit)) foreach ($kit->getItems($player) as $item) $player->getInventory()->addItem($item);
+        }
+        foreach ($this->getSpectators() as $spectator) {
+            $spectator->teleport($map->getSpectatorLocation());
+        }
+
+        TaskExecuter::submitTask(40, function (int $tick): void {
+            foreach (GameManager::getInstance()->getPlayers() as $player) {
+                $player->setImmobile(false);
+            }
+        });
+
+        foreach ($map->getSpawner() as $location => $data) {
+            $location = LocationUtils::fromString($location);
+            $type = $data["Type"];
+
+            $nbt = Entity::createBaseNBT($location);
+            $nbt->setString("Type", $type);
+            $spawner = new SpawnerEntity($location->getLevel(), $nbt);
+            $spawner->spawnToAll();
+        }
+
+        foreach ($map->getShopLocations() as $location) {
+            $nbt = Entity::createBaseNBT($location);
+            $shop = new ShopEntity($location->getLevel(), $nbt);
+            $shop->spawnToAll();
+        }
+    }
+
+    public function stopGame(): void {
+        $this->setCountdown(15);
+        //todo
+    }
+
+    /** @var array  */
+    private $blocks = [];
+
+    /**
+     * @param Block $block
+     */
+    public function addBlock(Block $block): void {
+        $this->blocks[] = Vector3Utils::toString($block->floor());
+    }
+
+    /**
+     * @param Block $block
+     * @return bool
+     */
+    public function isBlock(Block $block): bool {
+        return in_array(Vector3Utils::toString($block->floor()), $this->blocks);
+    }
+
+    /**
+     * @param Block $block
+     */
+    public function removeBlock(Block $block): void {
+        if(!$this->isBlock($block)) return;
+        unset($this->blocks[array_search(Vector3Utils::toString($block->floor()), $this->blocks)]);
+    }
+
+    /** @var bool  */
+    private $flag = false;
+
+    /**
+     * @return bool
+     */
+    public function isFlag(): bool {
+        return $this->flag;
+    }
+
+    /**
+     * @param bool $flag
+     */
+    public function setFlag(bool $flag): void {
+        $this->flag = $flag;
+        if(!$flag) $this->setCountdown(60);
+    }
+
+    /**
+     * @return FlagEntity|null
+     */
+    public function getFlag(): ?FlagEntity {
+        if(!$this->isFlag()) return null;
+        foreach (Server::getInstance()->getLevelByName($this->getMap()->getName())->getEntities() as $entity) {
+            if($entity instanceof FlagEntity) return $entity;
+        }
+        return null;
     }
 }
