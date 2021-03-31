@@ -20,6 +20,7 @@ use matze\flagwars\listener\PlayerMoveListener;
 use matze\flagwars\listener\PlayerQuitListener;
 use matze\flagwars\scheduler\GameUpdateTask;
 use matze\flagwars\utils\Settings;
+use muqsit\invmenu\InvMenuHandler;
 use pocketmine\entity\Entity;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
@@ -42,6 +43,10 @@ class Loader extends PluginBase {
         $this->initEntities();
 
         $this->getScheduler()->scheduleRepeatingTask(new GameUpdateTask(), 1);
+
+        if(!InvMenuHandler::isRegistered()){
+            InvMenuHandler::register($this);
+        }
     }
 
     /**

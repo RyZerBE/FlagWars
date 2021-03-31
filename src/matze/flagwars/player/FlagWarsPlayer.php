@@ -119,12 +119,13 @@ class FlagWarsPlayer {
         $kitSelector = ItemUtils::addItemTag(Item::get(Item::ENDER_CHEST)->setCustomName("§r§aChoose Kit"), "kit_selection", "function");
         $teamSelector = ItemUtils::addItemTag(Item::get(Item::BED)->setCustomName("§r§aChoose Team"), "team_selection", "function");
         $mapSelector = ItemUtils::addItemTag(Item::get(Item::EMPTYMAP)->setCustomName("§r§aChoose Map"), "map_selection", "function");
+        $quit = ItemUtils::addItemTag(Item::get(Item::SLIME_BALL)->setCustomName("§r§cQuit Round"), "quit", "function");
 
-        $player->getInventory()->setContents([
-            0 => $kitSelector,
-            4 => $teamSelector,
-            8 => $mapSelector
-        ]);
+        if(GameManager::getInstance()->isRestarting()) {
+            $player->getInventory()->setContents([8 => $quit]);
+            return;
+        }
+        $player->getInventory()->setContents([0 => $kitSelector, 3 => $teamSelector, 5 => $mapSelector, 8 => $quit]);
     }
 
     /** @var Kit|null */

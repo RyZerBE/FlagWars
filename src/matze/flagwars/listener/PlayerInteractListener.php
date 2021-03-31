@@ -60,6 +60,10 @@ class PlayerInteractListener implements Listener {
                     Forms::getSelectMapForm()->open($player);
                     break;
                 }
+                case "quit": {
+                    //CloudBridge::getCloudProvider()->dispatchProxyCommand($player->getName(), "hub");//todo
+                    break;
+                }
             }
         }
 

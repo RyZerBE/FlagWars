@@ -41,7 +41,7 @@ class PlayerJoinListener implements Listener {
                 break;
             }
             case $game::STATE_RESTART: {
-                Server::getInstance()->dispatchCommand($player, "hub");
+                //CloudBridge::getCloudProvider()->dispatchProxyCommand($player->getName(), "hub");//todo
                 break;
             }
         }

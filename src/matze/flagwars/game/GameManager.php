@@ -240,6 +240,7 @@ class GameManager {
         if($this->state === $state) {
             return;
         }
+        $this->state = $state;
         switch ($state) {
             case self::STATE_COUNTDOWN: {
                 $this->setCountdown(Settings::$waiting_countdown);
@@ -254,7 +255,6 @@ class GameManager {
                 break;
             }
         }
-        $this->state = $state;
     }
 
     /**
@@ -444,6 +444,20 @@ class GameManager {
 
     public function stopGame(): void {
         $this->setCountdown(15);
+
+        $winner = null;
+        $winners = array_filter($this->getTeams(), function (Team $team): bool {return $team->getFlagsSaved() >= Settings::$flag_to_win;});
+        foreach ($winners as $team) $winner = $team;
+
+        foreach (Server::getInstance()->getOnlinePlayers() as $player) {
+            $fwPlayer = FlagWars::getPlayer($player);
+            $player->teleport(Settings::$waiting_lobby_location);
+            $fwPlayer->reset();
+            $fwPlayer->getLobbyItems();
+
+            $player->sendMessage("Win: " . $winner->getColor() . $winner->getName());
+            if($fwPlayer->isSpectator()) continue;
+        }
         //todo
     }
 

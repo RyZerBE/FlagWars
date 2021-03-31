@@ -3,6 +3,8 @@
 namespace matze\flagwars\utils;
 
 use pocketmine\block\Block;
+use pocketmine\item\Item;
+use pocketmine\item\ItemFactory;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat as C;
 
@@ -44,6 +46,19 @@ class Settings {
         self::$iron_upgrade_cost = $settings->get("IronSpawnerUpgradeCost");
         self::$gold_upgrade_cost = $settings->get("GoldSpawnerUpgradeCost");
         self::$flag_to_win = $settings->get("FlagsToWin");
+
+        self::$shop_contents = [
+            "Blocks" => [
+                "Item" => Item::get(Item::WOOL),
+                "Offers" => [
+                    "Wool_4" => [
+                        "Result" => ItemFactory::get(Item::WOOL, 0, 4),
+                        "Price" => ItemFactory::get(Item::BRICK),
+                        "PriceSlot" => 
+                    ]
+                ]
+            ]
+        ];
     }
 
     public static $players_per_team;
@@ -59,6 +74,7 @@ class Settings {
     public static $iron_upgrade_cost;
     public static $gold_upgrade_cost;
     public static $flag_to_win;
+    public static $shop_contents;
 
     /**
      * @var array

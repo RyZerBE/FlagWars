@@ -155,7 +155,7 @@ class GameUpdateTask extends Task {
                 $game->tickCountdown();
                 if($game->getCountdown() === 3) {
                     foreach (Server::getInstance()->getOnlinePlayers() as $player) {
-                        Server::getInstance()->dispatchCommand($player, "hub");
+                        //CloudBridge::getCloudProvider()->dispatchProxyCommand($player->getName(), "hub");//todo
                     }
                 }
                 if($game->getCountdown() === 0) {
