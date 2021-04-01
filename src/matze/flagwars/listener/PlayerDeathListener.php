@@ -5,11 +5,11 @@ namespace matze\flagwars\listener;
 use BauboLP\Core\Provider\LanguageProvider;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
+use matze\flagwars\utils\ItemUtils;
 use matze\flagwars\utils\TaskExecuter;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\Server;
-use pocketmine\utils\TextFormat;
 
 class PlayerDeathListener implements Listener {
 
@@ -33,7 +33,7 @@ class PlayerDeathListener implements Listener {
         $kit = $fwPlayer->getKit();
         if(!is_null($kit)) {
             if($kit->getItemsOnRespawn()) {
-                foreach ($kit->getItems($player) as $item) $player->getInventory()->addItem($item);
+                foreach ($kit->getItems($player) as $item) $player->getInventory()->addItem(ItemUtils::addItemTag($item, "kit_item", "kit_item"));
             }
         }
 

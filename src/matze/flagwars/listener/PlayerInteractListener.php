@@ -8,6 +8,7 @@ use matze\flagwars\entity\SpawnerEntity;
 use matze\flagwars\FlagWars;
 use matze\flagwars\forms\Forms;
 use matze\flagwars\game\GameManager;
+use matze\flagwars\provider\FlagWarsProvider;
 use matze\flagwars\utils\ItemUtils;
 use matze\flagwars\utils\Settings;
 use matze\flagwars\utils\Vector3Utils;
@@ -18,6 +19,7 @@ use pocketmine\level\sound\AnvilFallSound;
 use pocketmine\level\sound\ClickSound;
 use pocketmine\Player;
 use pocketmine\Server;
+use pocketmine\utils\TextFormat;
 
 class PlayerInteractListener implements Listener {
 
@@ -106,16 +108,16 @@ class PlayerInteractListener implements Listener {
                             });
                             $form->setTitle("§r§l§f" . $spawner->getType() . " Spawner");
                             $form->setContent("§r§fCost§7: §f" . $spawner->getUpgradeCost($spawner->getSpawnerLevel() + 1) . " " . $spawner->getType());
-                            $form->addButton("§r§7§lUPGRADE");
+                            $form->addButton(TextFormat::GREEN.TextFormat::BOLD."✔ UPGRADE");
                             $form->sendToPlayer($player);
                         } else {
                             switch ($upgrade) {
                                 case SpawnerEntity::UPGRADE_REASON_ALREADY_MAX_LEVEL: {
-                                    $player->sendTip(LanguageProvider::getMessageContainer('fw-spawner-max-level', $player->getName()));//todo: tip
+                                    $player->sendTip(LanguageProvider::getMessageContainer('fw-spawner-max-level', $player->getName()));
                                     break;
                                 }
                                 case SpawnerEntity::UPGRADE_REASON_NOT_ENOUGH_ITEMS: {
-                                    $player->sendTip(LanguageProvider::getMessageContainer('fw-not-enough-resources', $player->getName(), ["#needed" => $spawner->getUpgradeCost($spawner->getSpawnerLevel() + 1)]));//todo: tip
+                                    $player->sendTip(LanguageProvider::getMessageContainer('fw-not-enough-resources', $player->getName(), ["#needed" => $spawner->getUpgradeCost($spawner->getSpawnerLevel() + 1)]));
                                     break;
                                 }
                             }
@@ -129,6 +131,19 @@ class PlayerInteractListener implements Listener {
                 if(in_array($block->getId(), Settings::$notInteractAbleBlocks)) {
                     $event->setCancelled();
                 }
+            }
+        }else if($action === PlayerInteractEvent::RIGHT_CLICK_AIR) {
+            switch ($item->getId()) {
+                case Item::GHAST_TEAR:
+                    $player->getInventory()->removeItem(Item::get(Item::GHAST_TEAR, 0, 1));
+                    $player->knockBack($player, 0, $player->getDirectionVector()->getX(), $player->getDirectionVector()->getZ(), 1.6);
+                    break;
+                case Item::LEVER:
+                    FlagWarsProvider::createWall($player);
+                    break;
+                case Item::BLAZE_ROD:
+                    FlagWarsProvider::createSafetyPlatform($player);
+                    break;
             }
         }
     }

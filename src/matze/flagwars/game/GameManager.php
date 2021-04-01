@@ -17,6 +17,7 @@ use matze\flagwars\game\kits\types\VampireKit;
 use matze\flagwars\utils\AsyncExecuter;
 use matze\flagwars\utils\FileUtils;
 use matze\flagwars\utils\InstantiableTrait;
+use matze\flagwars\utils\ItemUtils;
 use matze\flagwars\utils\LocationUtils;
 use matze\flagwars\utils\Settings;
 use matze\flagwars\utils\TaskExecuter;
@@ -417,7 +418,7 @@ class GameManager {
             $player->setImmobile();
 
             $kit = $fwPlayer->getKit();
-            if(!is_null($kit)) foreach ($kit->getItems($player) as $item) $player->getInventory()->addItem($item);
+            if(!is_null($kit)) foreach ($kit->getItems($player) as $item) $player->getInventory()->addItem(ItemUtils::addItemTag($item, "kit_item", "kit_item"));
         }
         foreach ($this->getSpectators() as $spectator) {
             $spectator->teleport($map->getSpectatorLocation());
