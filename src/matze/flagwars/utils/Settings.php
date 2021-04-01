@@ -69,7 +69,8 @@ class Settings {
     public static $teams = [
         1 => ["Name" => "Red", "Color" => C::RED],
         2 => ["Name" => "Blue", "Color" => C::BLUE],
-        //todo: all colors
+        3 => ["Name" => "Yellow", "Color" => C::YELLOW],
+        4 => ["Name" => "Green", "Color" => C::DARK_GREEN]
     ];
 
     /**
