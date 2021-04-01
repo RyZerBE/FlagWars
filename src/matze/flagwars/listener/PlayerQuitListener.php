@@ -7,6 +7,7 @@ use matze\flagwars\game\GameManager;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\Server;
+use pocketmine\utils\TextFormat;
 
 class PlayerQuitListener implements Listener {
 
@@ -22,12 +23,13 @@ class PlayerQuitListener implements Listener {
         $event->setQuitMessage("");
         switch ($game->getState()) {
             case $game::STATE_COUNTDOWN: {}
+            case $game::STATE_RESTART:
             case $game::STATE_WAITING: {
                 if($fwPlayer->isSpectator()) {
                     break;
                 }
                 foreach (Server::getInstance()->getOnlinePlayers() as $onlinePlayer) {
-                    $onlinePlayer->sendMessage($player->getName() . " left. (" . (count($game->getPlayers()) - 1) . "/" . $game->getMaxPlayers() . ")");//todo: message
+                    $onlinePlayer->sendMessage(FlagWars::PREFIX.TextFormat::WHITE."[".TextFormat::RED."-".TextFormat::WHITE."] ".$player->getName().TextFormat::RESET.TextFormat::GRAY."(" . (count($game->getPlayers()) - 1) . "/" . $game->getMaxPlayers() . ")");//todo: message
                 }
                 break;
             }
@@ -44,16 +46,7 @@ class PlayerQuitListener implements Listener {
                     }
                 }
                 foreach (Server::getInstance()->getOnlinePlayers() as $onlinePlayer) {
-                    $onlinePlayer->sendMessage($player->getName() . " left.");//todo: message
-                }
-                break;
-            }
-            case $game::STATE_RESTART: {
-                if($fwPlayer->isSpectator()) {
-                    break;
-                }
-                foreach (Server::getInstance()->getOnlinePlayers() as $onlinePlayer) {
-                    $onlinePlayer->sendMessage($player->getName() . " left.");//todo: message
+                    $onlinePlayer->sendMessage(FlagWars::PREFIX.TextFormat::WHITE."[".TextFormat::RED."-".TextFormat::WHITE."] ".$player->getName().TextFormat::RESET.TextFormat::GRAY."(" . (count($game->getPlayers()) - 1) . "/" . $game->getMaxPlayers() . ")");//todo: message
                 }
                 break;
             }

@@ -14,10 +14,11 @@ class PlayerDropItemListener implements Listener {
      */
     public function onDrop(PlayerDropItemEvent $event): void {
         $player = $event->getPlayer();
-        $item = $event->getItem();
         $game = GameManager::getInstance();
 
         if($player->isCreative(true)) return;
+        if($game->getState() === GameManager::STATE_INGAME) return;
+
         $event->setCancelled();
     }
 }

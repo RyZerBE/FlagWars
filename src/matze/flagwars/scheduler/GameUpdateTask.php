@@ -2,6 +2,7 @@
 
 namespace matze\flagwars\scheduler;
 
+use BauboLP\Core\Provider\LanguageProvider;
 use matze\flagwars\entity\FlagEntity;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
@@ -10,8 +11,10 @@ use matze\flagwars\utils\Scoreboard;
 use matze\flagwars\utils\Settings;
 use pocketmine\entity\Entity;
 use pocketmine\level\particle\DustParticle;
+use pocketmine\level\particle\FlameParticle;
 use pocketmine\scheduler\Task;
 use pocketmine\Server;
+use pocketmine\utils\TextFormat;
 
 class GameUpdateTask extends Task {
 
@@ -20,6 +23,17 @@ class GameUpdateTask extends Task {
 
     /** @var int  */
     private $degree = 0;
+
+    private $showNumbers = [
+        60,
+        30,
+        15,
+        10,
+        5,
+        3,
+        2,
+        1
+    ];
 
     /**
      * @param int $currentTick
@@ -43,6 +57,16 @@ class GameUpdateTask extends Task {
                     foreach ($y as $value) {
                         $level->addParticle(new DustParticle($team->getSpawnLocation()->add($cos, $value, $sin), mt_rand(), mt_rand(), mt_rand(), mt_rand()));
                     }
+
+                    if($currentTick % 20 === 0) {
+                        foreach ($level->getPlayers() as $levelPlayer) {
+                            $levelPlayer->playSound("firework.blast", 5.0, 1.0, [$levelPlayer]);
+                            if(($fwPlayer = FlagWars::getPlayer($levelPlayer)) != null) {
+                                if($fwPlayer->hasFlag())
+                                    $level->addParticle(new FlameParticle($levelPlayer->asVector3()->add($cos, 0, $sin)));
+                            }
+                        }
+                    }
                     break;
                 }
             }
@@ -63,7 +87,7 @@ class GameUpdateTask extends Task {
             case $game::STATE_WAITING: {
                 foreach (Server::getInstance()->getOnlinePlayers() as $player) {
                     if($player->isCreative()) continue;//For setup
-                    $player->sendTip("Missing players: " . $missingPlayers . str_repeat(".", $this->points));//todo: popup
+                    $player->sendTip(LanguageProvider::getMessageContainer('wait-of-players-tip', $player->getName(), ["#needed" => $missingPlayers]) . str_repeat(".", $this->points));//todo: popup
                 }
                 if($missingPlayers > 0 && !$game->isForceStart()) {
                     break;
@@ -83,8 +107,13 @@ class GameUpdateTask extends Task {
                         break;
                     }
                 }
+
                 foreach (Server::getInstance()->getOnlinePlayers() as $player) {
-                    $player->sendTip("Time until start: " . $game->getCountdown() . str_repeat(".", $this->points));//todo: popup
+                    $player->sendTip(LanguageProvider::getMessageContainer('countdown-tip', $player->getName(), ["#countdown" => $game->getCountdown()]) . str_repeat(".", $this->points));
+                    if(in_array($game->getCountdown(), $this->showNumbers)) {
+                        $player->sendTitle(TextFormat::AQUA.$game->getCountdown(), "");
+                        $player->playSound("note.bass", 5.0, 2.0, [$player]);
+                    }
                 }
                 if($game->getCountdown() === 5) $game->loadMap();
                 $game->tickCountdown();
@@ -114,11 +143,12 @@ class GameUpdateTask extends Task {
 
                         $game->setFlag(true);
                         foreach (Server::getInstance()->getOnlinePlayers() as $player) {
-                            $player->sendTip("Flag spawned.");//todo: popup
+                            $player->sendTitle(LanguageProvider::getMessageContainer("flag-spawn-title", $player->getName()), LanguageProvider::getMessageContainer("flag-spawn-subtitle", $player->getName(), ['#flaggsCount' => Settings::$flag_to_win]));
                         }
                     } elseif($game->getCountdown() <= 5) {
                         foreach (Server::getInstance()->getOnlinePlayers() as $player) {
-                            $player->sendTip("Flag spawns in: " . $game->getCountdown() . str_repeat(".", $this->points));//todo: popup
+                            $player->playSound("random.click", 5.0, 1.0, [$player]);
+                            $player->sendTitle(TextFormat::AQUA.$game->getCountdown(), TextFormat::WHITE.LanguageProvider::getMessageContainer('flag-spawn-time-title', $player->getName()));
                         }
                     }
                     $game->tickCountdown();
@@ -150,7 +180,7 @@ class GameUpdateTask extends Task {
             }
             case $game::STATE_RESTART: {
                 foreach (Server::getInstance()->getOnlinePlayers() as $player) {
-                    $player->sendTip("Server will be stopped: " . $game->getCountdown() . str_repeat(".", $this->points));//todo: popup
+                    $player->sendTip(FlagWars::PREFIX.TextFormat::RED.TextFormat::BOLD.$game->getCountdown() . str_repeat(".", $this->points));
                 }
                 $game->tickCountdown();
                 if($game->getCountdown() === 3) {

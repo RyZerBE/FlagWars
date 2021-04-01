@@ -94,7 +94,7 @@ class FlagWarsPlayer {
         $this->setLastDamager(null);
         $player->removeAllEffects();
         $player->removeTitles();
-        $player->sendTitle("§r", "§r", 1, 5, 1);
+        $player->sendTitle("§r", "§r", 15, 20, 15);
         $player->doCloseInventory();
         $player->getInventory()->clearAll();
         $player->getArmorInventory()->clearAll();

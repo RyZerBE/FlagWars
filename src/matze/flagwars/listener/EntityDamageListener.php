@@ -9,7 +9,6 @@ use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\Player;
-use pocketmine\Server;
 
 class EntityDamageListener implements Listener {
 
@@ -40,6 +39,7 @@ class EntityDamageListener implements Listener {
     public function attack(EntityDamageByEntityEvent $event): void {
         $player = $event->getEntity();
         $damager = $event->getDamager();
+
         if(!$player instanceof Player) return;
         if(!$damager instanceof Player) {
             if(!is_null($damager->getOwningEntity())) {

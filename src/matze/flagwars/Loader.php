@@ -3,6 +3,7 @@
 namespace matze\flagwars;
 
 use matze\flagwars\command\SetupCommand;
+use matze\flagwars\command\StartCommand;
 use matze\flagwars\entity\FlagEntity;
 use matze\flagwars\entity\ShopEntity;
 use matze\flagwars\entity\SpawnerEntity;
@@ -77,7 +78,8 @@ class Loader extends PluginBase {
 
     private function initCommands(): void {
         $commands = [
-            new SetupCommand("setup")
+            new SetupCommand("setup"),
+            new StartCommand("start")
         ];
         foreach ($commands as $command) {
             Server::getInstance()->getCommandMap()->register("FlagWars", $command);

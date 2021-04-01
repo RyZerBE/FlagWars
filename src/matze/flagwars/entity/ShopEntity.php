@@ -2,9 +2,12 @@
 
 namespace matze\flagwars\entity;
 
+use matze\flagwars\FlagWars;
+use matze\flagwars\shop\ShopCategorys;
 use matze\flagwars\utils\Vector3Utils;
 use pocketmine\entity\Creature;
 use pocketmine\entity\Entity;
+use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\Player;
 
@@ -58,7 +61,11 @@ class ShopEntity extends Creature {
     public function attack(EntityDamageEvent $source): void {
         $source->setCancelled();
 
-        //todo: shop
+        if($source instanceof EntityDamageByEntityEvent) {
+            $damager = $source->getDamager();
+            if ($damager instanceof Player)
+                ShopCategorys::RushCategory($damager);
+        }
     }
 
     /**

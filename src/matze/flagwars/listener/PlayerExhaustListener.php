@@ -15,6 +15,7 @@ class PlayerExhaustListener implements Listener {
         $player = $event->getPlayer();
         $game = GameManager::getInstance();
 
+        $event->setAmount(0.025);
         if(!$game->isIngame()) {
             $player->setFood($player->getMaxFood());
         }

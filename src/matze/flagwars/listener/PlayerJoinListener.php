@@ -8,6 +8,7 @@ use matze\flagwars\utils\Settings;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\Server;
+use pocketmine\utils\TextFormat;
 
 class PlayerJoinListener implements Listener {
 
@@ -32,7 +33,7 @@ class PlayerJoinListener implements Listener {
                 $game->addPlayer($player);
                 $fwPlayer->getLobbyItems();
                 foreach (Server::getInstance()->getOnlinePlayers() as $onlinePlayer) {
-                    $onlinePlayer->sendMessage($player->getName() . " joined. (" . count($game->getPlayers()) . "/" . $game->getMaxPlayers() . ")");//todo: message
+                    $onlinePlayer->sendMessage(FlagWars::PREFIX.TextFormat::WHITE."[".TextFormat::GREEN."+".TextFormat::WHITE."] ".$player->getNameTag().TextFormat::RESET.TextFormat::GRAY."(" . count($game->getPlayers()) . "/" . $game->getMaxPlayers() . ")");//todo: message
                 }
                 break;
             }

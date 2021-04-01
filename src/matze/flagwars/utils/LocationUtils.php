@@ -18,7 +18,7 @@ class LocationUtils {
             $location->z,
             $location->yaw,
             $location->pitch,
-            $location->getLevel()->getName()
+            $location->getLevel()->getFolderName()
         ]);
     }
 

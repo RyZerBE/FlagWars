@@ -2,6 +2,7 @@
 
 namespace matze\flagwars\listener;
 
+use BauboLP\Core\Provider\LanguageProvider;
 use jojoe77777\FormAPI\SimpleForm;
 use matze\flagwars\entity\SpawnerEntity;
 use matze\flagwars\FlagWars;
@@ -28,7 +29,6 @@ class PlayerInteractListener implements Listener {
      */
     public function onInteract(PlayerInteractEvent $event): void {
         $player = $event->getPlayer();
-        $fwPlayer = FlagWars::getPlayer($player);
         $item = $event->getItem();
         $action = $event->getAction();
         $block = $event->getBlock();
@@ -111,11 +111,11 @@ class PlayerInteractListener implements Listener {
                         } else {
                             switch ($upgrade) {
                                 case SpawnerEntity::UPGRADE_REASON_ALREADY_MAX_LEVEL: {
-                                    $player->sendTip("Already maxed");//todo: tip
+                                    $player->sendTip(LanguageProvider::getMessageContainer('fw-spawner-max-level', $player->getName()));//todo: tip
                                     break;
                                 }
                                 case SpawnerEntity::UPGRADE_REASON_NOT_ENOUGH_ITEMS: {
-                                    $player->sendTip("Not enough items. Needed: " . $spawner->getUpgradeCost($spawner->getSpawnerLevel() + 1));//todo: tip
+                                    $player->sendTip(LanguageProvider::getMessageContainer('fw-not-enough-resources', $player->getName(), ["#needed" => $spawner->getUpgradeCost($spawner->getSpawnerLevel() + 1)]));//todo: tip
                                     break;
                                 }
                             }

@@ -25,6 +25,7 @@ use pocketmine\block\Block;
 use pocketmine\entity\Entity;
 use pocketmine\Player;
 use pocketmine\Server;
+use pocketmine\utils\TextFormat;
 
 class GameManager {
     use InstantiableTrait;
@@ -368,8 +369,11 @@ class GameManager {
             $game = GameManager::getInstance();
             $game->setMap($game->getMapByName($map->getFolderName()));
 
+            $map->setTime(6000);
+            $map->stopTime();;
+
             foreach ($server->getOnlinePlayers() as $player) {
-                $player->sendMessage("Map: " . $game->getMap()->getName());
+                $player->sendTitle(TextFormat::GOLD.$game->getMap()->getName(), "");
             }
         });
     }
@@ -401,7 +405,7 @@ class GameManager {
                 $fwPlayer->setTeam($this->findTeam());
             }
             if(is_null($fwPlayer->getTeam())) {
-                $player->sendMessage("§c§oSomething went wrong. Team must not be null.");
+                $player->sendMessage("§c§oSomething went wrong. Team cannot be null.");
                 Server::getInstance()->dispatchCommand($player, "hub");
                 continue;
             }
@@ -449,16 +453,19 @@ class GameManager {
         $winners = array_filter($this->getTeams(), function (Team $team): bool {return $team->getFlagsSaved() >= Settings::$flag_to_win;});
         foreach ($winners as $team) $winner = $team;
 
+        if($winner === null)
+            $winner = $this->getTeams()[0];
+
         foreach (Server::getInstance()->getOnlinePlayers() as $player) {
             $fwPlayer = FlagWars::getPlayer($player);
             $player->teleport(Settings::$waiting_lobby_location);
             $fwPlayer->reset();
             $fwPlayer->getLobbyItems();
 
-            $player->sendMessage("Win: " . $winner->getColor() . $winner->getName());
+            $player->sendTitle($winner->getColor()."Team ".$winner->getName(), "HGW <3");
+            $player->playSound("firework.launch", 5.0, 1.0, [$player]);
             if($fwPlayer->isSpectator()) continue;
         }
-        //todo
     }
 
     /** @var array  */

@@ -2,6 +2,7 @@
 
 namespace matze\flagwars\listener;
 
+use BauboLP\Core\Provider\LanguageProvider;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
 use pocketmine\event\Listener;
@@ -29,9 +30,9 @@ class PlayerMoveListener implements Listener {
             $team->setHasFlag(false);
             $team->addFlagsSaved();
             $game->setFlag(false);
-
+            $player->playSound("random.levelup", 5.0, 1.0, [$player]);
             foreach (Server::getInstance()->getOnlinePlayers() as $onlinePlayer) {
-                $onlinePlayer->sendMessage($team->getColor() . "Team " . $team->getName() . "§r saved the flag.");//todo: message
+                $onlinePlayer->sendMessage(FlagWars::PREFIX.LanguageProvider::getMessageContainer('fw-flag-saved', $onlinePlayer->getName(), ["#team" => $team->getColor()."Team ".$team->getName()]));
             }
         }
     }

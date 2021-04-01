@@ -2,6 +2,7 @@
 
 namespace matze\flagwars\entity;
 
+use BauboLP\Core\Provider\LanguageProvider;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
 use matze\flagwars\utils\Settings;
@@ -21,6 +22,7 @@ use pocketmine\network\mcpe\protocol\SetActorLinkPacket;
 use pocketmine\network\mcpe\protocol\types\EntityLink;
 use pocketmine\Player;
 use pocketmine\Server;
+use pocketmine\utils\TextFormat;
 
 class FlagEntity extends Human {
 
@@ -66,7 +68,9 @@ class FlagEntity extends Human {
                 $this->setCarrier(null);
 
                 foreach (Server::getInstance()->getOnlinePlayers() as $onlinePlayer) {
-                    $onlinePlayer->sendTip("Flag lost.");
+                    $onlinePlayer->sendTitle(TextFormat::YELLOW."⚠", LanguageProvider::getMessageContainer('flag-lost-subtitle', $onlinePlayer->getName()));
+                    $onlinePlayer->sendMessage(FlagWars::PREFIX.LanguageProvider::getMessageContainer('flag-lost-subtitle', $onlinePlayer->getName()));
+                    $onlinePlayer->playSound("random.anvil_land", 5.0, 1.0, [$onlinePlayer]);
                 }
 
                 $pk = new SetActorLinkPacket();
@@ -137,6 +141,8 @@ class FlagEntity extends Human {
 
         foreach (Server::getInstance()->getOnlinePlayers() as $onlinePlayer) {
             $onlinePlayer->sendTip($team->getColor() . "Team " . $team->getName());
+            $onlinePlayer->playSound("random.pop", 5.0, 1.0, [$onlinePlayer]);
+            $onlinePlayer->sendTitle($team->getColor(). "Team ".$team->getName(), LanguageProvider::getMessageContainer('flag-team-get-subtitle', $onlinePlayer->getName()));
         }
     }
 
