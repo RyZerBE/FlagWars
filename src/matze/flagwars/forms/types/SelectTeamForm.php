@@ -25,6 +25,8 @@ class SelectTeamForm extends Form {
             $game = GameManager::getInstance();
             $team = $game->getTeam($data);
 
+            if($game->isIngame()) return;
+
             if($team->isPlayer($player)) return;
             if($team->isFull()) {
                 $player->sendMessage("Team full.");//todo: message
