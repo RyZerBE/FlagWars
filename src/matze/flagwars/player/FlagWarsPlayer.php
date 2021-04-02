@@ -84,7 +84,7 @@ class FlagWarsPlayer {
      * @return Player|null
      */
     public function getLastDamager(): ?Player {
-        if(($this->lastDamageTick + (7 * 20)) <= Server::getInstance()->getTick()) {
+        if(($this->lastDamageTick + (12 * 20)) <= Server::getInstance()->getTick()) {
             return null;
         }
         return $this->lastDamager;

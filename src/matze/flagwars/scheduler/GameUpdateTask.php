@@ -3,6 +3,7 @@
 namespace matze\flagwars\scheduler;
 
 use BauboLP\Core\Provider\LanguageProvider;
+use BauboLP\Cloud\CloudBridge;
 use matze\flagwars\entity\FlagEntity;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
@@ -24,16 +25,8 @@ class GameUpdateTask extends Task {
     /** @var int  */
     private $degree = 0;
 
-    private $showNumbers = [
-        60,
-        30,
-        15,
-        10,
-        5,
-        3,
-        2,
-        1
-    ];
+    /** @var int[]  */
+    private $showNumbers = [60, 30, 15, 10, 5, 3, 2, 1];
 
     /**
      * @param int $currentTick
@@ -185,7 +178,7 @@ class GameUpdateTask extends Task {
                 $game->tickCountdown();
                 if($game->getCountdown() === 3) {
                     foreach (Server::getInstance()->getOnlinePlayers() as $player) {
-                        //CloudBridge::getCloudProvider()->dispatchProxyCommand($player->getName(), "hub");//todo
+                        CloudBridge::getCloudProvider()->dispatchProxyCommand($player->getName(), "hub");
                     }
                 }
                 if($game->getCountdown() === 0) {

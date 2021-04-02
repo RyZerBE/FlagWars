@@ -91,12 +91,13 @@ class SpawnerEntity extends ItemEntity implements ChunkLoader {
 
         $spawnDelay = $this->namedtag->getInt("Delay", 10);
         $color = $this->namedtag->getString("Color", "§a");
+        $item = $this->getItem();
 
-        $amount = $this->namedtag->getInt("Amount", 0);
+        $amount = $item->getCount();
         $this->setNameTag("§r§l" . $color  . $amount);
 
         if(($currentTick % $spawnDelay) === 0) {
-            $this->namedtag->setInt("Amount", $amount + 1);
+            $item->setCount($item->getCount() + 1);
             $amount += 1;
         }
 
@@ -117,19 +118,19 @@ class SpawnerEntity extends ItemEntity implements ChunkLoader {
             if($amount <= 0) {
                 break;
             }
-            $item = $this->getItem();
-            $item->setCount(1);
+            $aItem = $this->getItem();
+            $aItem->setCount(1);
             if($amount > 1) {
-                $item->setCount($amount);
+                $aItem->setCount($amount);
             }
-            $player->getInventory()->addItem($item);
+            $player->getInventory()->addItem($aItem);
             $player->getLevel()->addSound(new PopSound($player, 1), [$player]);
 
-            $this->namedtag->setInt("Amount", 1);
+            $item->setCount(1);
             $amount = 1;
         }
         if($collidingEntities > 0) {
-            $this->namedtag->setInt("Amount", 0);
+            $item->setCount(0);
             return parent::onUpdate($currentTick);
         }
         return parent::onUpdate($currentTick);

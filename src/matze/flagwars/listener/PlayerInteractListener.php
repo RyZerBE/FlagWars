@@ -3,6 +3,7 @@
 namespace matze\flagwars\listener;
 
 use BauboLP\Core\Provider\LanguageProvider;
+use BauboLP\Cloud\CloudBridge;
 use jojoe77777\FormAPI\SimpleForm;
 use matze\flagwars\entity\SpawnerEntity;
 use matze\flagwars\FlagWars;
@@ -63,7 +64,7 @@ class PlayerInteractListener implements Listener {
                     break;
                 }
                 case "quit": {
-                    //CloudBridge::getCloudProvider()->dispatchProxyCommand($player->getName(), "hub");//todo
+                    CloudBridge::getCloudProvider()->dispatchProxyCommand($player->getName(), "hub");
                     break;
                 }
             }
