@@ -20,7 +20,7 @@ class Settings {
         $settings = new Config("plugins/settings.yml", Config::YAML, [
             "PlayersPerTeam" => 1,
             "TotalTeams" => 2,
-            "WaitingCountdown" => 10,//todo: 60
+            "WaitingCountdown" => 60,
             "WaitingLobbyLocation" => "0:5:0:0:0",
             "MapPool" => [],
             "PlayersForStart" => 2,
