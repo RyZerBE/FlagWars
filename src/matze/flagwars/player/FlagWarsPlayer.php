@@ -213,8 +213,6 @@ class FlagWarsPlayer {
             $player = $this->getPlayer();
 
             $player->removeEffect(Effect::SLOWNESS);
-            $attr = $player->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
-            $attr->setValue($player->isSprinting() ? ($attr->getValue() * 1.3) : ($attr->getValue() / 1.3), false, true);
         }
     }
 }
