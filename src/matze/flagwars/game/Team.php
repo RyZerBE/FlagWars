@@ -5,6 +5,7 @@ namespace matze\flagwars\game;
 use matze\flagwars\utils\Settings;
 use pocketmine\level\Location;
 use pocketmine\Player;
+use pocketmine\utils\TextFormat;
 
 class Team {
 
@@ -136,23 +137,24 @@ class Team {
      * @return int
      */
     public function getBlockMeta(): int {
-        switch (strtolower(str_replace(" ", "_", $this->getName()))) {
-            case "orange": return 1;
-            case "magenta": return 2;
-            case "light_blue": return 3;
-            case "yellow": return 4;
-            case "lime": return 5;
-            case "pink": return 6;
-            case "gray": return 7;
-            case "light_gray": return 8;
-            case "cyan": return 9;
-            case "purple": return 10;
-            case "blue": return 11;
-            case "brown": return 12;
-            case "green": return 13;
-            case "red": return 14;
-            case "black": return 15;
-            default: return 0;
+        switch ($this->getColor()) {
+            case TextFormat::RED:
+                return 14;
+            case TextFormat::BLUE:
+            case TextFormat::AQUA:
+                return 11;
+            case TextFormat::YELLOW:
+                return 4;
+            case TextFormat::GREEN:
+            case TextFormat::DARK_GREEN:
+                return 5;
+            case TextFormat::LIGHT_PURPLE:
+                return 6;
+            case TextFormat::GOLD:
+                return 1;
+            case TextFormat::DARK_PURPLE:
+                return 10;
         }
+        return 0;
     }
 }

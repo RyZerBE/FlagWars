@@ -49,7 +49,7 @@ class SpiderManKit extends Kit {
                 $block = $level->getBlock($player->add(0, $y, 0));
                 $frontBlock = $this->getFrontBlock($player, $player->y + $y);
 
-                if($frontBlock->isSolid() && $block->canBeReplaced() && !$block->canClimb()) {
+                if($frontBlock->isSolid() && !$frontBlock->isTransparent() && $block->canBeReplaced() && !$block->canClimb()) {
                     $faces = [0 => 8, 1 => 1, 2 => 2, 3 => 4, 4 => 8];
                     $meta = $faces[$player->getDirection()] ?? 0;
                     $level->setBlockIdAt($block->x, $block->y, $block->z, Block::VINE);

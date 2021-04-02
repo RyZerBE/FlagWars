@@ -6,6 +6,7 @@ use matze\flagwars\game\GameManager;
 use matze\flagwars\game\kits\Kit;
 use matze\flagwars\game\Team;
 use matze\flagwars\utils\ItemUtils;
+use pocketmine\entity\Attribute;
 use pocketmine\entity\Effect;
 use pocketmine\item\Item;
 use pocketmine\network\mcpe\protocol\PlaySoundPacket;
@@ -208,6 +209,12 @@ class FlagWarsPlayer {
      */
     public function setHasFlag(bool $hasFlag): void {
         $this->hasFlag = $hasFlag;
-        if(!$hasFlag) $this->getPlayer()->removeEffect(Effect::SLOWNESS);
+        if(!$hasFlag) {
+            $player = $this->getPlayer();
+
+            $player->removeEffect(Effect::SLOWNESS);
+            $attr = $player->getAttributeMap()->getAttribute(Attribute::MOVEMENT_SPEED);
+            $attr->setValue($player->isSprinting() ? ($attr->getValue() * 1.3) : ($attr->getValue() / 1.3), false, true);
+        }
     }
 }

@@ -9,8 +9,15 @@ use matze\flagwars\entity\ShopEntity;
 use matze\flagwars\entity\SpawnerEntity;
 use matze\flagwars\game\GameManager;
 use matze\flagwars\listener\BlockBreakListener;
+use matze\flagwars\listener\BlockBurnListener;
+use matze\flagwars\listener\BlockFormListener;
 use matze\flagwars\listener\BlockPlaceListener;
+use matze\flagwars\listener\CraftItemListener;
 use matze\flagwars\listener\EntityDamageListener;
+use matze\flagwars\listener\EntityExplodeListener;
+use matze\flagwars\listener\InventoryTransactionListener;
+use matze\flagwars\listener\LeavesDecayListener;
+use matze\flagwars\listener\PlayerBedEnterListener;
 use matze\flagwars\listener\PlayerDeathListener;
 use matze\flagwars\listener\PlayerDropItemListener;
 use matze\flagwars\listener\PlayerExhaustListener;
@@ -69,7 +76,14 @@ class Loader extends PluginBase {
             new PlayerExhaustListener(),
             new PlayerDeathListener(),
             new PlayerDropItemListener(),
-            new PlayerMoveListener()
+            new PlayerMoveListener(),
+            new CraftItemListener(),
+            new InventoryTransactionListener(),
+            new EntityExplodeListener(),
+            new LeavesDecayListener(),
+            new BlockFormListener(),
+            new BlockBurnListener(),
+            new PlayerBedEnterListener()
         ];
         foreach ($listeners as $listener) {
             Server::getInstance()->getPluginManager()->registerEvents($listener, $this);

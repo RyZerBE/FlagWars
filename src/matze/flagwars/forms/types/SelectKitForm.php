@@ -19,6 +19,8 @@ class SelectKitForm extends Form {
         //Temporary
         $form = new SimpleForm(function (Player $player, $data): void {
             if(is_null($data)) return;
+            $game = GameManager::getInstance();
+            if($game->isIngame()) return;
             $fwPlayer = FlagWars::getPlayer($player);
             $fwPlayer->setKit(GameManager::getInstance()->getKit($data));
             $fwPlayer->playSound("random.orb");

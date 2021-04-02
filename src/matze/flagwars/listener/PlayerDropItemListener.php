@@ -21,20 +21,19 @@ class PlayerDropItemListener implements Listener {
         $game = GameManager::getInstance();
         $fwPlayer = FlagWars::getPlayer($player);
 
+
         if($player->isCreative(true)) return;
-        if($game->getState() === GameManager::STATE_INGAME) return;
-
-        if($fwPlayer === null) {
+        if($fwPlayer->isSpectator()) {
             $event->setCancelled();
             return;
         }
-
-        if(ItemUtils::hasItemTag($item, "kit_item")) {
-            $event->setCancelled();
-            $player->sendMessage(FlagWars::PREFIX.LanguageProvider::getMessageContainer('cant-drop-kititem', $player->getName()));
+        if($game->isIngame()) {
+            if(ItemUtils::hasItemTag($item, "kit_item")) {
+                $event->setCancelled();
+                $player->sendMessage(FlagWars::PREFIX . LanguageProvider::getMessageContainer('cant-drop-kititem', $player->getName()));
+            }
             return;
         }
-
         $event->setCancelled();
     }
 }

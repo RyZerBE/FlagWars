@@ -48,34 +48,26 @@ class ShopManager
 
     /**
      * @param string $colorInt
-     * @return \pocketmine\utils\Color
+     * @return Color
      */
-    public static function teamColorIntoColor(string $colorInt): Color
-    {
+    public static function teamColorIntoColor(string $colorInt): Color {
         switch ($colorInt) {
             case TextFormat::RED:
                 return new Color(152, 245, 255);
-                break;
             case TextFormat::BLUE:
             case TextFormat::AQUA:
                 return new Color(255, 0, 0);
-                break;
             case TextFormat::YELLOW:
                 return new Color(255,255,0);
-                break;
             case TextFormat::GREEN:
             case TextFormat::DARK_GREEN:
                 return new Color(127,255,0);
-                break;
             case TextFormat::LIGHT_PURPLE:
                 return new Color(255,105,180);
-                break;
             case TextFormat::GOLD:
                 return new Color(255,69,0);
-                break;
             case TextFormat::DARK_PURPLE:
                 return new Color(139,0,139);
-                break;
         }
 
         return $color = new Color(255,240,245);
@@ -85,34 +77,25 @@ class ShopManager
      * @param string $colorInt
      * @return int
      */
-    public static function teamColorIntoMeta(string $colorInt): int
-    {
+    public static function teamColorIntoMeta(string $colorInt): int {
         switch ($colorInt) {
             case TextFormat::RED:
                 return 14;
-                break;
             case TextFormat::BLUE:
             case TextFormat::AQUA:
                 return 11;
-                break;
             case TextFormat::YELLOW:
                 return 4;
-                break;
             case TextFormat::GREEN:
             case TextFormat::DARK_GREEN:
                 return 5;
-                break;
             case TextFormat::LIGHT_PURPLE:
                 return 6;
-                break;
             case TextFormat::GOLD:
                 return 1;
-                break;
             case TextFormat::DARK_PURPLE:
                 return 10;
-                break;
         }
-
         return 0;
     }
 }

@@ -153,6 +153,7 @@ class FlagEntity extends Human {
     public function mount(Player $player): bool {
         $fwPlayer = FlagWars::getPlayer($player);
         if($fwPlayer->isSpectator()) return false;
+        if(!is_null($this->getCarrier())) return false;
         $this->setCarrier($player);
         $this->pickedUp = true;
         $player->toggleSprint($player->isSprinting());
