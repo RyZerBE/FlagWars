@@ -15,6 +15,7 @@ use matze\flagwars\listener\BlockPlaceListener;
 use matze\flagwars\listener\CraftItemListener;
 use matze\flagwars\listener\EntityDamageListener;
 use matze\flagwars\listener\EntityExplodeListener;
+use matze\flagwars\listener\InventoryPickUpListener;
 use matze\flagwars\listener\InventoryTransactionListener;
 use matze\flagwars\listener\LeavesDecayListener;
 use matze\flagwars\listener\PlayerBedEnterListener;
@@ -83,7 +84,8 @@ class Loader extends PluginBase {
             new LeavesDecayListener(),
             new BlockFormListener(),
             new BlockBurnListener(),
-            new PlayerBedEnterListener()
+            new PlayerBedEnterListener(),
+            new InventoryPickUpListener()
         ];
         foreach ($listeners as $listener) {
             Server::getInstance()->getPluginManager()->registerEvents($listener, $this);
