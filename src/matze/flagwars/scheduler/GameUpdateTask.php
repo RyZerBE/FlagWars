@@ -8,6 +8,7 @@ use matze\flagwars\entity\FlagEntity;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
 use matze\flagwars\game\Team;
+use matze\flagwars\provider\FlagWarsProvider;
 use matze\flagwars\utils\Scoreboard;
 use matze\flagwars\utils\Settings;
 use pocketmine\entity\Entity;
@@ -136,6 +137,7 @@ class GameUpdateTask extends Task {
 
                         $game->setFlag(true);
                         foreach (Server::getInstance()->getOnlinePlayers() as $player) {
+                            FlagWarsProvider::createStrike($player, $location->asVector3());
                             $player->sendTitle(LanguageProvider::getMessageContainer("flag-spawn-title", $player->getName()), LanguageProvider::getMessageContainer("flag-spawn-subtitle", $player->getName(), ['#flaggsCount' => Settings::$flag_to_win]));
                         }
                     } elseif($game->getCountdown() <= 5) {
@@ -159,7 +161,7 @@ class GameUpdateTask extends Task {
                     }
                     Scoreboard::setLine($player, ++$score);
                     Scoreboard::setLine($player, ++$score, "§r§fKit:");
-                    Scoreboard::setLine($player, ++$score, "§r§7" . (is_null($fwPlayer->getKit()) ? "N/A" : $fwPlayer->getKit()->getName()));
+                    Scoreboard::setLine($player, ++$score, "§r§7" . (is_null($fwPlayer->getKit()) ? "???" : $fwPlayer->getKit()->getName()));
                     Scoreboard::setLine($player, ++$score);
                     Scoreboard::setLine($player, ++$score, "§r§fFlag:");
                     $flag = $game->getFlag();
