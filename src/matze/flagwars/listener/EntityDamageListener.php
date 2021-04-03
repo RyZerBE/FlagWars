@@ -53,17 +53,16 @@ class EntityDamageListener implements Listener {
             if (!is_null($damager->getOwningEntity()))
                 $damager = $damager->getOwningEntity();
 
-            if (!$damager instanceof Player)
-                return;
-
-
-            if ($event instanceof EntityDamageByEntityEvent && $damager instanceof PrimedTNT && $player instanceof Player) {
+            if ($damager instanceof PrimedTNT && $player instanceof Player) {
                 $team = $damager->namedtag->getString("Team", 8);
                 if (ShopManager::teamColorIntoMeta($fwPlayer->getTeam()->getColor()) == $team) {
                     $event->setCancelled();
                     return;
                 }
             }
+
+            if (!$damager instanceof Player)
+                return;
         }
         $game = GameManager::getInstance();
         $fwDamager = FlagWars::getPlayer($damager);

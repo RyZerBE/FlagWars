@@ -12,7 +12,6 @@ use matze\flagwars\game\GameManager;
 use matze\flagwars\provider\FlagWarsProvider;
 use matze\flagwars\utils\ItemUtils;
 use matze\flagwars\utils\Settings;
-use matze\flagwars\utils\Vector3Utils;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\item\Item;
