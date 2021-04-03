@@ -11,6 +11,12 @@ use pocketmine\Player;
 
 class AthleteKit extends Kit {
 
+    public function __construct()
+    {
+        $this->setDescription("Mit diesem Kit bist Du ein echter Athlet! Du kannst mit der Flagge schneller rennen als alle anderen!");
+        parent::__construct();
+    }
+
     /**
      * @param Player $player
      * @return array

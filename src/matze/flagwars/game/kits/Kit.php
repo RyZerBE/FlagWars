@@ -11,6 +11,9 @@ use pocketmine\Server;
 
 abstract class Kit implements Listener {
 
+    /** @var string */
+    private $description = "";
+
     /**
      * Kit constructor.
      */
@@ -62,5 +65,21 @@ abstract class Kit implements Listener {
     public function isPlayer(Player $player): bool {
         $kit = FlagWars::getPlayer($player)->getKit();
         return !is_null($kit) && $kit->getName() === $this->getName();
+    }
+
+    /**
+     * @param string $description
+     */
+    public function setDescription(string $description): void
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
     }
 }

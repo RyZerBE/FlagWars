@@ -4,6 +4,8 @@ namespace matze\flagwars\listener;
 
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
+use matze\flagwars\shop\ShopManager;
+use pocketmine\entity\object\PrimedTNT;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
@@ -41,16 +43,29 @@ class EntityDamageListener implements Listener {
         $damager = $event->getDamager();
 
         if(!$player instanceof Player) return;
+        $fwPlayer = FlagWars::getPlayer($player);
+        if($fwPlayer === null) {
+            $event->setCancelled();
+            return;
+        }
+
         if(!$damager instanceof Player) {
-            if(!is_null($damager->getOwningEntity())) {
+            if (!is_null($damager->getOwningEntity()))
                 $damager = $damager->getOwningEntity();
-            }
-            if(!$damager instanceof Player) {
+
+            if (!$damager instanceof Player)
                 return;
+
+
+            if ($event instanceof EntityDamageByEntityEvent && $damager instanceof PrimedTNT && $player instanceof Player) {
+                $team = $damager->namedtag->getString("Team", 8);
+                if (ShopManager::teamColorIntoMeta($fwPlayer->getTeam()->getColor()) == $team) {
+                    $event->setCancelled();
+                    return;
+                }
             }
         }
         $game = GameManager::getInstance();
-        $fwPlayer = FlagWars::getPlayer($player);
         $fwDamager = FlagWars::getPlayer($damager);
 
         if(!$game->isIngame()) {

@@ -11,6 +11,13 @@ use pocketmine\Server;
 
 class SpiderManKit extends Kit {
 
+    public function __construct()
+    {
+        $this->setDescription("Kennst Du Spiderman aus dem Fernsehen? Wände hochklettern wäre doch echt nice, oder?\nMit diesem Kit sind Hindernisse kein Problem!");
+        parent::__construct();
+    }
+
+
     /**
      * @param Player $player
      * @return array

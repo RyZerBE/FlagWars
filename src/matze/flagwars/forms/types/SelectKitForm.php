@@ -21,9 +21,9 @@ class SelectKitForm extends Form {
             if(is_null($data)) return;
             $game = GameManager::getInstance();
             if($game->isIngame()) return;
-            $fwPlayer = FlagWars::getPlayer($player);
-            $fwPlayer->setKit(GameManager::getInstance()->getKit($data));
-            $fwPlayer->playSound("random.orb");
+
+            $form = new KitDescriptionForm();
+            $form->open($player, -1, ["name" => $data]);
         });
         $form->setTitle("§r§l§fFlagWars");
         foreach (GameManager::getInstance()->getKits() as $kit) {

@@ -30,11 +30,11 @@ class FlagWarsProvider
      */
     public function __construct()
     {
-        $mysqlSettings = new Config("mysql.yml");
+        $mysqlSettings = new Config("/root/RyzerCloud/data/mysql.yml");
         self::$host = $mysqlSettings->get("Host");
-        self::$user = $mysqlSettings->get("User");
+        self::$user = $mysqlSettings->get("Username");
         self::$password = $mysqlSettings->get("Password");
-        self::$database = $mysqlSettings->get("Database");
+        self::$database = "FlagWars";
     }
 
     /**

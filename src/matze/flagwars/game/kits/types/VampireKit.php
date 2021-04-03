@@ -9,6 +9,12 @@ use pocketmine\Player;
 
 class VampireKit extends Kit {
 
+    public function __construct()
+    {
+        $this->setDescription("Dein Team bekommt für jeden Kill 2.5 Herzen dazu, dafür läufst du aber mit der Flagge noch langsamer als normal!");
+        parent::__construct();
+    }
+
     /**
      * @param Player $player
      * @return array

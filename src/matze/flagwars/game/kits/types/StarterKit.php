@@ -10,6 +10,12 @@ use pocketmine\Player;
 
 class StarterKit extends Kit {
 
+    public function __construct()
+    {
+        $this->setDescription("Mit diesem Kit kannst Du richtig durchstarten. Gönn dir einfach Starter-Equipment");
+        parent::__construct();
+    }
+
     /**
      * @param Player $player
      * @return array

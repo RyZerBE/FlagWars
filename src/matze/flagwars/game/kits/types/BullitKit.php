@@ -10,6 +10,12 @@ use pocketmine\Player;
 
 class BullitKit extends Kit {
 
+    public function __construct()
+    {
+        $this->setDescription("Bist Du im Besitz einer Flagge? Dieses Kit hilft dir & fügt dir 5 Extraherzen hinzu.");
+        parent::__construct();
+    }
+
     /**
      * @param Player $player
      * @return array

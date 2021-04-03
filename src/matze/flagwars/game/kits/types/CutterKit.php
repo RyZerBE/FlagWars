@@ -10,6 +10,12 @@ use pocketmine\Player;
 
 class CutterKit extends Kit {
 
+    public function __construct()
+    {
+        $this->setDescription("Du kannst mit diesem Kit Wolle schneller abbauen. Ein wahrer Schneider!");
+        parent::__construct();
+    }
+
     /**
      * @param Player $player
      * @return array

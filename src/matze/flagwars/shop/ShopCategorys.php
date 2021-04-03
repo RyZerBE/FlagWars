@@ -48,7 +48,7 @@ class ShopCategorys
         $unbreaking = Enchantment::getEnchantment(Enchantment::UNBREAKING);
         $protection = Enchantment::getEnchantment(Enchantment::PROTECTION);
 
-        $eat = Item::get(Item::PORKCHOP, 0, 2)->setCustomName(TextFormat::GOLD . "Steak");
+        $eat = Item::get(Item::COOKED_PORKCHOP, 0, 2)->setCustomName(TextFormat::GOLD . "Bio-Schnitzel");
 
         $pickaxe->addEnchantment(new EnchantmentInstance($unbreaking));
         $sword->addEnchantment(new EnchantmentInstance($knock));
@@ -59,7 +59,7 @@ class ShopCategorys
         $leggings = Item::get(Item::LEATHER_LEGGINGS, 0, 1)->setCustomName(TextFormat::GOLD . "Hose");
         $boots = Item::get(Item::LEATHER_BOOTS, 0, 1)->setCustomName(TextFormat::GOLD . "Schuhe");
 
-        $cap->setLore([TextFormat::RED . TextFormat::BOLD . '2 ' . TextFormat::YELLOW . "Bronze"]);
+        $cap->setLore([TextFormat::RED . TextFormat::BOLD . '1 ' . TextFormat::YELLOW . "Bronze"]);
         $eat->setLore([TextFormat::RED . TextFormat::BOLD . '1 ' . TextFormat::YELLOW . "Bronze"]);
         $hoodie->setLore([TextFormat::RED . TextFormat::BOLD . '1 ' . TextFormat::YELLOW . "Iron"]);
         $leggings->setLore([TextFormat::RED . TextFormat::BOLD . '1 ' . TextFormat::YELLOW . "Bronze"]);
@@ -219,7 +219,7 @@ class ShopCategorys
         $eat_category = Item::get(Item::COOKED_CHICKEN, 0, 1)->setCustomName(TextFormat::AQUA . "Eat");
 
 
-        $porkchop = Item::get(Item::COOKED_PORKCHOP, 0, 2)->setCustomName(TextFormat::GOLD."Schnitzel");
+        $porkchop = Item::get(Item::COOKED_PORKCHOP, 0, 2)->setCustomName(TextFormat::GOLD."Bio-Schnitzel");
         $apple = Item::get(Item::APPLE, 0, 1)->setCustomName(TextFormat::GOLD."Apple");
         $cake = Item::get(Item::CAKE, 0, 1)->setCustomName(TextFormat::GOLD."Cake");
         $gold_apple = Item::get(Item::GOLDEN_APPLE, 0, 1)->setCustomName(TextFormat::GOLD."Gapple");

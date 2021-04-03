@@ -417,6 +417,7 @@ class GameManager {
             $player->teleport($team->getSpawnLocation());
             $player->setImmobile();
             $player->setNameTag($team->getColor().$player->getName());
+            $player->setDisplayName($team->getColor().$player->getName());
 
             $kit = $fwPlayer->getKit();
             if(!is_null($kit)) foreach ($kit->getItems($player) as $item) $player->getInventory()->addItem(ItemUtils::addItemTag($item, "kit_item", "kit_item"));
