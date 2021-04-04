@@ -21,6 +21,7 @@ class PlayerDeathListener implements Listener {
         $fwPlayer = FlagWars::getPlayer($player);
         $killer = $fwPlayer->getLastDamager();
 
+        $killer = $fwPlayer->getLastDamager();
         $fwPlayer->reset();
         $fwPlayer->setHasFlag(false);
 
