@@ -21,6 +21,7 @@ class PlayerDeathListener implements Listener {
         $fwPlayer = FlagWars::getPlayer($player);
         $game = GameManager::getInstance();
 
+        $killer = $fwPlayer->getLastDamager();
         $fwPlayer->reset();
         $fwPlayer->setHasFlag(false);
 
@@ -37,7 +38,6 @@ class PlayerDeathListener implements Listener {
             }
         }
 
-        $killer = $fwPlayer->getLastDamager();
         foreach (Server::getInstance()->getOnlinePlayers() as $onlinePlayer) {
             if(is_null($killer)) {
                 $onlinePlayer->sendMessage(FlagWars::PREFIX . LanguageProvider::getMessageContainer('player-fell-in-void', $onlinePlayer->getName(), ['#playername' => $fwPlayer->getPlayer()->getName()]));
