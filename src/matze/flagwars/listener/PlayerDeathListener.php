@@ -19,7 +19,6 @@ class PlayerDeathListener implements Listener {
     public function onDeath(PlayerDeathEvent $event): void {
         $player = $event->getPlayer();
         $fwPlayer = FlagWars::getPlayer($player);
-        $killer = $fwPlayer->getLastDamager();
 
         $killer = $fwPlayer->getLastDamager();
         $fwPlayer->reset();
