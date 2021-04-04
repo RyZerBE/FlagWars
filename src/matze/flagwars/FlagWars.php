@@ -10,7 +10,7 @@ use pocketmine\Player;
 class FlagWars {
     use InstantiableTrait;
 
-    public const PREFIX = "§r§6FlagWars§8 | §7";
+    public const PREFIX = "§r§bFlag§3Wars§8 | §7";
 
     /** @var FlagWarsProvider */
     private static $provider;
