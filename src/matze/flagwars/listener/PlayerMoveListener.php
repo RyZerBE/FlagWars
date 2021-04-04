@@ -8,6 +8,7 @@ use matze\flagwars\game\GameManager;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\Server;
+use BauboLP\Core\Provider\CoinProvider;
 
 class PlayerMoveListener implements Listener {
 
@@ -31,9 +32,9 @@ class PlayerMoveListener implements Listener {
             $team->addFlagsSaved();
             $game->setFlag(false);
             $player->playSound("random.levelup", 5.0, 1.0, [$player]);
-            foreach (Server::getInstance()->getOnlinePlayers() as $onlinePlayer) {
+            CoinProvider::addCoins($player->getName(), 50);
+            foreach (Server::getInstance()->getOnlinePlayers() as $onlinePlayer)
                 $onlinePlayer->sendMessage(FlagWars::PREFIX.LanguageProvider::getMessageContainer('fw-flag-saved', $onlinePlayer->getName(), ["#team" => $team->getColor()."Team ".$team->getName()]));
-            }
         }
     }
 }

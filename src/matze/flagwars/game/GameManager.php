@@ -27,6 +27,8 @@ use pocketmine\entity\Entity;
 use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
+use BauboLP\Core\Provider\CoinProvider;
+
 
 class GameManager {
     use InstantiableTrait;
@@ -461,12 +463,18 @@ class GameManager {
 
         foreach (Server::getInstance()->getOnlinePlayers() as $player) {
             $fwPlayer = FlagWars::getPlayer($player);
+            if($fwPlayer === null) continue;
             $player->teleport(Settings::$waiting_lobby_location);
             $fwPlayer->reset();
             $fwPlayer->getLobbyItems();
 
             $player->sendTitle($winner->getColor()."Team ".$winner->getName(), "HGW <3");
             $player->playSound("firework.launch", 5.0, 1.0, [$player]);
+            if($fwPlayer->getTeam()->getName() === $winner->getName())
+                CoinProvider::addCoins($player->getName(), rand(100, 300));
+            else
+                CoinProvider::addCoins($player->getName(), rand(50, 100));
+
             if($fwPlayer->isSpectator()) continue;
         }
     }
