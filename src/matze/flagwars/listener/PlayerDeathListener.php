@@ -19,7 +19,7 @@ class PlayerDeathListener implements Listener {
     public function onDeath(PlayerDeathEvent $event): void {
         $player = $event->getPlayer();
         $fwPlayer = FlagWars::getPlayer($player);
-        $game = GameManager::getInstance();
+        $killer = $fwPlayer->getLastDamager();
 
         $fwPlayer->reset();
         $fwPlayer->setHasFlag(false);
@@ -37,12 +37,11 @@ class PlayerDeathListener implements Listener {
             }
         }
 
-        $killer = $fwPlayer->getLastDamager();
         foreach (Server::getInstance()->getOnlinePlayers() as $onlinePlayer) {
             if(is_null($killer)) {
-                $onlinePlayer->sendMessage(FlagWars::PREFIX . LanguageProvider::getMessageContainer('player-fell-in-void', $onlinePlayer->getName(), ['#playername' => $fwPlayer->getPlayer()->getName()]));
+                $onlinePlayer->sendMessage(FlagWars::PREFIX . LanguageProvider::getMessageContainer('player-fell-in-void', $onlinePlayer->getName(), ['#playername' => $fwPlayer->getPlayer()->getDisplayName()]));
             } else {
-                $onlinePlayer->sendMessage(FlagWars::PREFIX.LanguageProvider::getMessageContainer('player-killed-by-player', $onlinePlayer->getName(), ["#killername" => $killer->getNameTag(), '#playername' => $fwPlayer->getPlayer()->getNameTag()]));
+                $onlinePlayer->sendMessage(FlagWars::PREFIX.LanguageProvider::getMessageContainer('player-killed-by-player', $onlinePlayer->getName(), ["#killername" => $killer->getDisplayName(), '#playername' => $fwPlayer->getPlayer()->getDisplayName()]));
             }
         }
     }
