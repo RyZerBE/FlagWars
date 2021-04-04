@@ -79,7 +79,7 @@ class FlagEntity extends Human {
                 return parent::onUpdate($currentTick);
             }
 
-            $this->getDataPropertyManager()->setVector3(Entity::DATA_RIDER_SEAT_POSITION, $this->getHeadPosition($carrier), 0);
+           /* $this->getDataPropertyManager()->setVector3(Entity::DATA_RIDER_SEAT_POSITION, $this->getHeadPosition($carrier), 0);
             $this->getDataPropertyManager()->setByte(Entity::DATA_CONTROLLING_RIDER_SEAT_NUMBER, 0);
 
             $pk = new SetActorLinkPacket();
@@ -87,7 +87,7 @@ class FlagEntity extends Human {
             $this->server->broadcastPacket(Server::getInstance()->getOnlinePlayers(), $pk);
             $this->setPosition($carrier->add($this->getHeadPosition($carrier)));
 
-            $this->yaw = $carrier->yaw;
+            $this->yaw = $carrier->yaw;*/
             $this->updateMovement();
 
             $kit = $fwCarrier->getKit();
@@ -138,6 +138,17 @@ class FlagEntity extends Human {
         $team = $fwPlayer->getTeam();
         $team->setHasFlag(true);
         $fwPlayer->setHasFlag(true);
+
+        $carrier = $fwPlayer->getPlayer();
+        $this->getDataPropertyManager()->setVector3(Entity::DATA_RIDER_SEAT_POSITION, $this->getHeadPosition($carrier), 0);
+        $this->getDataPropertyManager()->setByte(Entity::DATA_CONTROLLING_RIDER_SEAT_NUMBER, 0);
+
+        $pk = new SetActorLinkPacket();
+        $pk->link = new EntityLink($carrier->id, $this->getId(), EntityLink::TYPE_RIDER, true, true);
+        $this->server->broadcastPacket(Server::getInstance()->getOnlinePlayers(), $pk);
+        $this->setPosition($carrier->add($this->getHeadPosition($carrier)));
+
+        $this->yaw = $carrier->yaw;
 
         foreach (Server::getInstance()->getOnlinePlayers() as $onlinePlayer) {
             $onlinePlayer->sendTip($team->getColor() . "Team " . $team->getName());
