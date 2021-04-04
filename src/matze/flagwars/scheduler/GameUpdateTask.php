@@ -119,10 +119,11 @@ class GameUpdateTask extends Task {
             case $game::STATE_INGAME: {
                 $map = $game->getMap();
                 $level = Server::getInstance()->getLevelByName($map->getName());
+                $haveToWinFlags = Settings::$flag_to_win;
                 if(count(array_filter($game->getTeams(), function (Team $team): bool {
                     return $team->isAlive();
-                })) <= 1 || count(array_filter($game->getTeams(), function (Team $team): bool {
-                    return $team->getFlagsSaved() >= 3;
+                })) <= 1 || count(array_filter($game->getTeams(), function (Team $team) use ($haveToWinFlags): bool {
+                    return $team->getFlagsSaved() >= $haveToWinFlags;
                 })) >= 1) {
                     $game->setState($game::STATE_RESTART);
                     return;
