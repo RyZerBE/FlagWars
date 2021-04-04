@@ -512,7 +512,7 @@ class GameManager {
      */
     public function setFlag(bool $flag): void {
         $this->flag = $flag;
-        if(!$flag) $this->setCountdown(30);
+        if(!$flag) $this->setCountdown(45);
     }
 
     /**
