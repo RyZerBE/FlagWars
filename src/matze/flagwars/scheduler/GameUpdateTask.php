@@ -137,8 +137,8 @@ class GameUpdateTask extends Task {
                         $flag->spawnToAll();
 
                         $game->setFlag(true);
+                        FlagWarsProvider::createStrike($location->asVector3());
                         foreach (Server::getInstance()->getOnlinePlayers() as $player) {
-                            FlagWarsProvider::createStrike($player, $location->asVector3());
                             $player->sendTitle(LanguageProvider::getMessageContainer("flag-spawn-title", $player->getName()), LanguageProvider::getMessageContainer("flag-spawn-subtitle", $player->getName(), ['#flaggsCount' => Settings::$flag_to_win]));
                         }
                     } elseif($game->getCountdown() <= 5) {

@@ -12,6 +12,7 @@ use pocketmine\item\Item;
 use pocketmine\math\Vector3;
 use pocketmine\network\mcpe\protocol\AddActorPacket;
 use pocketmine\Player;
+use pocketmine\Server;
 use pocketmine\utils\Config;
 
 class FlagWarsProvider
@@ -303,19 +304,23 @@ class FlagWarsProvider
     }
 
     /**
-     * @param \pocketmine\Player $player
+     * @param Player[] $players
      * @param \pocketmine\math\Vector3 $vector3
      */
-    public static function createStrike(Player $player, Vector3 $vector3)
+    public static function createStrike(Vector3 $vector3, array $players = [])
     {
+        if(count($players) <= 0 || in_array("ALL", $players))
+            $players = Server::getInstance()->getOnlinePlayers();
+
         $light = new AddActorPacket();
         $light->type = "minecraft:lightning_bolt";
         $light->metadata = [];
-        $light->yaw = $player->getYaw();
-        $light->pitch = $player->getPitch();
         $light->position = new Vector3($vector3->x, $vector3->y, $vector3->z);
         $light->entityRuntimeId = Entity::$entityCount++;
-        $player->sendDataPacket($light);
-        $player->playSound("ambient.weather.lightning.impact", 2.0, 1.0, [$player]);
+        /** @var Player $player */
+        foreach ($players as $player) {
+            $player->sendDataPacket($light);
+            $player->playSound("ambient.weather.lightning.impact", 2.0, 1.0, [$player]);
+        }
     }
 }

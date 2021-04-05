@@ -5,6 +5,7 @@ namespace matze\flagwars\entity;
 use BauboLP\Core\Provider\LanguageProvider;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
+use matze\flagwars\provider\FlagWarsProvider;
 use matze\flagwars\utils\Settings;
 use matze\flagwars\utils\SkinUtils;
 use matze\marioparty\MarioParty;
@@ -104,7 +105,9 @@ class FlagEntity extends Human {
         $this->updateMovement();
 
         if($this->getY() <= 0) {
-            $this->teleport($game->getMap()->getRandomFlagLocation());
+            $location = $game->getMap()->getRandomFlagLocation();
+            $this->teleport($location);
+            FlagWarsProvider::createStrike($location->asVector3());
         }
 
         return parent::onUpdate($currentTick);
