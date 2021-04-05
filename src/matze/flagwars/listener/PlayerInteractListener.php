@@ -93,7 +93,7 @@ class PlayerInteractListener implements Listener {
                                 $fwPlayer->playSound("random.levelup");
                                 $cost = $spawner->upgrade();
 
-                                $item = $spawner->getItem();
+                                $item = clone $spawner->getItem();
                                 $item->setCount($cost);
 
                                 foreach ($player->getInventory()->getContents() as $slot => $content) {
