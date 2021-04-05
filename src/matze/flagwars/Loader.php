@@ -23,6 +23,7 @@ use matze\flagwars\listener\PlayerChatListener;
 use matze\flagwars\listener\PlayerDeathListener;
 use matze\flagwars\listener\PlayerDropItemListener;
 use matze\flagwars\listener\PlayerExhaustListener;
+use matze\flagwars\listener\PlayerInteractEntityListener;
 use matze\flagwars\listener\PlayerInteractListener;
 use matze\flagwars\listener\PlayerJoinListener;
 use matze\flagwars\listener\PlayerLoginListener;
@@ -87,7 +88,8 @@ class Loader extends PluginBase {
             new BlockBurnListener(),
             new PlayerBedEnterListener(),
             new InventoryPickUpListener(),
-            new PlayerChatListener()
+            new PlayerChatListener(),
+            new PlayerInteractEntityListener()
         ];
         foreach ($listeners as $listener) {
             Server::getInstance()->getPluginManager()->registerEvents($listener, $this);
