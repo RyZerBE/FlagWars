@@ -15,7 +15,7 @@ class StartCommand extends Command
     public function __construct(string $commandName)
     {
         parent::__construct($commandName, "Start the game", "", []);
-        $this->setPermission("bedwars.start");
+        $this->setPermission("game.start");
     }
 
     public function execute(CommandSender $sender, string $commandLabel, array $args)
