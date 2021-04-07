@@ -34,4 +34,13 @@ class CutterKit extends Kit {
     public function getName(): string {
         return "Schneider";
     }
+
+
+    /**
+     * @return int
+     */
+    public function getPrice(): int
+    {
+        return 500;
+    }
 }

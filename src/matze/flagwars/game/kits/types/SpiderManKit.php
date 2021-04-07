@@ -84,4 +84,12 @@ class SpiderManKit extends Kit {
             default: return $player->getLevel()->getBlock(new Vector3($player->x, $y, $player->z));
         }
     }
+
+    /**
+     * @return int
+     */
+    public function getPrice(): int
+    {
+        return 500;
+    }
 }

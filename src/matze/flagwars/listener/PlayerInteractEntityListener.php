@@ -17,8 +17,7 @@ class PlayerInteractEntityListener implements Listener
         $entity = $event->getEntity();
         $player = $event->getPlayer();
 
-        if($entity instanceof ShopEntity) {
+        if($entity instanceof ShopEntity)
             ShopCategorys::RushCategory($player);
-        }
     }
 }

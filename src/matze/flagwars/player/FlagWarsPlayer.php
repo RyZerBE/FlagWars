@@ -2,6 +2,8 @@
 
 namespace matze\flagwars\player;
 
+use BauboLP\Core\Provider\AsyncExecutor;
+use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
 use matze\flagwars\game\kits\Kit;
 use matze\flagwars\game\Team;
@@ -28,7 +30,7 @@ class FlagWarsPlayer {
     public function __construct(Player $player) {
         $this->player = $player;
 
-        $this->kit = GameManager::getInstance()->getKit("Sprengmeister");
+        $this->kit = null;
     }
 
     /**
@@ -160,6 +162,23 @@ class FlagWarsPlayer {
         $this->unlockedKits = $unlockedKits;
     }
 
+    /**
+     * @param \matze\flagwars\game\kits\Kit $kit
+     * @return bool
+     */
+    public function boughtKit(Kit $kit)
+    {
+        return in_array($kit->getName(), $this->unlockedKits);
+    }
+
+    /**
+     * @param string $kitName
+     */
+    public function addUnlockedKit(string $kitName)
+    {
+        $this->unlockedKits[] = $kitName;
+    }
+
     /** @var Team|null */
     private $team = null;
 
@@ -214,5 +233,44 @@ class FlagWarsPlayer {
 
             $player->removeEffect(Effect::SLOWNESS);
         }
+    }
+
+    public function load(): void
+    {
+        $name = $this->getPlayer()->getName();
+        AsyncExecutor::submitMySQLAsyncTask("FlagWars", function (\mysqli $mysqli) use ($name) {
+            $res = $mysqli->query("SELECT * FROM kits WHERE playername='$name'");
+
+            if ($res->num_rows > 0)
+                return $res->fetch_assoc();
+            else
+                $mysqli->query("INSERT INTO `kits`(`playername`, `selected_kit`, `kits`) VALUES ('$name', '', '')");
+
+            return null;
+        }, function (Server $server, $result) use ($name) {
+            if ($result === null) return;
+            $player = $server->getPlayer($name);
+            if($player === null) return;
+
+            $fwPlayer = FlagWars::getPlayer($player);
+            $kits = explode(";", $result["kits"]);
+            $selected_kit = $result["selected_kit"];
+
+            if (strlen($selected_kit) > 0)
+                $fwPlayer->setKit(GameManager::getInstance()->getKit($selected_kit));
+
+            $fwPlayer->setUnlockedKits($kits);
+            $fwPlayer->getPlayer()->playSound("random.levelup", 5.0, 1.0, [$fwPlayer->getPlayer()]);
+        });
+    }
+
+    public function save()
+    {
+        $lockedKits = implode(";", $this->getUnlockedKits());
+        $kit = $this->getKit()->getName();
+        $name = $this->getPlayer()->getName();
+        AsyncExecutor::submitMySQLAsyncTask("FlagWars", function (\mysqli $mysqli) use ($name, $kit, $lockedKits){
+             $mysqli->query("UPDATE kits SET selected_kit='$kit',kits='$lockedKits' WHERE playername='$name'");
+        });
     }
 }

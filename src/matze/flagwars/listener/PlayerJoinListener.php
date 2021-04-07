@@ -26,6 +26,7 @@ class PlayerJoinListener implements Listener {
             case $game::STATE_COUNTDOWN: {}
             case $game::STATE_WAITING: {
                 $player->setGamemode(2);
+                $fwPlayer->load();
                 $player->teleport(Settings::$waiting_lobby_location);
                 if(count($game->getPlayers()) >= $game->getMaxPlayers()) {
                     return;

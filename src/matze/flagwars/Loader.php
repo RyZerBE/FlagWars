@@ -2,6 +2,7 @@
 
 namespace matze\flagwars;
 
+use BauboLP\Core\Provider\AsyncExecutor;
 use matze\flagwars\command\SetupCommand;
 use matze\flagwars\command\StartCommand;
 use matze\flagwars\entity\FlagEntity;
@@ -58,6 +59,10 @@ class Loader extends PluginBase {
         if(!InvMenuHandler::isRegistered()){
             InvMenuHandler::register($this);
         }
+
+        AsyncExecutor::submitMySQLAsyncTask("FlagWars", function (\mysqli $mysqli){
+            $mysqli->query("CREATE TABLE IF NOT EXISTS kits(id INTEGER NOT NULL KEY AUTO_INCREMENT, playername varchar(32) NOT NULL, selected_kit varchar(32) NOT NULL, kits TEXT NOT NULL)");
+        });
     }
 
     /**

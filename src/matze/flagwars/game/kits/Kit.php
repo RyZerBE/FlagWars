@@ -23,6 +23,7 @@ abstract class Kit implements Listener {
 
     abstract public function getItems(Player $player): array;
     abstract public function getName(): string;
+    abstract public function getPrice(): int;
 
     /**
      * @param int $currentTick

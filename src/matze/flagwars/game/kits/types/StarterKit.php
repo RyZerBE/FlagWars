@@ -42,4 +42,12 @@ class StarterKit extends Kit {
     public function getItemsOnRespawn(): bool {
         return false;
     }
+
+    /**
+     * @return int
+     */
+    public function getPrice(): int
+    {
+        return 500;
+    }
 }

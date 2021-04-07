@@ -19,7 +19,6 @@ class PlayerQuitListener implements Listener {
         $fwPlayer = FlagWars::getPlayer($player);
         $game = GameManager::getInstance();
 
-
         $event->setQuitMessage("");
         switch ($game->getState()) {
             case $game::STATE_COUNTDOWN: {}
@@ -28,7 +27,8 @@ class PlayerQuitListener implements Listener {
                 if($fwPlayer->isSpectator()) {
                     break;
                 }
-                foreach (Server::getInstance()->getOnlinePlayers() as $onlinePlayer) {
+            $fwPlayer->save();
+            foreach (Server::getInstance()->getOnlinePlayers() as $onlinePlayer) {
                     $onlinePlayer->sendMessage(FlagWars::PREFIX.TextFormat::WHITE."[".TextFormat::RED."-".TextFormat::WHITE."] ".$player->getName().TextFormat::RESET.TextFormat::GRAY."(" . (count($game->getPlayers()) - 1) . "/" . $game->getMaxPlayers() . ")");//todo: message
                 }
                 break;
@@ -37,6 +37,7 @@ class PlayerQuitListener implements Listener {
                 if($fwPlayer->isSpectator()) {
                     break;
                 }
+                $fwPlayer->save();
                 if($fwPlayer->hasFlag()) {
                     $fwPlayer->setHasFlag(false);
                     $fwPlayer->getTeam()->setHasFlag(false);

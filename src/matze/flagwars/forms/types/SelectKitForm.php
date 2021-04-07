@@ -7,6 +7,7 @@ use matze\flagwars\FlagWars;
 use matze\flagwars\forms\Form;
 use matze\flagwars\game\GameManager;
 use pocketmine\Player;
+use pocketmine\utils\TextFormat;
 
 class SelectKitForm extends Form {
 
@@ -21,13 +22,36 @@ class SelectKitForm extends Form {
             if(is_null($data)) return;
             $game = GameManager::getInstance();
             if($game->isIngame()) return;
+            $fwPlayer = FlagWars::getPlayer($player);
+            if($fwPlayer === null) return;
 
             $form = new KitDescriptionForm();
-            $form->open($player, -1, ["name" => $data]);
+            $form->open($player, -1, ["name" => $data, "unlocked" => (in_array($data, $fwPlayer->getUnlockedKits())) ? true : false]);
         });
+
+        $fwPlayer = FlagWars::getPlayer($player);
+        if($fwPlayer === null) return;
+
         $form->setTitle("§r§l§fFlagWars");
+        $playerKit = $fwPlayer->getKit();
+
+        if($playerKit === null)
+            $playerKit = "#CoVid19";
+        else
+            $playerKit = $fwPlayer->getKit()->getName();
         foreach (GameManager::getInstance()->getKits() as $kit) {
-            $form->addButton("§r§7" . $kit->getName(), -1, "", $kit->getName());
+            if($kit->getName() === $playerKit) {
+                $info = TextFormat::AQUA . "AUSGEWÄHLT";
+                $picture = "textures/ui/op";
+            } else if($fwPlayer->boughtKit($kit)) {
+                $info = TextFormat::GREEN."GEKAUFT";
+                $picture = "textures/ui/confirm.png";
+            } else {
+                $info = TextFormat::RED."GEKAUFT";
+                $picture = "textures/ui/realms_red_x.png";
+            }
+
+            $form->addButton(TextFormat::GRAY. $kit->getName().TextFormat::DARK_GRAY."(".$info.TextFormat::DARK_GRAY.")", 0, $picture, $kit->getName());
         }
         $form->sendToPlayer($player);
     }

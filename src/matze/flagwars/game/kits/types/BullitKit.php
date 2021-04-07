@@ -66,4 +66,12 @@ class BullitKit extends Kit {
     public function manipulatesFlagMovement(): bool {
         return true;
     }
+
+    /**
+     * @return int
+     */
+    public function getPrice(): int
+    {
+        return 500;
+    }
 }

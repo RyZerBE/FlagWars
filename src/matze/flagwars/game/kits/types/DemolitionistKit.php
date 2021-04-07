@@ -88,4 +88,12 @@ class DemolitionistKit extends Kit {
         $block->ignite(1, ShopManager::teamColorIntoMeta($fwPlayer->getTeam()->getColor()));
         $player->getInventory()->setItemInHand(Item::get(0));
     }
+
+    /**
+     * @return int
+     */
+    public function getPrice(): int
+    {
+        return 500;
+    }
 }
