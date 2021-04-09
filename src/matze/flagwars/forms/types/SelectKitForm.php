@@ -47,11 +47,11 @@ class SelectKitForm extends Form {
                 $info = TextFormat::GREEN."GEKAUFT";
                 $picture = "textures/ui/confirm.png";
             } else {
-                $info = TextFormat::RED."GEKAUFT";
+                $info = TextFormat::GOLD.$kit->getPrice()." Coins";
                 $picture = "textures/ui/realms_red_x.png";
             }
 
-            $form->addButton(TextFormat::GRAY. $kit->getName().TextFormat::DARK_GRAY."(".$info.TextFormat::DARK_GRAY.")", 0, $picture, $kit->getName());
+            $form->addButton(TextFormat::GRAY. $kit->getName()."\n".TextFormat::DARK_GRAY."(".$info.TextFormat::DARK_GRAY.")", 0, $picture, $kit->getName());
         }
         $form->sendToPlayer($player);
     }
