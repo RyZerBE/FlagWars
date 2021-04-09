@@ -3,6 +3,7 @@
 namespace matze\flagwars\entity;
 
 use matze\flagwars\FlagWars;
+use matze\flagwars\shop\categories\RushCategory;
 use matze\flagwars\shop\ShopCategorys;
 use matze\flagwars\utils\Vector3Utils;
 use pocketmine\entity\Creature;
@@ -63,8 +64,13 @@ class ShopEntity extends Creature {
 
         if($source instanceof EntityDamageByEntityEvent) {
             $damager = $source->getDamager();
-            if ($damager instanceof Player)
-                ShopCategorys::RushCategory($damager);
+            if ($damager instanceof Player) {
+                $fwPlayer = FlagWars::getPlayer($damager);
+                if($fwPlayer === null) return;
+
+                $fwPlayer->getShopMenu()->updateCategory(new RushCategory());
+                $fwPlayer->getShopMenu()->open();
+            }
         }
     }
 

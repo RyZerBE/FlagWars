@@ -31,6 +31,7 @@ use matze\flagwars\listener\PlayerLoginListener;
 use matze\flagwars\listener\PlayerMoveListener;
 use matze\flagwars\listener\PlayerQuitListener;
 use matze\flagwars\scheduler\GameUpdateTask;
+use matze\flagwars\shop\ShopManager;
 use matze\flagwars\utils\Settings;
 use muqsit\invmenu\InvMenuHandler;
 use pocketmine\entity\Entity;
@@ -49,6 +50,7 @@ class Loader extends PluginBase {
 
         FlagWars::getInstance();
         GameManager::getInstance();
+        ShopManager::loadCategories();
 
         $this->initListener();
         $this->initCommands();

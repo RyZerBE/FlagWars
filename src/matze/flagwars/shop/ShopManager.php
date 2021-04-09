@@ -4,6 +4,15 @@
 namespace matze\flagwars\shop;
 
 
+use matze\flagwars\shop\categories\BlockCategory;
+use matze\flagwars\shop\categories\BowCategory;
+use matze\flagwars\shop\categories\EatCategory;
+use matze\flagwars\shop\categories\PotionCategory;
+use matze\flagwars\shop\categories\ProtectionCategory;
+use matze\flagwars\shop\categories\RushCategory;
+use matze\flagwars\shop\categories\SpecialCategory;
+use matze\flagwars\shop\categories\SwordCategory;
+use matze\flagwars\shop\categories\ToolsCategory;
 use pocketmine\item\Item;
 use pocketmine\Player;
 use pocketmine\utils\Color;
@@ -11,6 +20,27 @@ use pocketmine\utils\TextFormat;
 
 class ShopManager
 {
+    /** @var \matze\flagwars\shop\ShopCategory[] */
+    public static $categories = [];
+
+    public static function loadCategories(): void
+    {
+        $categories = [
+            new BlockCategory(),
+            new BowCategory(),
+            new EatCategory(),
+            new PotionCategory(),
+            new ProtectionCategory(),
+            new RushCategory(),
+            new SpecialCategory(),
+            new SwordCategory(),
+            new ToolsCategory()
+        ];
+        
+        /** @var \matze\flagwars\shop\ShopCategory $category */
+        foreach ($categories as $category)
+            self::$categories[$category->getName()] = $category;
+    }
 
     public static function rm(Player $player, int $id = Item::BRICK, $count = 1)
     {

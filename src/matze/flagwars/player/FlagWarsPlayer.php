@@ -7,8 +7,8 @@ use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
 use matze\flagwars\game\kits\Kit;
 use matze\flagwars\game\Team;
+use matze\flagwars\shop\ShopMenu;
 use matze\flagwars\utils\ItemUtils;
-use pocketmine\entity\Attribute;
 use pocketmine\entity\Effect;
 use pocketmine\item\Item;
 use pocketmine\network\mcpe\protocol\PlaySoundPacket;
@@ -29,8 +29,8 @@ class FlagWarsPlayer {
      */
     public function __construct(Player $player) {
         $this->player = $player;
-
         $this->kit = null;
+        $this->shopMenu = new ShopMenu($this);
     }
 
     /**
@@ -233,6 +233,16 @@ class FlagWarsPlayer {
 
             $player->removeEffect(Effect::SLOWNESS);
         }
+    }
+    /** @var \matze\flagwars\shop\ShopMenu */
+    private $shopMenu;
+
+    /**
+     * @return \matze\flagwars\shop\ShopMenu
+     */
+    public function getShopMenu(): \matze\flagwars\shop\ShopMenu
+    {
+        return $this->shopMenu;
     }
 
     public function load(): void

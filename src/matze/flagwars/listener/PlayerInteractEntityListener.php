@@ -5,7 +5,8 @@ namespace matze\flagwars\listener;
 
 
 use matze\flagwars\entity\ShopEntity;
-use matze\flagwars\shop\ShopCategorys;
+use matze\flagwars\FlagWars;
+use matze\flagwars\shop\categories\RushCategory;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerInteractEntityEvent;
 
@@ -17,7 +18,12 @@ class PlayerInteractEntityListener implements Listener
         $entity = $event->getEntity();
         $player = $event->getPlayer();
 
-        if($entity instanceof ShopEntity)
-            ShopCategorys::RushCategory($player);
+        if($entity instanceof ShopEntity) {
+            $fwPlayer = FlagWars::getPlayer($player);
+            if($fwPlayer === null) return;
+
+            $fwPlayer->getShopMenu()->updateCategory(new RushCategory());
+            $fwPlayer->getShopMenu()->open();
+        }
     }
 }

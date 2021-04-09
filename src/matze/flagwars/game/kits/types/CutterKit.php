@@ -26,6 +26,7 @@ class CutterKit extends Kit {
                 Enchantment::EFFICIENCY => 5
             ])
         ];
+        #TODO: Nerf? Damage item? Maybe. #CONTENTS
     }
 
     /**
