@@ -46,23 +46,33 @@ class PlayerInteractListener implements Listener {
             $player->resetItemCooldown($item, 10);
             $event->setCancelled();
             switch (ItemUtils::getItemTag($item, "function")) {
-                case "kit_selection": {
+                case "kit_selection":
+                {
                     Forms::getSelectKitForm()->open($player);
                     break;
                 }
-                case "team_selection": {
+                case "team_selection":
+                {
                     Forms::getSelectTeamForm()->open($player);
                     break;
                 }
-                case "map_selection": {
-                    if($game->getCountdown() <= 5) {
+                case "map_selection":
+                {
+                    if ($game->getCountdown() <= 5) {
                         $player->getLevel()->addSound(new ClickSound($player), [$player]);
                         break;
                     }
                     Forms::getSelectMapForm()->open($player);
                     break;
                 }
-                case "quit": {
+                case "info":
+                    $form = new SimpleForm(null);
+                    $form->setTitle(FlagWars::PREFIX.TextFormat::GREEN."Info");
+                    $form->setContent(LanguageProvider::getMessageContainer('info-fw', $player->getName()));
+                    $form->sendToPlayer($player);
+                    break;
+                case "quit":
+                {
                     CloudBridge::getCloudProvider()->dispatchProxyCommand($player->getName(), "hub");
                     break;
                 }
