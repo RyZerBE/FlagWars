@@ -35,13 +35,13 @@ class GameManager {
 
     public function __construct() {
         $kits = [
-            new SpiderManKit(),
             new StarterKit(),
-            new CutterKit(),
-            new AthleteKit(),
-            new BullitKit(),
             new VampireKit(),
-            new DemolitionistKit()
+            new DemolitionistKit(),
+            new SpiderManKit(),
+            new BullitKit(),
+            new CutterKit(),
+            new AthleteKit()
         ];
         foreach ($kits as $kit) {
             $this->registerKit($kit);
