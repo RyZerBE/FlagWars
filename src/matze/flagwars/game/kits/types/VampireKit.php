@@ -55,6 +55,6 @@ class VampireKit extends Kit {
      */
     public function getPrice(): int
     {
-        return 500;
+        return 25000;
     }
 }

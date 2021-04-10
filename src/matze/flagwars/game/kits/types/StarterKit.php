@@ -48,6 +48,6 @@ class StarterKit extends Kit {
      */
     public function getPrice(): int
     {
-        return 500;
+        return 10000;
     }
 }

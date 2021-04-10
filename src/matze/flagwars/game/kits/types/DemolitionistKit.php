@@ -94,6 +94,6 @@ class DemolitionistKit extends Kit {
      */
     public function getPrice(): int
     {
-        return 500;
+        return 40000;
     }
 }

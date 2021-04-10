@@ -72,6 +72,6 @@ class BullitKit extends Kit {
      */
     public function getPrice(): int
     {
-        return 500;
+        return 60000;
     }
 }

@@ -59,6 +59,6 @@ class AthleteKit extends Kit {
      */
     public function getPrice(): int
     {
-        return 500;
+        return 120000;
     }
 }
