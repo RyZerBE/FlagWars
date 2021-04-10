@@ -278,7 +278,9 @@ class FlagWarsPlayer {
     public function save()
     {
         $lockedKits = implode(";", $this->getUnlockedKits());
+        if($this->getKit() != null)
         $kit = $this->getKit()->getName();
+
         $name = $this->getPlayer()->getName();
         AsyncExecutor::submitMySQLAsyncTask("FlagWars", function (\mysqli $mysqli) use ($name, $kit, $lockedKits){
              $mysqli->query("UPDATE kits SET selected_kit='$kit',kits='$lockedKits' WHERE playername='$name'");
