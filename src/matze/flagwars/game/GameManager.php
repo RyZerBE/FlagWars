@@ -22,6 +22,8 @@ use matze\flagwars\utils\LocationUtils;
 use matze\flagwars\utils\Settings;
 use matze\flagwars\utils\TaskExecuter;
 use matze\flagwars\utils\Vector3Utils;
+use matze\replaySystem\replay\Replay;
+use matze\replaySystem\replay\ReplayManager;
 use pocketmine\block\Block;
 use pocketmine\entity\Entity;
 use pocketmine\Player;
@@ -449,6 +451,11 @@ class GameManager {
             $shop = new ShopEntity($location->getLevel(), $nbt);
             $shop->spawnToAll();
         }
+
+        $replay = new Replay($map->getSpectatorLocation()->getLevel());
+        $replay->setSpawn($map->getSpectatorLocation()->asVector3());
+        $replay->startRecording();
+        ReplayManager::getInstance()->addReplay($replay);
     }
 
     public function stopGame(): void {
@@ -460,6 +467,9 @@ class GameManager {
 
         if($winner === null)
             $winner = $this->getTeams()[0];
+
+        $replay = ReplayManager::getInstance()->getReplayByLevel($this->getMap()->getSpectatorLocation()->getLevel());
+        $replay->stopRecording();
 
         foreach (Server::getInstance()->getOnlinePlayers() as $player) {
             $fwPlayer = FlagWars::getPlayer($player);
