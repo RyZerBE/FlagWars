@@ -452,10 +452,10 @@ class GameManager {
             $shop->spawnToAll();
         }
 
-        $replay = new Replay($map->getSpectatorLocation()->getLevel());
+      /*  $replay = new Replay($map->getSpectatorLocation()->getLevel());
         $replay->setSpawn($map->getSpectatorLocation()->asVector3());
         $replay->startRecording();
-        ReplayManager::getInstance()->addReplay($replay);
+        ReplayManager::getInstance()->addReplay($replay);*/
     }
 
     public function stopGame(): void {
@@ -468,8 +468,8 @@ class GameManager {
         if($winner === null)
             $winner = $this->getTeams()[0];
 
-        $replay = ReplayManager::getInstance()->getReplayByLevel($this->getMap()->getSpectatorLocation()->getLevel());
-        $replay->stopRecording();
+       /* $replay = ReplayManager::getInstance()->getReplayByLevel($this->getMap()->getSpectatorLocation()->getLevel());
+        $replay->stopRecording();*/
 
         foreach (Server::getInstance()->getOnlinePlayers() as $player) {
             $fwPlayer = FlagWars::getPlayer($player);

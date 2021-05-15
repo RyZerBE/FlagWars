@@ -169,7 +169,7 @@ class FlagWarsPlayer {
      */
     public function boughtKit(Kit $kit)
     {
-        return in_array($kit->getName(), $this->unlockedKits);
+        return in_array($kit->getName(), $this->unlockedKits) || $this->getPlayer()->hasPermission("kits.free");
     }
 
     /**
