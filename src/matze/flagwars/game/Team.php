@@ -92,7 +92,7 @@ class Team {
      */
     public function getSpawnLocation(): Location {
         if(is_null(GameManager::getInstance()->getMap())) return new Location();
-        $location = GameManager::getInstance()->getMap()->getTeamSpawnLocation($this);
+        $location = clone GameManager::getInstance()->getMap()->getTeamSpawnLocation($this);
         $level = $location->getLevel();
         while (
             $level->getBlock($location)->isSolid() ||
