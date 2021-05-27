@@ -58,7 +58,7 @@ class KitDescriptionForm extends Form
                     $form->addButton(TextFormat::GREEN.TextFormat::BOLD."✔ CLICK TO BUY", 0, "textures/ui/confirm.png");
                 }else {
                     $form->setContent($kit->getDescription()."\n".LanguageProvider::getMessageContainer('fw-not-enough-coins-kit', $player->getName(), ['#coins' => $kit->getPrice() - $coins]));
-                    $form->addButton(TextFormat::GREEN.TextFormat::BOLD."✘ CANNOT BUY", 0, "textures/ui/realms_red_x.png");
+                    $form->addButton(TextFormat::RED.TextFormat::BOLD."✘ CANNOT BUY", 0, "textures/ui/realms_red_x.png");
                 }
             }
         }
