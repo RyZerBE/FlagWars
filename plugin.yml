@@ -2,3 +2,7 @@ name: FlagWars
 version: 1.0
 api: 3.0.0
 main: matze\flagwars\Loader
+
+permissions:
+  kits.free:
+    default: op
