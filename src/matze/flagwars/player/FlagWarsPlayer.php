@@ -278,12 +278,14 @@ class FlagWarsPlayer {
     public function save()
     {
         $lockedKits = implode(";", $this->getUnlockedKits());
-        if($this->getKit() != null)
-        $kit = $this->getKit()->getName();
+        if ($this->getKit() != null)
+            $kit = $this->getKit()->getName();
+        else
+            $kit = "";
 
         $name = $this->getPlayer()->getName();
-        AsyncExecutor::submitMySQLAsyncTask("FlagWars", function (\mysqli $mysqli) use ($name, $kit, $lockedKits){
-             $mysqli->query("UPDATE kits SET selected_kit='$kit',kits='$lockedKits' WHERE playername='$name'");
+        AsyncExecutor::submitMySQLAsyncTask("FlagWars", function (\mysqli $mysqli) use ($name, $kit, $lockedKits) {
+            $mysqli->query("UPDATE kits SET selected_kit='$kit',kits='$lockedKits' WHERE playername='$name'");
         });
     }
 }
