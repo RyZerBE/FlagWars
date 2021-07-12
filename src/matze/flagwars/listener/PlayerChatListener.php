@@ -4,13 +4,13 @@
 namespace matze\flagwars\listener;
 
 
-use BauboLP\Core\Provider\LanguageProvider;
+use baubolp\core\player\RyzerPlayerProvider;
+use baubolp\core\provider\CoinProvider;
+use baubolp\core\provider\LanguageProvider;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChatEvent;
-use BauboLP\Core\Player\RyzerPlayerProvider;
-use BauboLP\Core\Provider\CoinProvider;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
 

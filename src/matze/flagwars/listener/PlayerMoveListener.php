@@ -2,13 +2,13 @@
 
 namespace matze\flagwars\listener;
 
-use BauboLP\Core\Provider\LanguageProvider;
+use baubolp\core\provider\CoinProvider;
+use baubolp\core\provider\LanguageProvider;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\Server;
-use BauboLP\Core\Provider\CoinProvider;
 
 class PlayerMoveListener implements Listener {
 

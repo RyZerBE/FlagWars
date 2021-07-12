@@ -3,9 +3,9 @@
 
 namespace matze\flagwars\forms\types;
 
-use BauboLP\Core\Provider\LanguageProvider;
-use BauboLP\Core\Player\RyzerPlayerProvider;
-use BauboLP\Core\Provider\CoinProvider;
+use baubolp\core\player\RyzerPlayerProvider;
+use baubolp\core\provider\CoinProvider;
+use baubolp\core\provider\LanguageProvider;
 use jojoe77777\FormAPI\SimpleForm;
 use matze\flagwars\FlagWars;
 use matze\flagwars\forms\Form;

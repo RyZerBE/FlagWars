@@ -2,6 +2,7 @@
 
 namespace matze\flagwars\game\kits\types;
 
+use baubolp\core\entity\TNT;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
 use matze\flagwars\game\kits\Kit;
@@ -12,7 +13,6 @@ use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\item\Item;
 use pocketmine\Player;
-use BauboLP\Core\Utils\TNT;
 
 class DemolitionistKit extends Kit {
 

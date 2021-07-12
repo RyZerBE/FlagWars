@@ -2,7 +2,7 @@
 
 namespace matze\flagwars;
 
-use BauboLP\Core\Provider\AsyncExecutor;
+use baubolp\core\provider\AsyncExecutor;
 use matze\flagwars\command\SetupCommand;
 use matze\flagwars\command\StartCommand;
 use matze\flagwars\entity\FlagEntity;

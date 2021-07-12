@@ -3,8 +3,6 @@
 namespace matze\flagwars\utils;
 
 use pocketmine\block\Block;
-use pocketmine\item\Item;
-use pocketmine\item\ItemFactory;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat as C;
 

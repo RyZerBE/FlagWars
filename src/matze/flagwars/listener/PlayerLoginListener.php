@@ -3,8 +3,6 @@
 namespace matze\flagwars\listener;
 
 use matze\flagwars\FlagWars;
-use matze\flagwars\provider\FlagWarsProvider;
-use matze\flagwars\utils\AsyncExecuter;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerLoginEvent;
 

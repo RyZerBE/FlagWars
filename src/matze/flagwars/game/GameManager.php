@@ -2,6 +2,7 @@
 
 namespace matze\flagwars\game;
 
+use baubolp\core\provider\CoinProvider;
 use matze\flagwars\entity\FlagEntity;
 use matze\flagwars\entity\ShopEntity;
 use matze\flagwars\entity\SpawnerEntity;
@@ -29,7 +30,6 @@ use pocketmine\entity\Entity;
 use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
-use BauboLP\Core\Provider\CoinProvider;
 
 
 class GameManager {

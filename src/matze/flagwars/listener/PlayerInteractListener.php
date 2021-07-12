@@ -2,8 +2,8 @@
 
 namespace matze\flagwars\listener;
 
-use BauboLP\Core\Provider\LanguageProvider;
 use BauboLP\Cloud\CloudBridge;
+use baubolp\core\provider\LanguageProvider;
 use jojoe77777\FormAPI\SimpleForm;
 use matze\flagwars\entity\SpawnerEntity;
 use matze\flagwars\FlagWars;

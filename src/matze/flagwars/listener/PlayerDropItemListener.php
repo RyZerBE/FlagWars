@@ -2,7 +2,7 @@
 
 namespace matze\flagwars\listener;
 
-use BauboLP\Core\Provider\LanguageProvider;
+use baubolp\core\provider\LanguageProvider;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
 use matze\flagwars\utils\ItemUtils;

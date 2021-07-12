@@ -2,8 +2,8 @@
 
 namespace matze\flagwars\scheduler;
 
-use BauboLP\Core\Provider\LanguageProvider;
 use BauboLP\Cloud\CloudBridge;
+use baubolp\core\provider\LanguageProvider;
 use matze\flagwars\entity\FlagEntity;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;

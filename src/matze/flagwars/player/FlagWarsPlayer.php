@@ -2,7 +2,7 @@
 
 namespace matze\flagwars\player;
 
-use BauboLP\Core\Provider\AsyncExecutor;
+use baubolp\core\provider\AsyncExecutor;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
 use matze\flagwars\game\kits\Kit;

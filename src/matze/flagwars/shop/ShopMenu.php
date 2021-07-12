@@ -6,7 +6,6 @@ namespace matze\flagwars\shop;
 
 use matze\flagwars\FlagWars;
 use matze\flagwars\player\FlagWarsPlayer;
-use matze\flagwars\shop\categories\RushCategory;
 use muqsit\invmenu\InvMenu;
 use muqsit\invmenu\transaction\InvMenuTransaction;
 use muqsit\invmenu\transaction\InvMenuTransactionResult;

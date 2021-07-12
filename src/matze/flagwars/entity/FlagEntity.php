@@ -2,13 +2,12 @@
 
 namespace matze\flagwars\entity;
 
-use BauboLP\Core\Provider\LanguageProvider;
+use baubolp\core\provider\LanguageProvider;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
 use matze\flagwars\provider\FlagWarsProvider;
 use matze\flagwars\utils\Settings;
 use matze\flagwars\utils\SkinUtils;
-use matze\marioparty\MarioParty;
 use pocketmine\entity\Effect;
 use pocketmine\entity\EffectInstance;
 use pocketmine\entity\Entity;
