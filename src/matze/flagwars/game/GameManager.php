@@ -2,6 +2,7 @@
 
 namespace matze\flagwars\game;
 
+use baubolp\core\player\RyzerPlayerProvider;
 use baubolp\core\provider\CoinProvider;
 use matze\flagwars\entity\FlagEntity;
 use matze\flagwars\entity\ShopEntity;
@@ -480,12 +481,13 @@ class GameManager {
 
             $player->sendTitle($winner->getColor()."Team ".$winner->getName(), "HGW <3");
             $player->playSound("firework.launch", 5.0, 1.0, [$player]);
-            if($fwPlayer->getTeam()->getName() === $winner->getName())
-                CoinProvider::addCoins($player->getName(), rand(100, 300));
-            else
-                CoinProvider::addCoins($player->getName(), rand(50, 100));
-
             if($fwPlayer->isSpectator()) continue;
+            if($fwPlayer->getTeam()->getName() === $winner->getName()){
+                CoinProvider::addCoins($player->getName(), rand(100, 300));
+                RyzerPlayerProvider::getRyzerPlayer($player->getName())->getNetworkLevel()->addProgress(50);
+            }else{
+                CoinProvider::addCoins($player->getName(), rand(50, 100));
+            }
         }
     }
 
