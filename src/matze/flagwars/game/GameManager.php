@@ -16,6 +16,7 @@ use matze\flagwars\game\kits\types\DemolitionistKit;
 use matze\flagwars\game\kits\types\SpiderManKit;
 use matze\flagwars\game\kits\types\StarterKit;
 use matze\flagwars\game\kits\types\VampireKit;
+use matze\flagwars\Loader;
 use matze\flagwars\utils\AsyncExecuter;
 use matze\flagwars\utils\FileUtils;
 use matze\flagwars\utils\InstantiableTrait;
@@ -31,7 +32,7 @@ use pocketmine\entity\Entity;
 use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
-
+use ryzerbe\statssystem\provider\StatsAsyncProvider;
 
 class GameManager {
     use InstantiableTrait;
@@ -424,6 +425,8 @@ class GameManager {
             $player->setNameTag($team->getColor().$player->getName());
             $player->setDisplayName($team->getColor().$player->getName());
 
+            StatsAsyncProvider::appendStatistic($player->getName(), Loader::STATS_CATEGORY, "rounds", 1);
+
             $kit = $fwPlayer->getKit();
             if(!is_null($kit)) foreach ($kit->getItems($player) as $item) $player->getInventory()->addItem(ItemUtils::addItemTag($item, "kit_item", "kit_item"));
         }
@@ -485,7 +488,9 @@ class GameManager {
             if($fwPlayer->getTeam()->getName() === $winner->getName()){
                 CoinProvider::addCoins($player->getName(), rand(100, 300));
                 RyzerPlayerProvider::getRyzerPlayer($player->getName())->getNetworkLevel()->addProgress(50);
+                StatsAsyncProvider::appendStatistic($player->getName(), Loader::STATS_CATEGORY, "wins", 1);
             }else{
+                StatsAsyncProvider::appendStatistic($player->getName(), Loader::STATS_CATEGORY, "loses", 1);
                 CoinProvider::addCoins($player->getName(), rand(50, 100));
             }
         }

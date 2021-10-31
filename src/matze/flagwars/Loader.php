@@ -34,11 +34,16 @@ use matze\flagwars\scheduler\GameUpdateTask;
 use matze\flagwars\shop\ShopManager;
 use matze\flagwars\utils\Settings;
 use muqsit\invmenu\InvMenuHandler;
+use mysqli;
 use pocketmine\entity\Entity;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
+use ryzerbe\statssystem\provider\StatsAsyncProvider;
+use ryzerbe\statssystem\provider\StatsProvider;
+use ryzerbe\statssystem\StatsSystem;
 
 class Loader extends PluginBase {
+    public const STATS_CATEGORY = "FlagWars";
 
     /** @var Loader|null */
     private static $instance = null;
@@ -62,9 +67,21 @@ class Loader extends PluginBase {
             InvMenuHandler::register($this);
         }
 
-        AsyncExecutor::submitMySQLAsyncTask("FlagWars", function (\mysqli $mysqli){
+        AsyncExecutor::submitMySQLAsyncTask("FlagWars", function (mysqli $mysqli){
             $mysqli->query("CREATE TABLE IF NOT EXISTS kits(id INTEGER NOT NULL KEY AUTO_INCREMENT, playername varchar(32) NOT NULL, selected_kit varchar(32) NOT NULL, kits TEXT NOT NULL)");
         });
+
+        StatsAsyncProvider::createCategory(self::STATS_CATEGORY, [
+            "wins" => "INT",
+            "loses" => "INT",
+            "rounds" => "INT",
+            "flags" => "INT",
+        ], [
+            "wins" => 0,
+            "loses" => 0,
+            "rounds" => 0,
+            "flags" => 0,
+        ]);
     }
 
     /**

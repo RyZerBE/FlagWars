@@ -7,9 +7,11 @@ use baubolp\core\provider\CoinProvider;
 use baubolp\core\provider\LanguageProvider;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
+use matze\flagwars\Loader;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerMoveEvent;
 use pocketmine\Server;
+use ryzerbe\statssystem\provider\StatsAsyncProvider;
 
 class PlayerMoveListener implements Listener {
 
@@ -35,6 +37,7 @@ class PlayerMoveListener implements Listener {
             $player->playSound("random.levelup", 5.0, 1.0, [$player]);
             CoinProvider::addCoins($player->getName(), 50);
             RyzerPlayerProvider::getRyzerPlayer($player->getName())->getNetworkLevel()->addProgress(25);
+            StatsAsyncProvider::appendStatistic($player->getName(), Loader::STATS_CATEGORY, "flags", 1);
             foreach (Server::getInstance()->getOnlinePlayers() as $onlinePlayer)
                 $onlinePlayer->sendMessage(FlagWars::PREFIX.LanguageProvider::getMessageContainer('fw-flag-saved', $onlinePlayer->getName(), ["#team" => $team->getColor()."Team ".$team->getName()]));
         }
