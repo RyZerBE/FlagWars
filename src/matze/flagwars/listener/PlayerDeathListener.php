@@ -3,12 +3,12 @@
 namespace matze\flagwars\listener;
 
 use matze\flagwars\FlagWars;
-use ryzerbe\core\util\ItemUtils;
 use matze\flagwars\utils\TaskExecuter;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\Server;
 use ryzerbe\core\language\LanguageProvider;
+use ryzerbe\core\util\ItemUtils;
 
 class PlayerDeathListener implements Listener {
 

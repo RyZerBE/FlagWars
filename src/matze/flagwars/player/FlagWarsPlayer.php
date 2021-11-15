@@ -7,7 +7,6 @@ use matze\flagwars\game\GameManager;
 use matze\flagwars\game\kits\Kit;
 use matze\flagwars\game\Team;
 use matze\flagwars\shop\ShopMenu;
-use ryzerbe\core\util\ItemUtils;
 use mysqli;
 use pocketmine\block\BlockIds;
 use pocketmine\entity\Effect;
@@ -17,6 +16,7 @@ use pocketmine\network\mcpe\protocol\PlaySoundPacket;
 use pocketmine\Player;
 use pocketmine\Server;
 use ryzerbe\core\util\async\AsyncExecutor;
+use ryzerbe\core\util\ItemUtils;
 
 class FlagWarsPlayer {
 

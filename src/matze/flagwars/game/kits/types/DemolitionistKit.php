@@ -6,13 +6,13 @@ use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
 use matze\flagwars\game\kits\Kit;
 use matze\flagwars\shop\ShopManager;
-use ryzerbe\core\util\ItemUtils;
 use pocketmine\block\BlockIds;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\item\Item;
 use pocketmine\Player;
 use ryzerbe\core\block\TNTBlock;
+use ryzerbe\core\util\ItemUtils;
 use ryzerbe\core\util\Vector3Utils;
 
 class DemolitionistKit extends Kit {

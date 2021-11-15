@@ -3,11 +3,11 @@
 namespace matze\flagwars\game\kits\types;
 
 use matze\flagwars\game\kits\Kit;
-use ryzerbe\core\util\ItemUtils;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item;
 use pocketmine\item\ItemIds;
 use pocketmine\Player;
+use ryzerbe\core\util\ItemUtils;
 
 class CutterKit extends Kit {
 

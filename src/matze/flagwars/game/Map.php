@@ -2,10 +2,10 @@
 
 namespace matze\flagwars\game;
 
-use ryzerbe\core\util\LocationUtils;
 use matze\flagwars\utils\Settings;
 use pocketmine\level\Location;
 use pocketmine\utils\Config;
+use ryzerbe\core\util\LocationUtils;
 
 class Map {
 

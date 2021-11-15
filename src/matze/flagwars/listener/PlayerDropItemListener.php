@@ -4,10 +4,10 @@ namespace matze\flagwars\listener;
 
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
-use ryzerbe\core\util\ItemUtils;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerDropItemEvent;
 use ryzerbe\core\language\LanguageProvider;
+use ryzerbe\core\util\ItemUtils;
 
 class PlayerDropItemListener implements Listener {
 

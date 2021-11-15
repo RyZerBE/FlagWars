@@ -9,7 +9,6 @@ use matze\flagwars\FlagWars;
 use matze\flagwars\forms\Forms;
 use matze\flagwars\game\GameManager;
 use matze\flagwars\provider\FlagWarsProvider;
-use ryzerbe\core\util\ItemUtils;
 use matze\flagwars\utils\Settings;
 use pocketmine\block\BlockIds;
 use pocketmine\event\Listener;
@@ -22,6 +21,7 @@ use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
 use ryzerbe\core\language\LanguageProvider;
+use ryzerbe\core\util\ItemUtils;
 
 class PlayerInteractListener implements Listener {
 

@@ -4,7 +4,6 @@ namespace matze\flagwars\command;
 
 use matze\flagwars\game\GameManager;
 use matze\flagwars\game\Map;
-use ryzerbe\core\util\ItemUtils;
 use pocketmine\block\BlockIds;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
@@ -12,6 +11,7 @@ use pocketmine\item\Item;
 use pocketmine\item\ItemIds;
 use pocketmine\Player;
 use pocketmine\Server;
+use ryzerbe\core\util\ItemUtils;
 
 class SetupCommand extends Command {
 
