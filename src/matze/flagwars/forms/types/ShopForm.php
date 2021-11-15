@@ -16,7 +16,6 @@ class ShopForm extends Form {
     public function open(Player $player, int $window = -1, array $extraData = []): void {
         $menu = InvMenu::create(InvMenu::TYPE_CHEST);
         $menu->setName("§r§6Shop");
-        $inventory = $menu->getInventory();
 
         $menu->send($player);
     }

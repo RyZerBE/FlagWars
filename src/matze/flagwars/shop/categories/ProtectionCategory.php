@@ -6,9 +6,11 @@ namespace matze\flagwars\shop\categories;
 
 use matze\flagwars\game\Team;
 use matze\flagwars\shop\ShopCategory;
+use pocketmine\block\BlockIds;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\Item;
+use pocketmine\item\ItemIds;
 use pocketmine\utils\TextFormat;
 
 class ProtectionCategory extends ShopCategory
@@ -22,13 +24,13 @@ class ProtectionCategory extends ShopCategory
         $fallprotection = Enchantment::getEnchantment(Enchantment::FEATHER_FALLING);
 
 
-        $cap = Item::get(Item::LEATHER_CAP, 0, 1)->setCustomName(TextFormat::YELLOW."Cap");
-        $hoodie1 = Item::get(Item::CHAIN_CHESTPLATE, 0, 1)->setCustomName(TextFormat::YELLOW."Hoodie I");
-        $leggings = Item::get(Item::LEATHER_LEGGINGS, 0, 1)->setCustomName(TextFormat::YELLOW."Leggings");
-        $boots = Item::get(Item::LEATHER_BOOTS, 0, 1)->setCustomName(TextFormat::YELLOW."Boots");
-        $hoodie2 = Item::get(Item::CHAINMAIL_CHESTPLATE, 0, 1)->setCustomName(TextFormat::YELLOW."Hoodie II");
-        $hoodie3 = Item::get(Item::CHAINMAIL_CHESTPLATE, 0, 1)->setCustomName(TextFormat::YELLOW."Hoodie III");
-        $fall_boots = Item::get(Item::GOLD_BOOTS, 0, 1)->setCustomName(TextFormat::YELLOW."Fall Boots");
+        $cap = Item::get(ItemIds::LEATHER_CAP)->setCustomName(TextFormat::YELLOW."Cap");
+        $hoodie1 = Item::get(ItemIds::CHAIN_CHESTPLATE)->setCustomName(TextFormat::YELLOW."Hoodie I");
+        $leggings = Item::get(ItemIds::LEATHER_LEGGINGS)->setCustomName(TextFormat::YELLOW."Leggings");
+        $boots = Item::get(ItemIds::LEATHER_BOOTS)->setCustomName(TextFormat::YELLOW."Boots");
+        $hoodie2 = Item::get(ItemIds::CHAINMAIL_CHESTPLATE)->setCustomName(TextFormat::YELLOW."Hoodie II");
+        $hoodie3 = Item::get(ItemIds::CHAINMAIL_CHESTPLATE)->setCustomName(TextFormat::YELLOW."Hoodie III");
+        $fall_boots = Item::get(ItemIds::GOLD_BOOTS)->setCustomName(TextFormat::YELLOW."Fall Boots");
 
         $cap->setLore([TextFormat::RED.TextFormat::BOLD.'1 '.TextFormat::YELLOW."Bronze"]);
         $hoodie1->setLore([TextFormat::RED.TextFormat::BOLD.'1 '.TextFormat::YELLOW."Iron"]);
@@ -49,7 +51,7 @@ class ProtectionCategory extends ShopCategory
         $leggings->addEnchantment(new EnchantmentInstance($protection));
         $boots->addEnchantment(new EnchantmentInstance($protection));
 
-        $variable = Item::get(Item::GLASS_PANE, 0, 1)->setCustomName("");
+        $variable = Item::get(BlockIds::GLASS_PANE)->setCustomName("");
         for ($i =9; $i < 27; $i++)
             $contents[$i] = $variable;
 

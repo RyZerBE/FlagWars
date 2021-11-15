@@ -5,7 +5,7 @@ namespace matze\flagwars\utils;
 trait InstantiableTrait {
 
     /** @var static $instance|null  */
-    private static $instance = null;
+    private static ?self $instance = null;
 
     /**
      * @return static

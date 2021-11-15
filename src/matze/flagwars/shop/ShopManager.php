@@ -14,14 +14,15 @@ use matze\flagwars\shop\categories\SpecialCategory;
 use matze\flagwars\shop\categories\SwordCategory;
 use matze\flagwars\shop\categories\ToolsCategory;
 use pocketmine\item\Item;
+use pocketmine\item\ItemIds;
 use pocketmine\Player;
 use pocketmine\utils\Color;
 use pocketmine\utils\TextFormat;
 
 class ShopManager
 {
-    /** @var \matze\flagwars\shop\ShopCategory[] */
-    public static $categories = [];
+    /** @var ShopCategory[] */
+    public static array $categories = [];
 
     public static function loadCategories(): void
     {
@@ -37,17 +38,17 @@ class ShopManager
             new ToolsCategory()
         ];
         
-        /** @var \matze\flagwars\shop\ShopCategory $category */
+        /** @var ShopCategory $category */
         foreach ($categories as $category)
             self::$categories[$category->getName()] = $category;
     }
 
-    public static function rm(Player $player, int $id = Item::BRICK, $count = 1)
+    public static function rm(Player $player, int $id = ItemIds::BRICK, $count = 1)
     {
         $player->getInventory()->removeItem(Item::get($id, 0, $count));
     }
 
-    public static function count(Player $player, int $id = Item::BRICK): int{
+    public static function count(Player $player, int $id = ItemIds::BRICK): int{
         $all = 0;
         $inv = $player->getInventory();
         $content = $inv->getContents();
@@ -81,26 +82,16 @@ class ShopManager
      * @return Color
      */
     public static function teamColorIntoColor(string $colorInt): Color {
-        switch ($colorInt) {
-            case TextFormat::RED:
-                return new Color(152, 245, 255);
-            case TextFormat::BLUE:
-            case TextFormat::AQUA:
-                return new Color(255, 0, 0);
-            case TextFormat::YELLOW:
-                return new Color(255,255,0);
-            case TextFormat::GREEN:
-            case TextFormat::DARK_GREEN:
-                return new Color(127,255,0);
-            case TextFormat::LIGHT_PURPLE:
-                return new Color(255,105,180);
-            case TextFormat::GOLD:
-                return new Color(255,69,0);
-            case TextFormat::DARK_PURPLE:
-                return new Color(139,0,139);
-        }
-
-        return $color = new Color(255,240,245);
+        return match ($colorInt) {
+            TextFormat::RED => new Color(152, 245, 255),
+            TextFormat::BLUE, TextFormat::AQUA => new Color(255, 0, 0),
+            TextFormat::YELLOW => new Color(255, 255, 0),
+            TextFormat::GREEN, TextFormat::DARK_GREEN => new Color(127, 255, 0),
+            TextFormat::LIGHT_PURPLE => new Color(255, 105, 180),
+            TextFormat::GOLD => new Color(255, 69, 0),
+            TextFormat::DARK_PURPLE => new Color(139, 0, 139),
+            default => $color = new Color(255, 240, 245),
+        };
     }
 
     /**
@@ -108,24 +99,15 @@ class ShopManager
      * @return int
      */
     public static function teamColorIntoMeta(string $colorInt): int {
-        switch ($colorInt) {
-            case TextFormat::RED:
-                return 14;
-            case TextFormat::BLUE:
-            case TextFormat::AQUA:
-                return 11;
-            case TextFormat::YELLOW:
-                return 4;
-            case TextFormat::GREEN:
-            case TextFormat::DARK_GREEN:
-                return 5;
-            case TextFormat::LIGHT_PURPLE:
-                return 6;
-            case TextFormat::GOLD:
-                return 1;
-            case TextFormat::DARK_PURPLE:
-                return 10;
-        }
-        return 0;
+        return match ($colorInt) {
+            TextFormat::RED => 14,
+            TextFormat::BLUE, TextFormat::AQUA => 11,
+            TextFormat::YELLOW => 4,
+            TextFormat::GREEN, TextFormat::DARK_GREEN => 5,
+            TextFormat::LIGHT_PURPLE => 6,
+            TextFormat::GOLD => 1,
+            TextFormat::DARK_PURPLE => 10,
+            default => 0,
+        };
     }
 }

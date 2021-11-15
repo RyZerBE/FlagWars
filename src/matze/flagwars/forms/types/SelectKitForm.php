@@ -26,7 +26,7 @@ class SelectKitForm extends Form {
             if($fwPlayer === null) return;
 
             $form = new KitDescriptionForm();
-            $form->open($player, -1, ["name" => $data, "unlocked" => (in_array($data, $fwPlayer->getUnlockedKits()) || $player->hasPermission("kits.free")) ? true : false]);
+            $form->open($player, -1, ["name" => $data, "unlocked" => in_array($data, $fwPlayer->getUnlockedKits()) || $player->hasPermission("kits.free")]);
         });
 
         $fwPlayer = FlagWars::getPlayer($player);

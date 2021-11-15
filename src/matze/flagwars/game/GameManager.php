@@ -2,8 +2,6 @@
 
 namespace matze\flagwars\game;
 
-use baubolp\core\player\RyzerPlayerProvider;
-use baubolp\core\provider\CoinProvider;
 use matze\flagwars\entity\FlagEntity;
 use matze\flagwars\entity\ShopEntity;
 use matze\flagwars\entity\SpawnerEntity;
@@ -17,21 +15,21 @@ use matze\flagwars\game\kits\types\SpiderManKit;
 use matze\flagwars\game\kits\types\StarterKit;
 use matze\flagwars\game\kits\types\VampireKit;
 use matze\flagwars\Loader;
-use matze\flagwars\utils\AsyncExecuter;
+use ryzerbe\core\util\async\AsyncExecutor;
 use matze\flagwars\utils\FileUtils;
 use matze\flagwars\utils\InstantiableTrait;
-use matze\flagwars\utils\ItemUtils;
-use matze\flagwars\utils\LocationUtils;
+use ryzerbe\core\util\ItemUtils;
 use matze\flagwars\utils\Settings;
 use matze\flagwars\utils\TaskExecuter;
-use matze\flagwars\utils\Vector3Utils;
-use matze\replaySystem\replay\Replay;
-use matze\replaySystem\replay\ReplayManager;
 use pocketmine\block\Block;
 use pocketmine\entity\Entity;
 use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
+use ryzerbe\core\player\RyZerPlayerProvider;
+use ryzerbe\core\provider\CoinProvider;
+use ryzerbe\core\util\LocationUtils;
+use ryzerbe\core\util\Vector3Utils;
 use ryzerbe\statssystem\provider\StatsAsyncProvider;
 
 class GameManager {
@@ -62,7 +60,7 @@ class GameManager {
     }
 
     /** @var array  */
-    private $teams = [];
+    private array $teams = [];
 
     /**
      * @return Team[]
@@ -90,9 +88,8 @@ class GameManager {
      * @return Team|null
      */
     public function findTeam(): ?Team {
-        $result = null;
         $teams = [];
-        foreach ($this->getTeams() as $teamName => $team) {
+        foreach ($this->getTeams() as $team) {
             if($team->isFull()) continue;
             $teams[$team->getName()] = count($team->getPlayers());
         }
@@ -106,7 +103,7 @@ class GameManager {
     }
 
     /** @var array  */
-    private $kits = [];
+    private array $kits = [];
 
     /**
      * @return Kit[]
@@ -138,7 +135,7 @@ class GameManager {
     }
 
     /** @var array  */
-    private $players = [];
+    private array $players = [];
 
     /**
      * @param Player $player
@@ -148,9 +145,9 @@ class GameManager {
     }
 
     /**
-     * @param Player|string $player
+     * @param string|Player $player
      */
-    public function removePlayer($player): void {
+    public function removePlayer(Player|string $player): void {
         if($player instanceof Player) {
             $player = $player->getName();
         }
@@ -160,10 +157,10 @@ class GameManager {
     }
 
     /**
-     * @param Player|string $player
+     * @param string|Player $player
      * @return bool
      */
-    public function isPlayer($player): bool {
+    public function isPlayer(Player|string $player): bool {
         if($player instanceof Player) {
             $player = $player->getName();
         }
@@ -193,7 +190,7 @@ class GameManager {
     }
 
     /** @var bool  */
-    private $stats = true;
+    private bool $stats = true;
 
     /**
      * @param bool $enabled
@@ -210,7 +207,7 @@ class GameManager {
     }
 
     /** @var bool  */
-    private $forceStart = false;
+    private bool $forceStart = false;
 
     /**
      * @param bool $forceStart
@@ -232,7 +229,7 @@ class GameManager {
     public const STATE_RESTART = 4;
 
     /** @var int  */
-    private $state = self::STATE_WAITING;
+    private int $state = self::STATE_WAITING;
 
     /**
      * @return int
@@ -294,7 +291,7 @@ class GameManager {
     }
 
     /** @var int  */
-    private $countdown = 60;
+    private int $countdown = 60;
 
     /**
      * @param int $countdown
@@ -318,7 +315,7 @@ class GameManager {
     }
 
     /** @var array  */
-    private $map_pool = [];
+    private array $map_pool = [];
 
     /**
      * @return array
@@ -364,7 +361,7 @@ class GameManager {
         }
         $topMaps = $maps[1];
         $map = $topMaps[array_rand($topMaps)];
-        AsyncExecuter::submitAsyncTask(function () use ($map): void {
+        AsyncExecutor::submitMySQLAsyncTask("Lobby", function () use ($map): void {
             if(is_dir("worlds/" . $map)) {
                 FileUtils::delete("worlds/" . $map);
             }
@@ -377,16 +374,16 @@ class GameManager {
             $game->setMap($game->getMapByName($map->getFolderName()));
 
             $map->setTime(6000);
-            $map->stopTime();;
+            $map->stopTime();
 
             foreach ($server->getOnlinePlayers() as $player) {
-                $player->sendTitle(TextFormat::GOLD.$game->getMap()->getName(), "");
+                $player->sendTitle(TextFormat::GOLD.$game->getMap()->getName());
             }
         });
     }
 
     /** @var Map|null */
-    private $map = null;
+    private ?Map $map = null;
 
     /**
      * @return Map|null
@@ -487,7 +484,7 @@ class GameManager {
             if($fwPlayer->isSpectator()) continue;
             if($fwPlayer->getTeam()->getName() === $winner->getName()){
                 CoinProvider::addCoins($player->getName(), rand(100, 300));
-                RyzerPlayerProvider::getRyzerPlayer($player->getName())->getNetworkLevel()->addProgress(50);
+                RyZerPlayerProvider::getRyzerPlayer($player->getName())->getNetworkLevel()->addProgress(50);
                 StatsAsyncProvider::appendStatistic($player->getName(), Loader::STATS_CATEGORY, "wins", 1);
             }else{
                 StatsAsyncProvider::appendStatistic($player->getName(), Loader::STATS_CATEGORY, "loses", 1);
@@ -497,7 +494,7 @@ class GameManager {
     }
 
     /** @var array  */
-    private $blocks = [];
+    private array $blocks = [];
 
     /**
      * @param Block $block
@@ -523,7 +520,7 @@ class GameManager {
     }
 
     /** @var bool  */
-    private $flag = false;
+    private bool $flag = false;
 
     /**
      * @return bool

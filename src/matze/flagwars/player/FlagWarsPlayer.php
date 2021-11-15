@@ -2,26 +2,29 @@
 
 namespace matze\flagwars\player;
 
-use baubolp\core\provider\AsyncExecutor;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
 use matze\flagwars\game\kits\Kit;
 use matze\flagwars\game\Team;
 use matze\flagwars\shop\ShopMenu;
-use matze\flagwars\utils\ItemUtils;
+use ryzerbe\core\util\ItemUtils;
+use mysqli;
+use pocketmine\block\BlockIds;
 use pocketmine\entity\Effect;
 use pocketmine\item\Item;
+use pocketmine\item\ItemIds;
 use pocketmine\network\mcpe\protocol\PlaySoundPacket;
 use pocketmine\Player;
 use pocketmine\Server;
+use ryzerbe\core\util\async\AsyncExecutor;
 
 class FlagWarsPlayer {
 
     /** @var Player */
-    private $player;
+    private Player $player;
 
     /** @var array  */
-    private $unlockedKits = [];
+    private array $unlockedKits = [];
 
     /**
      * FlagWarsPlayer constructor.
@@ -65,9 +68,9 @@ class FlagWarsPlayer {
     }
 
     /** @var Player|null  */
-    private $lastDamager = null;
+    private ?Player $lastDamager = null;
     /** @var int  */
-    private $lastDamageTick = 0;
+    private int $lastDamageTick = 0;
 
     /**
      * @param Player|null $player
@@ -112,18 +115,18 @@ class FlagWarsPlayer {
         $player->setNameTagAlwaysVisible(true);
         $player->setInvisible(false);
         $player->setFlying($player->isCreative() && $player->isFlying());
-        $player->setAllowFlight($player->isCreative());;
+        $player->setAllowFlight($player->isCreative());
         $player->getInventory()->setHeldItemIndex(0);
     }
 
     public function getLobbyItems(): void {
         $player = $this->getPlayer();
 
-        $kitSelector = ItemUtils::addItemTag(Item::get(Item::ENDER_CHEST)->setCustomName("§r§aChoose Kit"), "kit_selection", "function");
-        $teamSelector = ItemUtils::addItemTag(Item::get(Item::BED)->setCustomName("§r§aChoose Team"), "team_selection", "function");
-        $mapSelector = ItemUtils::addItemTag(Item::get(Item::EMPTYMAP)->setCustomName("§r§aChoose Map"), "map_selection", "function");
-        $info = ItemUtils::addItemTag(Item::get(Item::BOOK)->setCustomName("§r§aInfo"), "info", "function");
-        $quit = ItemUtils::addItemTag(Item::get(Item::SLIME_BALL)->setCustomName("§r§cQuit Round"), "quit", "function");
+        $kitSelector = ItemUtils::addItemTag(Item::get(BlockIds::ENDER_CHEST)->setCustomName("§r§aChoose Kit"), "kit_selection", "function");
+        $teamSelector = ItemUtils::addItemTag(Item::get(ItemIds::BED)->setCustomName("§r§aChoose Team"), "team_selection", "function");
+        $mapSelector = ItemUtils::addItemTag(Item::get(ItemIds::EMPTYMAP)->setCustomName("§r§aChoose Map"), "map_selection", "function");
+        $info = ItemUtils::addItemTag(Item::get(ItemIds::BOOK)->setCustomName("§r§aInfo"), "info", "function");
+        $quit = ItemUtils::addItemTag(Item::get(ItemIds::SLIME_BALL)->setCustomName("§r§cQuit Round"), "quit", "function");
 
         if(GameManager::getInstance()->isRestarting()) {
             $player->getInventory()->setContents([8 => $quit]);
@@ -133,7 +136,7 @@ class FlagWarsPlayer {
     }
 
     /** @var Kit|null */
-    private $kit = null;
+    private ?Kit $kit;
 
     /**
      * @return Kit|null
@@ -164,11 +167,10 @@ class FlagWarsPlayer {
     }
 
     /**
-     * @param \matze\flagwars\game\kits\Kit $kit
+     * @param Kit $kit
      * @return bool
      */
-    public function boughtKit(Kit $kit)
-    {
+    public function boughtKit(Kit $kit): bool{
         return in_array($kit->getName(), $this->unlockedKits) || $this->getPlayer()->hasPermission("kits.free");
     }
 
@@ -181,7 +183,7 @@ class FlagWarsPlayer {
     }
 
     /** @var Team|null */
-    private $team = null;
+    private ?Team $team = null;
 
     /**
      * @return Team|null
@@ -198,7 +200,7 @@ class FlagWarsPlayer {
     }
 
     /** @var string  */
-    private $mapVote = "N/A";
+    private string $mapVote = "N/A";
 
     /**
      * @return string
@@ -215,7 +217,7 @@ class FlagWarsPlayer {
     }
 
     /** @var bool  */
-    private $hasFlag = false;
+    private bool $hasFlag = false;
 
     /**
      * @return bool
@@ -235,13 +237,13 @@ class FlagWarsPlayer {
             $player->removeEffect(Effect::SLOWNESS);
         }
     }
-    /** @var \matze\flagwars\shop\ShopMenu */
-    private $shopMenu;
+    /** @var ShopMenu */
+    private ShopMenu $shopMenu;
 
     /**
-     * @return \matze\flagwars\shop\ShopMenu
+     * @return ShopMenu
      */
-    public function getShopMenu(): \matze\flagwars\shop\ShopMenu
+    public function getShopMenu(): ShopMenu
     {
         return $this->shopMenu;
     }
@@ -249,7 +251,7 @@ class FlagWarsPlayer {
     public function load(): void
     {
         $name = $this->getPlayer()->getName();
-        AsyncExecutor::submitMySQLAsyncTask("FlagWars", function (\mysqli $mysqli) use ($name) {
+        AsyncExecutor::submitMySQLAsyncTask("FlagWars", function (mysqli $mysqli) use ($name) {
             $res = $mysqli->query("SELECT * FROM kits WHERE playername='$name'");
 
             if ($res->num_rows > 0)
@@ -284,7 +286,7 @@ class FlagWarsPlayer {
             $kit = "";
 
         $name = $this->getPlayer()->getName();
-        AsyncExecutor::submitMySQLAsyncTask("FlagWars", function (\mysqli $mysqli) use ($name, $kit, $lockedKits) {
+        AsyncExecutor::submitMySQLAsyncTask("FlagWars", function (mysqli $mysqli) use ($name, $kit, $lockedKits) {
             $mysqli->query("UPDATE kits SET selected_kit='$kit',kits='$lockedKits' WHERE playername='$name'");
         });
     }

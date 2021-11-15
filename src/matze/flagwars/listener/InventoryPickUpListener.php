@@ -6,6 +6,7 @@ namespace matze\flagwars\listener;
 
 use matze\flagwars\FlagWars;
 use matze\flagwars\shop\ShopManager;
+use pocketmine\block\BlockIds;
 use pocketmine\event\inventory\InventoryPickupItemEvent;
 use pocketmine\event\Listener;
 use pocketmine\item\Item;
@@ -18,7 +19,7 @@ class InventoryPickUpListener implements Listener
     {
         $itemEntity = $event->getItem();
         $item = $itemEntity->getItem();
-        if ($item->getId() === Item::WOOL) {
+        if ($item->getId() === BlockIds::WOOL) {
             $event->setCancelled();
             foreach ($itemEntity->getViewers() as $player) {
                 if (!$player instanceof Player) continue;
@@ -28,7 +29,7 @@ class InventoryPickUpListener implements Listener
 
                 if ($player->distance($itemEntity->asVector3()) < 1.2) {
                     $itemEntity->close();
-                    $player->getInventory()->addItem(Item::get(Item::WOOL, ShopManager::teamColorIntoMeta($fwPlayer->getTeam()->getColor()), $item->getCount()));
+                    $player->getInventory()->addItem(Item::get(BlockIds::WOOL, ShopManager::teamColorIntoMeta($fwPlayer->getTeam()->getColor()), $item->getCount()));
                     $player->playSound("random.pop", 1.0, 1.0, [$player]);
                     break;
                 }

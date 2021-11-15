@@ -2,7 +2,6 @@
 
 namespace matze\flagwars\listener;
 
-use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
 use matze\flagwars\utils\Settings;
 use pocketmine\event\block\BlockBreakEvent;
@@ -16,9 +15,7 @@ class BlockBreakListener implements Listener {
     public function onBreak(BlockBreakEvent $event): void {
         $game = GameManager::getInstance();
         $player = $event->getPlayer();
-        $fwPlayer = FlagWars::getPlayer($player);
         $block = $event->getBlock();
-        $item = $event->getItem();
 
         if($player->isCreative(true)) return;
         if(!$game->isIngame()) {

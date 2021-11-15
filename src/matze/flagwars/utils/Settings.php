@@ -2,9 +2,11 @@
 
 namespace matze\flagwars\utils;
 
-use pocketmine\block\Block;
+use pocketmine\block\BlockIds;
+use pocketmine\level\Location;
 use pocketmine\utils\Config;
 use pocketmine\utils\TextFormat as C;
+use ryzerbe\core\util\LocationUtils;
 
 class Settings {
 
@@ -46,25 +48,25 @@ class Settings {
         self::$flag_to_win = $settings->get("FlagsToWin");
     }
 
-    public static $players_per_team;
-    public static $total_teams;
-    public static $waiting_countdown;
-    public static $waiting_lobby_location;
-    public static $map_pool;
-    public static $players_for_start;
-    public static $bronze_spawn_delay;
-    public static $iron_spawn_delay;
-    public static $gold_spawn_delay;
-    public static $bronze_upgrade_cost;
-    public static $iron_upgrade_cost;
-    public static $gold_upgrade_cost;
-    public static $flag_to_win;
+    public static mixed $players_per_team;
+    public static mixed $total_teams;
+    public static mixed $waiting_countdown;
+    public static Location $waiting_lobby_location;
+    public static mixed $map_pool;
+    public static mixed $players_for_start;
+    public static mixed $bronze_spawn_delay;
+    public static mixed $iron_spawn_delay;
+    public static mixed $gold_spawn_delay;
+    public static mixed $bronze_upgrade_cost;
+    public static mixed $iron_upgrade_cost;
+    public static mixed $gold_upgrade_cost;
+    public static mixed $flag_to_win;
     public static $shop_contents;
 
     /**
      * @var array
      */
-    public static $teams = [
+    public static array $teams = [
         1 => ["Name" => "Red", "Color" => C::RED],
         2 => ["Name" => "Blue", "Color" => C::BLUE],
         3 => ["Name" => "Yellow", "Color" => C::YELLOW],
@@ -74,16 +76,16 @@ class Settings {
     /**
      * @var array
      */
-    public static $breakableBlocks = [
-        Block::RED_MUSHROOM,
-        Block::BROWN_MUSHROOM,
+    public static array $breakableBlocks = [
+        BlockIds::RED_MUSHROOM,
+        BlockIds::BROWN_MUSHROOM,
         31
     ];
 
     /**
      * @var array
      */
-    public static $notInteractAbleBlocks = [
-        Block::CHEST, Block::FURNACE, Block::WORKBENCH
+    public static array $notInteractAbleBlocks = [
+        BlockIds::CHEST, BlockIds::FURNACE, BlockIds::WORKBENCH
     ];
 }

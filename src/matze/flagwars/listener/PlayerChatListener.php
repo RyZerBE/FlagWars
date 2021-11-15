@@ -4,24 +4,24 @@
 namespace matze\flagwars\listener;
 
 
-use baubolp\core\player\RyzerPlayerProvider;
-use baubolp\core\provider\CoinProvider;
-use baubolp\core\provider\LanguageProvider;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
+use ryzerbe\core\language\LanguageProvider;
+use ryzerbe\core\player\RyZerPlayerProvider;
+use ryzerbe\core\provider\CoinProvider;
 
 class PlayerChatListener implements Listener
 {
     /** @var array  */
-    private $globalIndex = ["@", "@a", "@g", "@global"];
+    private array $globalIndex = ["@", "@a", "@g", "@global"];
     /** @var array  */
-    private $ggIndex = ["gg", "nd", "gege", "ggwp"];
+    private array $ggIndex = ["gg", "nd", "gege", "ggwp"];
     /** @var array  */
-    private $gg = [];
+    private array $gg = [];
 
     public function chat(PlayerChatEvent $event)
     {
@@ -32,8 +32,8 @@ class PlayerChatListener implements Listener
         $game = GameManager::getInstance();
         $fwPlayer = FlagWars::getPlayer($player);
 
-        if (($ryzerPlayer = RyzerPlayerProvider::getRyzerPlayer($player->getName())) != null) {
-            if ($ryzerPlayer->isMuted()) {
+        if (($ryzerPlayer = RyZerPlayerProvider::getRyzerPlayer($player->getName())) != null) {
+            if ($ryzerPlayer->getMute() === null) {
                 $event->setCancelled();
                 return;
             }

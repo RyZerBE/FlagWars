@@ -13,7 +13,7 @@ class FlagWars {
     public const PREFIX = "§r§bFlag§3Wars§8 | §7";
 
     /** @var FlagWarsProvider */
-    private static $provider;
+    private static FlagWarsProvider $provider;
 
     /**
      * MarioParty constructor.
@@ -37,7 +37,7 @@ class FlagWars {
     }
 
     /** @var array  */
-    private static $players = [];
+    private static array $players = [];
 
     /**
      * @param Player $player

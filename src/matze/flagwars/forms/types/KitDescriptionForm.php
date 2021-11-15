@@ -3,15 +3,15 @@
 
 namespace matze\flagwars\forms\types;
 
-use baubolp\core\player\RyzerPlayerProvider;
-use baubolp\core\provider\CoinProvider;
-use baubolp\core\provider\LanguageProvider;
 use jojoe77777\FormAPI\SimpleForm;
 use matze\flagwars\FlagWars;
 use matze\flagwars\forms\Form;
 use matze\flagwars\game\GameManager;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
+use ryzerbe\core\language\LanguageProvider;
+use ryzerbe\core\player\RyZerPlayerProvider;
+use ryzerbe\core\provider\CoinProvider;
 
 class KitDescriptionForm extends Form
 {
@@ -25,7 +25,7 @@ class KitDescriptionForm extends Form
             if($game->isIngame()) return;
             $fwPlayer = FlagWars::getPlayer($player);
             $kit = GameManager::getInstance()->getKit($extraData["name"]);
-            if(($ryzerPlayer = RyzerPlayerProvider::getRyzerPlayer($player->getName())) != null) {
+            if(RyZerPlayerProvider::getRyzerPlayer($player->getName()) !== null) {
                 if($bought) {
                     $fwPlayer->setKit($kit);
                     $fwPlayer->playSound("random.orb");
@@ -49,7 +49,7 @@ class KitDescriptionForm extends Form
 
         if($bought) {
             $form->setContent($kit->getDescription());
-            $form->addButton(TextFormat::GREEN.TextFormat::BOLD."✔ USE KIT", -1, "");
+            $form->addButton(TextFormat::GREEN.TextFormat::BOLD."✔ USE KIT", -1);
         }else {
             if(($ryzerPlayer = RyzerPlayerProvider::getRyzerPlayer($player->getName())) != null) {
                 $coins = $ryzerPlayer->getCoins();

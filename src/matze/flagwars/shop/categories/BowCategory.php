@@ -6,9 +6,11 @@ namespace matze\flagwars\shop\categories;
 
 use matze\flagwars\game\Team;
 use matze\flagwars\shop\ShopCategory;
+use pocketmine\block\BlockIds;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\Item;
+use pocketmine\item\ItemIds;
 use pocketmine\utils\TextFormat;
 
 class BowCategory extends ShopCategory
@@ -17,10 +19,10 @@ class BowCategory extends ShopCategory
     public function getItems(?Team $team): array
     {
         $contents = $this->categoryList();
-        $bow = Item::get(Item::BOW, 0, 1)->setCustomName(TextFormat::YELLOW."Bow I");
-        $bow2 = Item::get(Item::BOW, 0, 1)->setCustomName(TextFormat::YELLOW."Bow II");
-        $bow3 = Item::get(Item::BOW, 0, 1)->setCustomName(TextFormat::YELLOW."Bow III");
-        $arrow = Item::get(Item::ARROW, 0, 1)->setCustomName(TextFormat::YELLOW."Arrow");
+        $bow = Item::get(ItemIds::BOW)->setCustomName(TextFormat::YELLOW."Bow I");
+        $bow2 = Item::get(ItemIds::BOW)->setCustomName(TextFormat::YELLOW."Bow II");
+        $bow3 = Item::get(ItemIds::BOW)->setCustomName(TextFormat::YELLOW."Bow III");
+        $arrow = Item::get(ItemIds::ARROW)->setCustomName(TextFormat::YELLOW."Arrow");
 
         $power = Enchantment::getEnchantment(Enchantment::POWER);
         $punch = Enchantment::getEnchantment(Enchantment::PUNCH);
@@ -38,7 +40,7 @@ class BowCategory extends ShopCategory
         $arrow->setLore([TextFormat::RED.TextFormat::BOLD.'1 '.TextFormat::YELLOW."Iron"]);
 
 
-        $variable = Item::get(Item::GLASS_PANE, 0, 1)->setCustomName("");
+        $variable = Item::get(BlockIds::GLASS_PANE)->setCustomName("");
         for ($i = 9; $i < 27; $i++)
             $contents[$i] = $variable;
 

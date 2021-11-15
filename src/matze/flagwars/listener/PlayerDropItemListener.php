@@ -2,12 +2,12 @@
 
 namespace matze\flagwars\listener;
 
-use baubolp\core\provider\LanguageProvider;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
-use matze\flagwars\utils\ItemUtils;
+use ryzerbe\core\util\ItemUtils;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerDropItemEvent;
+use ryzerbe\core\language\LanguageProvider;
 
 class PlayerDropItemListener implements Listener {
 

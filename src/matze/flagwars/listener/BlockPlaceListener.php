@@ -3,10 +3,9 @@
 namespace matze\flagwars\listener;
 
 use jojoe77777\FormAPI\SimpleForm;
-use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
-use matze\flagwars\utils\ItemUtils;
-use matze\flagwars\utils\LocationUtils;
+use ryzerbe\core\util\ItemUtils;
+use ryzerbe\core\util\LocationUtils;
 use matze\flagwars\utils\SetupUtils;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\Listener;
@@ -22,7 +21,6 @@ class BlockPlaceListener implements Listener {
     public function onPlace(BlockPlaceEvent $event): void {
         $game = GameManager::getInstance();
         $player = $event->getPlayer();
-        $fwPlayer = FlagWars::getPlayer($player);
         $block = $event->getBlock();
         $item = $event->getItem();
 
@@ -48,7 +46,7 @@ class BlockPlaceListener implements Listener {
                         $player->sendMessage("§8» §r§7Flag location set. " . str_replace(":", ", ", $positionString));
 
                         for ($n = 1; $n <= 20; $n++) {
-                            $player->getLevel()->addParticle(new DustParticle($position->add(0, $n / 10, 0), mt_rand(), mt_rand(), mt_rand(), mt_rand()));
+                            $player->getLevel()->addParticle(new DustParticle($position->add(0, $n / 10), mt_rand(), mt_rand(), mt_rand(), mt_rand()));
                         }
                         break;
                     }
@@ -60,7 +58,7 @@ class BlockPlaceListener implements Listener {
 
                         $player->sendMessage("§8» §r§7Shop location set. " . str_replace(":", ", ", $positionString));
                         for ($n = 1; $n <= 20; $n++) {
-                            $player->getLevel()->addParticle(new DustParticle($position->add(0, $n / 10, 0), mt_rand(), mt_rand(), mt_rand(), mt_rand()));
+                            $player->getLevel()->addParticle(new DustParticle($position->add(0, $n / 10), mt_rand(), mt_rand(), mt_rand(), mt_rand()));
                         }
                         break;
                     }
@@ -73,7 +71,7 @@ class BlockPlaceListener implements Listener {
 
                             $player->sendMessage("§8» §r§7Team " . $data . " spawn position set. " . str_replace(":", ", ", $positionString));
                             for ($n = 1; $n <= 20; $n++) {
-                                $player->getLevel()->addParticle(new DustParticle($position->add(0, $n / 10, 0), mt_rand(), mt_rand(), mt_rand(), mt_rand()));
+                                $player->getLevel()->addParticle(new DustParticle($position->add(0, $n / 10), mt_rand(), mt_rand(), mt_rand(), mt_rand()));
                             }
                         });
                         $form->setTitle("§f§lTeam Setup");
@@ -94,7 +92,7 @@ class BlockPlaceListener implements Listener {
 
                             $player->sendMessage("§8» §r§7" . ucfirst($data) . " spawner position set. " . str_replace(":", ", ", $positionString));
                             for ($n = 1; $n <= 20; $n++) {
-                                $player->getLevel()->addParticle(new DustParticle($position->add(0, $n / 10, 0), mt_rand(), mt_rand(), mt_rand(), mt_rand()));
+                                $player->getLevel()->addParticle(new DustParticle($position->add(0, $n / 10), mt_rand(), mt_rand(), mt_rand(), mt_rand()));
                             }
                         });
                         $form->setTitle("§f§lSpawner Setup");
@@ -111,7 +109,7 @@ class BlockPlaceListener implements Listener {
                         $player->sendMessage("§8» §r§7Spectator location set. " . str_replace(":", ", ", $positionString));
 
                         for ($n = 1; $n <= 20; $n++) {
-                            $player->getLevel()->addParticle(new DustParticle($position->add(0, $n / 10, 0), mt_rand(), mt_rand(), mt_rand(), mt_rand()));
+                            $player->getLevel()->addParticle(new DustParticle($position->add(0, $n / 10), mt_rand(), mt_rand(), mt_rand(), mt_rand()));
                         }
                         break;
                     }

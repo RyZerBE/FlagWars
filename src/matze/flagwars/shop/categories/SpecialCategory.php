@@ -6,9 +6,11 @@ namespace matze\flagwars\shop\categories;
 
 use matze\flagwars\game\Team;
 use matze\flagwars\shop\ShopCategory;
+use pocketmine\block\BlockIds;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\Item;
+use pocketmine\item\ItemIds;
 use pocketmine\utils\TextFormat;
 
 class SpecialCategory extends ShopCategory
@@ -17,9 +19,9 @@ class SpecialCategory extends ShopCategory
     public function getItems(?Team $team): array
     {
         $contents = $this->categoryList();
-        $rp = Item::get(Item::BLAZE_ROD, 0, 1)->setCustomName(TextFormat::GOLD."Rettungsplattform");
-        $ep = Item::get(Item::ENDER_PEARL, 0, 1)->setCustomName(TextFormat::GOLD."EnderPerle");
-        $booster = Item::get(Item::GHAST_TEAR, 0, 1)->setCustomName(TextFormat::GOLD."Booster");
+        $rp = Item::get(ItemIds::BLAZE_ROD)->setCustomName(TextFormat::GOLD."Rettungsplattform");
+        $ep = Item::get(ItemIds::ENDER_PEARL)->setCustomName(TextFormat::GOLD."EnderPerle");
+        $booster = Item::get(ItemIds::GHAST_TEAR)->setCustomName(TextFormat::GOLD."Booster");
 
         $unbreaking = Enchantment::getEnchantment(Enchantment::UNBREAKING);
 
@@ -29,7 +31,7 @@ class SpecialCategory extends ShopCategory
         $ep->setLore([TextFormat::RED.TextFormat::BOLD.'13 '.TextFormat::YELLOW."Gold"]);
         $booster->setLore([TextFormat::RED.TextFormat::BOLD.'7 '.TextFormat::YELLOW."Iron"]);
 
-        $variable = Item::get(Item::GLASS_PANE, 0, 1)->setCustomName("");
+        $variable = Item::get(BlockIds::GLASS_PANE)->setCustomName("");
 
         for ($i = 9; $i < 27; $i++)
             $contents[$i] = $variable;

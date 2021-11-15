@@ -12,7 +12,7 @@ use pocketmine\Server;
 abstract class Kit implements Listener {
 
     /** @var string */
-    private $description = "";
+    private string $description = "";
 
     /**
      * Kit constructor.

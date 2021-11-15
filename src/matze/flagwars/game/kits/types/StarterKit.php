@@ -4,8 +4,10 @@ namespace matze\flagwars\game\kits\types;
 
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\kits\Kit;
+use pocketmine\block\BlockIds;
 use pocketmine\item\Item;
 use pocketmine\item\ItemFactory;
+use pocketmine\item\ItemIds;
 use pocketmine\Player;
 
 class StarterKit extends Kit {
@@ -22,10 +24,10 @@ class StarterKit extends Kit {
      */
     public function getItems(Player $player): array {
         return [
-            Item::get(Item::LEATHER_CHESTPLATE),
-            Item::get(Item::SHEARS),
-            ItemFactory::get(Item::WOOL, FlagWars::getPlayer($player)->getTeam()->getBlockMeta(), 32),
-            ItemFactory::get(Item::STEAK, 0, 16),
+            Item::get(ItemIds::LEATHER_CHESTPLATE),
+            Item::get(ItemIds::SHEARS),
+            ItemFactory::get(BlockIds::WOOL, FlagWars::getPlayer($player)->getTeam()->getBlockMeta(), 32),
+            ItemFactory::get(ItemIds::STEAK, 0, 16),
         ];
     }
 

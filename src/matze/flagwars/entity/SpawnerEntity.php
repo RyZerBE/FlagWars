@@ -3,12 +3,12 @@
 namespace matze\flagwars\entity;
 
 use matze\flagwars\utils\Settings;
-use matze\flagwars\utils\Vector3Utils;
 use pocketmine\block\Block;
 use pocketmine\entity\Entity;
 use pocketmine\entity\object\ItemEntity;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\item\Item;
+use pocketmine\item\ItemIds;
 use pocketmine\level\ChunkLoader;
 use pocketmine\level\format\Chunk;
 use pocketmine\level\Level;
@@ -18,6 +18,7 @@ use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
 use pocketmine\Player;
 use pocketmine\Server;
+use ryzerbe\core\util\Vector3Utils;
 
 class SpawnerEntity extends ItemEntity implements ChunkLoader {
 
@@ -37,19 +38,19 @@ class SpawnerEntity extends ItemEntity implements ChunkLoader {
             case "iron": {
                 $nbt->setString("Color", "§f");
                 $nbt->setInt("Delay", Settings::$iron_spawn_delay[1]);
-                $item = Item::get(Item::IRON_INGOT)->setCustomName("§r§fIron");
+                $item = Item::get(ItemIds::IRON_INGOT)->setCustomName("§r§fIron");
                 break;
             }
             case "gold": {
                 $nbt->setString("Color", "§6");
                 $nbt->setInt("Delay", Settings::$gold_spawn_delay[1]);
-                $item = Item::get(Item::GOLD_INGOT)->setCustomName("§r§6Gold");
+                $item = Item::get(ItemIds::GOLD_INGOT)->setCustomName("§r§6Gold");
                 break;
             }
             default: {
                 $nbt->setString("Color", "§a");
                 $nbt->setInt("Delay", Settings::$bronze_spawn_delay[1]);
-                $item = Item::get(Item::BRICK)->setCustomName("§r§aBronze");
+                $item = Item::get(ItemIds::BRICK)->setCustomName("§r§aBronze");
             }
         }
         $nbt->setString("ForcePosition", Vector3Utils::toString($this));
@@ -78,9 +79,9 @@ class SpawnerEntity extends ItemEntity implements ChunkLoader {
     public $height = 0.4;
 
     /** @var FloatingTextParticle|null */
-    private $floatingText = null;
+    private ?FloatingTextParticle $floatingText = null;
     /** @var int  */
-    private $spawnerLevel = 1;
+    private int $spawnerLevel = 1;
 
     /**
      * @param int $currentTick
@@ -164,7 +165,7 @@ class SpawnerEntity extends ItemEntity implements ChunkLoader {
         if($cost === -1) return self::UPGRADE_REASON_ALREADY_MAX_LEVEL;
 
         $contents = [];
-        foreach ($player->getInventory()->getContents() as $slot => $item) {
+        foreach ($player->getInventory()->getContents() as $item) {
             $sItem = implode(":", [$item->getId(), $item->getDamage()]);
             if(!isset($contents[$sItem])) $contents[$sItem] = 0;
             $contents[$sItem] += $item->getCount();
@@ -209,17 +210,17 @@ class SpawnerEntity extends ItemEntity implements ChunkLoader {
         if(is_null($spawnerLevel)) {
             $spawnerLevel = $this->spawnerLevel;
         }
-        switch ($this->getType()) {
-            case "iron": return Settings::$iron_upgrade_cost[$spawnerLevel] ?? -1;
-            case "gold": return Settings::$gold_upgrade_cost[$spawnerLevel] ?? -1;
-            default: return Settings::$bronze_upgrade_cost[$spawnerLevel] ?? -1;
-        }
+        return match ($this->getType()) {
+            "iron" => Settings::$iron_upgrade_cost[$spawnerLevel] ?? -1,
+            "gold" => Settings::$gold_upgrade_cost[$spawnerLevel] ?? -1,
+            default => Settings::$bronze_upgrade_cost[$spawnerLevel] ?? -1,
+        };
     }
 
     public function initText(): void {
         $floatingText = $this->floatingText;
         if(is_null($floatingText)) {
-            $floatingText = new FloatingTextParticle($this->add(0, 1.5, 0), "");
+            $floatingText = new FloatingTextParticle($this->add(0, 1.5), "");
         }
         $color = $this->namedtag->getString("Color", "§a");
         $floatingText->setText("§r" . $color . strtoupper($this->getType()) . " SPAWNER §eLVL " . $this->spawnerLevel . ($this->spawnerLevel >= 3 ? " §7(§8MAX§7)": "\n§r§fClick to upgrade"));
@@ -275,7 +276,7 @@ class SpawnerEntity extends ItemEntity implements ChunkLoader {
      * @return Block
      */
     public function getBlock(): Block {
-        return $this->getLevel()->getBlock($this->subtract(0, 1, 0));
+        return $this->getLevel()->getBlock($this->subtract(0, 1));
     }
 
     public function onChunkChanged(Chunk $chunk): void {}

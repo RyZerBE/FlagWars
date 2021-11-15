@@ -2,12 +2,10 @@
 
 namespace matze\flagwars\entity;
 
-use baubolp\core\provider\LanguageProvider;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
 use matze\flagwars\provider\FlagWarsProvider;
 use matze\flagwars\utils\Settings;
-use matze\flagwars\utils\SkinUtils;
 use pocketmine\entity\Effect;
 use pocketmine\entity\EffectInstance;
 use pocketmine\entity\Entity;
@@ -23,6 +21,8 @@ use pocketmine\network\mcpe\protocol\types\EntityLink;
 use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
+use ryzerbe\core\language\LanguageProvider;
+use ryzerbe\core\util\SkinUtils;
 
 class FlagEntity extends Human {
 
@@ -34,7 +34,7 @@ class FlagEntity extends Human {
     public function __construct(Level $level, CompoundTag $nbt) {
         $this->skin = new Skin(
             "FlagEntity",
-            SkinUtils::readImage(Settings::SKIN_PATH . "Flag_White.png"),
+            SkinUtils::fromImage(Settings::SKIN_PATH . "Flag_White.png"),
             "",
             "geometry.Mobs.Zombie",
             file_get_contents(Settings::SKIN_PATH . "Flag.geo.json")
@@ -174,7 +174,7 @@ class FlagEntity extends Human {
     }
 
     /** @var Player|null */
-    private $carrier = null;
+    private ?Player $carrier = null;
 
     /**
      * @return Player|null
@@ -197,7 +197,7 @@ class FlagEntity extends Human {
 
         $this->setSkin(new Skin(
             "FlagEntity",
-            SkinUtils::readImage(Settings::SKIN_PATH . "Flag_" . $team . ".png"),
+            SkinUtils::fromImage(Settings::SKIN_PATH . "Flag_" . $team . ".png"),
             "",
             "geometry.Mobs.Zombie",
             file_get_contents(Settings::SKIN_PATH . "Flag.geo.json")
@@ -206,7 +206,7 @@ class FlagEntity extends Human {
     }
 
     /** @var bool  */
-    private $pickedUp = false;
+    private bool $pickedUp = false;
 
     /**
      * @return bool

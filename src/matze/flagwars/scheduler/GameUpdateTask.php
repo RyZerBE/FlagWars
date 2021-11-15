@@ -3,7 +3,6 @@
 namespace matze\flagwars\scheduler;
 
 use BauboLP\Cloud\CloudBridge;
-use baubolp\core\provider\LanguageProvider;
 use matze\flagwars\entity\FlagEntity;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
@@ -17,17 +16,18 @@ use pocketmine\level\particle\FlameParticle;
 use pocketmine\scheduler\Task;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
+use ryzerbe\core\language\LanguageProvider;
 
 class GameUpdateTask extends Task {
 
     /** @var int  */
-    private $points = 0;
+    private int $points = 0;
 
     /** @var int  */
-    private $degree = 0;
+    private int $degree = 0;
 
     /** @var int[]  */
-    private $showNumbers = [60, 30, 15, 10, 5, 3, 2, 1];
+    private array $showNumbers = [60, 30, 15, 10, 5, 3, 2, 1];
 
     /**
      * @param int $currentTick
@@ -105,7 +105,7 @@ class GameUpdateTask extends Task {
                 foreach (Server::getInstance()->getOnlinePlayers() as $player) {
                     $player->sendTip(LanguageProvider::getMessageContainer('countdown-tip', $player->getName(), ["#countdown" => $game->getCountdown()]) . str_repeat(".", $this->points));
                     if(in_array($game->getCountdown(), $this->showNumbers)) {
-                        $player->sendTitle(TextFormat::AQUA.$game->getCountdown(), "");
+                        $player->sendTitle(TextFormat::AQUA.$game->getCountdown());
                         $player->playSound("note.bass", 5.0, 2.0, [$player]);
                     }
                 }

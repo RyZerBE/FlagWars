@@ -17,7 +17,6 @@ class SelectMapForm extends Form {
      */
     public function open(Player $player, int $window = -1, array $extraData = []): void {
         $game = GameManager::getInstance();
-        $fwPlayer = FlagWars::getPlayer($player);
         $form = new SimpleForm(function (Player $player, $data): void {
             if(is_null($data)) return;
             $game = GameManager::getInstance();

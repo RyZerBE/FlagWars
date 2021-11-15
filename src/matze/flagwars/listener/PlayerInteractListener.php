@@ -3,28 +3,30 @@
 namespace matze\flagwars\listener;
 
 use BauboLP\Cloud\CloudBridge;
-use baubolp\core\provider\LanguageProvider;
 use jojoe77777\FormAPI\SimpleForm;
 use matze\flagwars\entity\SpawnerEntity;
 use matze\flagwars\FlagWars;
 use matze\flagwars\forms\Forms;
 use matze\flagwars\game\GameManager;
 use matze\flagwars\provider\FlagWarsProvider;
-use matze\flagwars\utils\ItemUtils;
+use ryzerbe\core\util\ItemUtils;
 use matze\flagwars\utils\Settings;
+use pocketmine\block\BlockIds;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\item\Item;
+use pocketmine\item\ItemIds;
 use pocketmine\level\sound\AnvilFallSound;
 use pocketmine\level\sound\ClickSound;
 use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
+use ryzerbe\core\language\LanguageProvider;
 
 class PlayerInteractListener implements Listener {
 
     /** @var array  */
-    private $cooldown = [];
+    private array $cooldown = [];
 
     /**
      * @param PlayerInteractEvent $event
@@ -144,14 +146,14 @@ class PlayerInteractListener implements Listener {
             }
         }else if($action === PlayerInteractEvent::RIGHT_CLICK_AIR) {
             switch ($item->getId()) {
-                case Item::GHAST_TEAR:
-                    $player->getInventory()->removeItem(Item::get(Item::GHAST_TEAR, 0, 1));
+                case ItemIds::GHAST_TEAR:
+                    $player->getInventory()->removeItem(Item::get(ItemIds::GHAST_TEAR));
                     $player->knockBack($player, 0, $player->getDirectionVector()->getX(), $player->getDirectionVector()->getZ(), 1.6);
                     break;
-                case Item::LEVER:
+                case BlockIds::LEVER:
                     FlagWarsProvider::createWall($player);
                     break;
-                case Item::BLAZE_ROD:
+                case ItemIds::BLAZE_ROD:
                     FlagWarsProvider::createSafetyPlatform($player);
                     break;
             }

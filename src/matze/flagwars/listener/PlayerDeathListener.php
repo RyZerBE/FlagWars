@@ -2,13 +2,13 @@
 
 namespace matze\flagwars\listener;
 
-use baubolp\core\provider\LanguageProvider;
 use matze\flagwars\FlagWars;
-use matze\flagwars\utils\ItemUtils;
+use ryzerbe\core\util\ItemUtils;
 use matze\flagwars\utils\TaskExecuter;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\Server;
+use ryzerbe\core\language\LanguageProvider;
 
 class PlayerDeathListener implements Listener {
 

@@ -5,6 +5,7 @@ namespace matze\flagwars\game\kits\types;
 use matze\flagwars\game\GameManager;
 use matze\flagwars\game\kits\Kit;
 use pocketmine\block\Block;
+use pocketmine\block\BlockIds;
 use pocketmine\math\Vector3;
 use pocketmine\Player;
 use pocketmine\Server;
@@ -34,7 +35,7 @@ class SpiderManKit extends Kit {
     }
 
     /** @var array  */
-    private $blocks = [];
+    private array $blocks = [];
 
     /**
      * @param int $currentTick
@@ -53,13 +54,13 @@ class SpiderManKit extends Kit {
         foreach ($this->getPlayers() as $player) {
             //Don`t mind this trash code
             for ($y = 0; $y <= 1; $y++) {
-                $block = $level->getBlock($player->add(0, $y, 0));
+                $block = $level->getBlock($player->add(0, $y));
                 $frontBlock = $this->getFrontBlock($player, $player->y + $y);
 
                 if($frontBlock->isSolid() && !$frontBlock->isTransparent() && $block->canBeReplaced() && !$block->canClimb()) {
                     $faces = [0 => 8, 1 => 1, 2 => 2, 3 => 4, 4 => 8];
                     $meta = $faces[$player->getDirection()] ?? 0;
-                    $level->setBlockIdAt($block->x, $block->y, $block->z, Block::VINE);
+                    $level->setBlockIdAt($block->x, $block->y, $block->z, BlockIds::VINE);
                     $level->setBlockDataAt($block->x, $block->y, $block->z, $meta);
 
                     if(!isset($this->blocks[($currentTick + 20)])) $this->blocks[($currentTick + 20)] = [];
@@ -76,13 +77,13 @@ class SpiderManKit extends Kit {
      */
     private function getFrontBlock(Player $player, ?int $y = null) : Block {
         $y = $y ?? $player->y;
-        switch ($player->getDirection()){
-            case 0: return $player->getLevel()->getBlock(new Vector3($player->x + 0.5, $y, $player->z));//South
-            case 1: return $player->getLevel()->getBlock(new Vector3($player->x, $y, $player->z + 0.5));//West
-            case 2: return $player->getLevel()->getBlock(new Vector3($player->x - 0.5, $y, $player->z));//North
-            case 3: return $player->getLevel()->getBlock(new Vector3($player->x, $y, $player->z - 0.5));//East
-            default: return $player->getLevel()->getBlock(new Vector3($player->x, $y, $player->z));
-        }
+        return match ($player->getDirection()) {
+            0 => $player->getLevel()->getBlock(new Vector3($player->x + 0.5, $y, $player->z)),
+            1 => $player->getLevel()->getBlock(new Vector3($player->x, $y, $player->z + 0.5)),
+            2 => $player->getLevel()->getBlock(new Vector3($player->x - 0.5, $y, $player->z)),
+            3 => $player->getLevel()->getBlock(new Vector3($player->x, $y, $player->z - 0.5)),
+            default => $player->getLevel()->getBlock(new Vector3($player->x, $y, $player->z)),
+        };
     }
 
     /**

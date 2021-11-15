@@ -2,7 +2,7 @@
 
 namespace matze\flagwars\game;
 
-use matze\flagwars\utils\LocationUtils;
+use ryzerbe\core\util\LocationUtils;
 use matze\flagwars\utils\Settings;
 use pocketmine\level\Location;
 use pocketmine\utils\Config;
@@ -10,9 +10,9 @@ use pocketmine\utils\Config;
 class Map {
 
     /** @var string */
-    private $map;
+    private string $map;
     /** @var string */
-    private $creator;
+    private mixed $creator;
 
     /**
      * Map constructor.
@@ -38,7 +38,7 @@ class Map {
     }
 
     /** @var Config|null */
-    private $settings = null;
+    private ?Config $settings = null;
 
     /**
      * @return Config
@@ -51,7 +51,7 @@ class Map {
     }
 
     /** @var array  */
-    private $cache = [];
+    private array $cache = [];
 
     /**
      * @param Team $team
@@ -77,7 +77,7 @@ class Map {
      */
     public function getShopLocations(): array {
         $spawner = [];
-        foreach ($this->getSettings()->get("Shops") as $type => $data) {
+        foreach ($this->getSettings()->get("Shops") as $data) {
             $spawner[] = LocationUtils::fromString($data);
         }
         return $spawner;

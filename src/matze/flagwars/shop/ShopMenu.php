@@ -9,7 +9,9 @@ use matze\flagwars\player\FlagWarsPlayer;
 use muqsit\invmenu\InvMenu;
 use muqsit\invmenu\transaction\InvMenuTransaction;
 use muqsit\invmenu\transaction\InvMenuTransactionResult;
+use pocketmine\block\BlockIds;
 use pocketmine\item\Item;
+use pocketmine\item\ItemIds;
 use pocketmine\item\LeatherBoots;
 use pocketmine\item\LeatherCap;
 use pocketmine\item\LeatherPants;
@@ -18,12 +20,11 @@ use pocketmine\utils\TextFormat;
 
 class ShopMenu
 {
-    /** @var \muqsit\invmenu\InvMenu */
-    private $menu;
-    /** @var \matze\flagwars\shop\ShopCategory */
-    private $category;
+    /** @var InvMenu */
+    private InvMenu $menu;
+    private ?ShopCategory $category;
     /** @var FlagWarsPlayer */
-    private $player;
+    private FlagWarsPlayer $player;
 
     public function __construct(FlagWarsPlayer $player)
     {
@@ -55,11 +56,11 @@ class ShopMenu
                 $price = TextFormat::clean($infos[0]);
 
                 if($resource == "Iron") {
-                    $resource_obj = Item::IRON_INGOT;
+                    $resource_obj = ItemIds::IRON_INGOT;
                 }else if($resource == "Gold") {
-                    $resource_obj = Item::GOLD_INGOT;
+                    $resource_obj = ItemIds::GOLD_INGOT;
                 }else {
-                    $resource_obj = Item::BRICK;
+                    $resource_obj = ItemIds::BRICK;
                 }
 
                 $price = ShopManager::setPrice($player, $price, $resource_obj);
@@ -71,8 +72,8 @@ class ShopMenu
                         $color = ShopManager::teamColorIntoColor($teamColor);
                         $item->setCustomColor($color);
                     }
-                    if($item->getId() === Item::WOOL)
-                        $item = Item::get(Item::WOOL, $item->getDamage(), $item->getCount());
+                    if($item->getId() === BlockIds::WOOL)
+                        $item = Item::get(BlockIds::WOOL, $item->getDamage(), $item->getCount());
 
                     $player->getInventory()->addItem($item);
                     $player->playSound("note.bass", 1, 2, [$player]);
@@ -83,7 +84,7 @@ class ShopMenu
                 if($itemName == "Wool" && !$price) {
                     $count = ShopManager::count($player) * 4;
                     $teamColor = ShopManager::teamColorIntoMeta($fwPlayer->getTeam()->getColor());
-                    $sandstone = Item::get(Item::WOOL, $teamColor, $count);
+                    $sandstone = Item::get(BlockIds::WOOL, $teamColor, $count);
                     $player->getInventory()->addItem($sandstone);
                     ShopManager::rm($player, $resource_obj, ShopManager::count($player, $resource_obj));
                 }
@@ -101,7 +102,7 @@ class ShopMenu
     }
 
     /**
-     * @return \matze\flagwars\shop\ShopCategory
+     * @return ShopCategory
      */
     public function getCategory(): ShopCategory
     {
@@ -109,7 +110,7 @@ class ShopMenu
     }
 
     /**
-     * @param \matze\flagwars\shop\ShopCategory $category
+     * @param ShopCategory $category
      */
     public function updateCategory(ShopCategory $category): void
     {
@@ -119,9 +120,9 @@ class ShopMenu
     }
 
     /**
-     * @return \muqsit\invmenu\InvMenu
+     * @return InvMenu
      */
-    public function getMenu(): \muqsit\invmenu\InvMenu
+    public function getMenu(): InvMenu
     {
         return $this->menu;
     }

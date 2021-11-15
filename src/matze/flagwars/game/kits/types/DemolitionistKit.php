@@ -2,17 +2,18 @@
 
 namespace matze\flagwars\game\kits\types;
 
-use baubolp\core\entity\TNT;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
 use matze\flagwars\game\kits\Kit;
 use matze\flagwars\shop\ShopManager;
-use matze\flagwars\utils\ItemUtils;
-use matze\flagwars\utils\Vector3Utils;
+use ryzerbe\core\util\ItemUtils;
+use pocketmine\block\BlockIds;
 use pocketmine\event\block\BlockPlaceEvent;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\item\Item;
 use pocketmine\Player;
+use ryzerbe\core\block\TNTBlock;
+use ryzerbe\core\util\Vector3Utils;
 
 class DemolitionistKit extends Kit {
 
@@ -28,7 +29,7 @@ class DemolitionistKit extends Kit {
      */
     public function getItems(Player $player): array {
         return [
-            ItemUtils::addItemTags(Item::get(Item::TNT)->setCustomName("§r§fRemote TNT"), ["remote_tnt" => ""])
+            ItemUtils::addItemTags(Item::get(BlockIds::TNT)->setCustomName("§r§fRemote TNT"), ["remote_tnt" => ""])
         ];
     }
 
@@ -57,7 +58,7 @@ class DemolitionistKit extends Kit {
             return;
         }
         $position = Vector3Utils::toString($block->floor());
-        $newItem = ItemUtils::addItemTags(Item::get(Item::REDSTONE_TORCH)->setCustomName("§r§fFuse Remote TNT"), [
+        $newItem = ItemUtils::addItemTags(Item::get(BlockIds::REDSTONE_TORCH)->setCustomName("§r§fFuse Remote TNT"), [
             "position" => $position,
             "remote_tnt" => "",
             "kit_item" => "kit_item"
@@ -82,7 +83,7 @@ class DemolitionistKit extends Kit {
         $position = Vector3Utils::fromString(ItemUtils::getItemTag($item, "position"));
         $block = $player->getLevel()->getBlock($position);
 
-        if(!$block instanceof TNT) {
+        if(!$block instanceof TNTBlock) {
             return;
         }
         $block->ignite(1, ShopManager::teamColorIntoMeta($fwPlayer->getTeam()->getColor()));

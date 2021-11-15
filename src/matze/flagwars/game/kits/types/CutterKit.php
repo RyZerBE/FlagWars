@@ -3,9 +3,10 @@
 namespace matze\flagwars\game\kits\types;
 
 use matze\flagwars\game\kits\Kit;
-use matze\flagwars\utils\ItemUtils;
+use ryzerbe\core\util\ItemUtils;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\Item;
+use pocketmine\item\ItemIds;
 use pocketmine\Player;
 
 class CutterKit extends Kit {
@@ -22,7 +23,7 @@ class CutterKit extends Kit {
      */
     public function getItems(Player $player): array {
         return [
-            ItemUtils::addEnchantments(Item::get(Item::SHEARS), [
+            ItemUtils::addEnchantments(Item::get(ItemIds::SHEARS), [
                 Enchantment::EFFICIENCY => 5
             ])
         ];

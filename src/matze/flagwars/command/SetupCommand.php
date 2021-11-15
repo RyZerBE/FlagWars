@@ -4,10 +4,12 @@ namespace matze\flagwars\command;
 
 use matze\flagwars\game\GameManager;
 use matze\flagwars\game\Map;
-use matze\flagwars\utils\ItemUtils;
+use ryzerbe\core\util\ItemUtils;
+use pocketmine\block\BlockIds;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\item\Item;
+use pocketmine\item\ItemIds;
 use pocketmine\Player;
 use pocketmine\Server;
 
@@ -66,11 +68,11 @@ class SetupCommand extends Command {
         $settings->save();
 
         $sender->getInventory()->setContents([
-            0 => ItemUtils::addItemTag(Item::get(Item::BANNER)->setCustomName("§r§aFlaggen Position \n§7[§8Place§7]"), "flag_position", "map_setup"),
-            1 => ItemUtils::addItemTag(Item::get(Item::WOOL, mt_rand(0, 15))->setCustomName("§r§aTeam Spawn Positions \n§7[§8Place§7]"), "team_spawn_positions", "map_setup"),
-            2 => ItemUtils::addItemTag(Item::get(Item::MOB_SPAWNER)->setCustomName("§r§aSpawner Positions \n§7[§8Place§7]"), "spawner_positions", "map_setup"),
-            3 => ItemUtils::addItemTag(Item::get(Item::CHEST)->setCustomName("§r§aShop Positions \n§7[§8Place§7]"), "shop_positions", "map_setup"),
-            4 => ItemUtils::addItemTag(Item::get(Item::STAINED_GLASS, mt_rand(0, 15))->setCustomName("§r§aSpectator Position \n§7[§8Place§7]"), "spectator_position", "map_setup"),
+            0 => ItemUtils::addItemTag(Item::get(ItemIds::BANNER)->setCustomName("§r§aFlaggen Position \n§7[§8Place§7]"), "flag_position", "map_setup"),
+            1 => ItemUtils::addItemTag(Item::get(BlockIds::WOOL, mt_rand(0, 15))->setCustomName("§r§aTeam Spawn Positions \n§7[§8Place§7]"), "team_spawn_positions", "map_setup"),
+            2 => ItemUtils::addItemTag(Item::get(BlockIds::MOB_SPAWNER)->setCustomName("§r§aSpawner Positions \n§7[§8Place§7]"), "spawner_positions", "map_setup"),
+            3 => ItemUtils::addItemTag(Item::get(BlockIds::CHEST)->setCustomName("§r§aShop Positions \n§7[§8Place§7]"), "shop_positions", "map_setup"),
+            4 => ItemUtils::addItemTag(Item::get(BlockIds::STAINED_GLASS, mt_rand(0, 15))->setCustomName("§r§aSpectator Position \n§7[§8Place§7]"), "spectator_position", "map_setup"),
         ]);
     }
 }

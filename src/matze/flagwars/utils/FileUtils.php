@@ -2,6 +2,8 @@
 
 namespace matze\flagwars\utils;
 
+use ryzerbe\core\util\async\AsyncExecutor;
+
 class FileUtils {
 
     /**
@@ -56,7 +58,7 @@ class FileUtils {
      * @param string $destination
      */
     public static function copyAsync(string $source, string $destination): void {
-        AsyncExecuter::submitAsyncTask(
+        AsyncExecutor::submitMySQLAsyncTask("Lobby",
             function () use ($source, $destination): void {
                 FileUtils::copy($source, $destination);
             }
@@ -67,7 +69,7 @@ class FileUtils {
      * @param string $path
      */
     public static function deleteAsync(string $path): void {
-        AsyncExecuter::submitAsyncTask(
+        AsyncExecutor::submitMySQLAsyncTask("Lobby",
             function () use ($path): void {
                 FileUtils::delete($path);
             }

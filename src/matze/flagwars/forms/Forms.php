@@ -7,9 +7,7 @@ use matze\flagwars\forms\types\SelectMapForm;
 use matze\flagwars\forms\types\SelectTeamForm;
 
 class Forms {
-
-    /** @var  */
-    private static $selectTeamForm = null;
+    private static ?Form $selectTeamForm = null;
 
     /**
      * @return Form
@@ -21,8 +19,7 @@ class Forms {
         return self::$selectTeamForm;
     }
 
-    /** @var  */
-    private static $selectMapForm = null;
+    private static ?Form $selectMapForm = null;
 
     /**
      * @return Form
@@ -34,8 +31,7 @@ class Forms {
         return self::$selectMapForm;
     }
 
-    /** @var  */
-    private static $selectKitForm = null;
+    private static ?Form $selectKitForm = null;
 
     /**
      * @return Form

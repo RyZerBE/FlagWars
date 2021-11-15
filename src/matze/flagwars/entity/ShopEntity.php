@@ -4,13 +4,12 @@ namespace matze\flagwars\entity;
 
 use matze\flagwars\FlagWars;
 use matze\flagwars\shop\categories\RushCategory;
-use matze\flagwars\shop\ShopCategorys;
-use matze\flagwars\utils\Vector3Utils;
 use pocketmine\entity\Creature;
 use pocketmine\entity\Entity;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\Player;
+use ryzerbe\core\util\Vector3Utils;
 
 class ShopEntity extends Creature {
 

@@ -32,7 +32,7 @@ class BullitKit extends Kit {
     }
 
     /** @var array  */
-    private $hasFlag = [];
+    private array $hasFlag = [];
 
     /**
      * @param int $currentTick

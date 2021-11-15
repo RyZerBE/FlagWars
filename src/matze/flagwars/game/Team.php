@@ -10,13 +10,13 @@ use pocketmine\utils\TextFormat;
 class Team {
 
     /** @var string */
-    private $name;
+    private string $name;
 
     /** @var string */
-    private $color;
+    private string $color;
 
     /** @var array  */
-    private $players = [];
+    private array $players = [];
 
     /**
      * Team constructor.
@@ -96,7 +96,7 @@ class Team {
         $level = $location->getLevel();
         while (
             $level->getBlock($location)->isSolid() ||
-            $level->getBlock($location->add(0, 1, 0))->isSolid()
+            $level->getBlock($location->add(0, 1))->isSolid()
         ) {
             $location->y++;
         }
@@ -111,7 +111,7 @@ class Team {
     }
 
     /** @var bool  */
-    private $hasFlag = false;
+    private bool $hasFlag = false;
 
     /**
      * @param bool $hasFlag
@@ -128,7 +128,7 @@ class Team {
     }
 
     /** @var int  */
-    private $flagsSaved = 0;
+    private int $flagsSaved = 0;
 
     /**
      * @return int
@@ -145,24 +145,15 @@ class Team {
      * @return int
      */
     public function getBlockMeta(): int {
-        switch ($this->getColor()) {
-            case TextFormat::RED:
-                return 14;
-            case TextFormat::BLUE:
-            case TextFormat::AQUA:
-                return 11;
-            case TextFormat::YELLOW:
-                return 4;
-            case TextFormat::GREEN:
-            case TextFormat::DARK_GREEN:
-                return 5;
-            case TextFormat::LIGHT_PURPLE:
-                return 6;
-            case TextFormat::GOLD:
-                return 1;
-            case TextFormat::DARK_PURPLE:
-                return 10;
-        }
-        return 0;
+        return match ($this->getColor()) {
+            TextFormat::RED => 14,
+            TextFormat::BLUE, TextFormat::AQUA => 11,
+            TextFormat::YELLOW => 4,
+            TextFormat::GREEN, TextFormat::DARK_GREEN => 5,
+            TextFormat::LIGHT_PURPLE => 6,
+            TextFormat::GOLD => 1,
+            TextFormat::DARK_PURPLE => 10,
+            default => 0,
+        };
     }
 }

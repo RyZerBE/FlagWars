@@ -2,7 +2,7 @@
 
 namespace matze\flagwars\listener;
 
-use pocketmine\block\Block;
+use pocketmine\block\BlockIds;
 use pocketmine\event\block\BlockFormEvent;
 use pocketmine\event\Listener;
 
@@ -13,7 +13,7 @@ class BlockFormListener implements Listener {
      */
     public function onForm(BlockFormEvent $event): void {
         $allowedBlocks = [
-            Block::WATER
+            BlockIds::WATER
         ];
         $block = $event->getBlock();
         if(!in_array($block->getId(), $allowedBlocks)) {

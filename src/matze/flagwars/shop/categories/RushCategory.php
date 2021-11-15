@@ -7,9 +7,11 @@ namespace matze\flagwars\shop\categories;
 use matze\flagwars\game\Team;
 use matze\flagwars\shop\ShopCategory;
 use matze\flagwars\shop\ShopManager;
+use pocketmine\block\BlockIds;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\Item;
+use pocketmine\item\ItemIds;
 use pocketmine\utils\TextFormat;
 
 class RushCategory extends ShopCategory
@@ -21,9 +23,9 @@ class RushCategory extends ShopCategory
 
         $teamColor = ShopManager::teamColorIntoMeta($team->getColor());
 
-        $sword = Item::get(Item::WOODEN_SWORD, 0, 1)->setCustomName(TextFormat::GOLD . "Holzschwert");
-        $pickaxe = Item::get(Item::SHEARS, 0, 1)->setCustomName(TextFormat::GOLD . "Schere");
-        $blocks = Item::get(Item::WOOL, $teamColor, 32)->setCustomName(TextFormat::GOLD . "Wool");
+        $sword = Item::get(ItemIds::WOODEN_SWORD)->setCustomName(TextFormat::GOLD . "Holzschwert");
+        $pickaxe = Item::get(ItemIds::SHEARS)->setCustomName(TextFormat::GOLD . "Schere");
+        $blocks = Item::get(BlockIds::WOOL, $teamColor, 32)->setCustomName(TextFormat::GOLD . "Wool");
 
         $sword->setLore([TextFormat::RED . TextFormat::BOLD . '10 ' . TextFormat::YELLOW . "Bronze"]);
         $pickaxe->setLore([TextFormat::RED . TextFormat::BOLD . '5 ' . TextFormat::YELLOW . "Bronze"]);
@@ -33,16 +35,16 @@ class RushCategory extends ShopCategory
         $unbreaking = Enchantment::getEnchantment(Enchantment::UNBREAKING);
         $protection = Enchantment::getEnchantment(Enchantment::PROTECTION);
 
-        $eat = Item::get(Item::COOKED_PORKCHOP, 0, 2)->setCustomName(TextFormat::GOLD . "Bio-Schnitzel");
+        $eat = Item::get(ItemIds::COOKED_PORKCHOP, 0, 2)->setCustomName(TextFormat::GOLD . "Bio-Schnitzel");
 
         $pickaxe->addEnchantment(new EnchantmentInstance($unbreaking));
         $sword->addEnchantment(new EnchantmentInstance($knock));
         $sword->addEnchantment(new EnchantmentInstance($unbreaking));
 
-        $cap = Item::get(Item::LEATHER_CAP, 0, 1)->setCustomName(TextFormat::GOLD . "Helm");
-        $hoodie = Item::get(Item::CHAIN_CHESTPLATE, 0, 1)->setCustomName(TextFormat::GOLD . "Brustplatte");
-        $leggings = Item::get(Item::LEATHER_LEGGINGS, 0, 1)->setCustomName(TextFormat::GOLD . "Hose");
-        $boots = Item::get(Item::LEATHER_BOOTS, 0, 1)->setCustomName(TextFormat::GOLD . "Schuhe");
+        $cap = Item::get(ItemIds::LEATHER_CAP)->setCustomName(TextFormat::GOLD . "Helm");
+        $hoodie = Item::get(ItemIds::CHAIN_CHESTPLATE)->setCustomName(TextFormat::GOLD . "Brustplatte");
+        $leggings = Item::get(ItemIds::LEATHER_LEGGINGS)->setCustomName(TextFormat::GOLD . "Hose");
+        $boots = Item::get(ItemIds::LEATHER_BOOTS)->setCustomName(TextFormat::GOLD . "Schuhe");
 
         $cap->setLore([TextFormat::RED . TextFormat::BOLD . '1 ' . TextFormat::YELLOW . "Bronze"]);
         $eat->setLore([TextFormat::RED . TextFormat::BOLD . '1 ' . TextFormat::YELLOW . "Bronze"]);
@@ -55,7 +57,7 @@ class RushCategory extends ShopCategory
         $boots->addEnchantment(new EnchantmentInstance($protection));
         $hoodie->addEnchantment(new EnchantmentInstance($protection));
 
-        $variable = Item::get(Item::GLASS_PANE, 0, 1)->setCustomName("");
+        $variable = Item::get(BlockIds::GLASS_PANE)->setCustomName("");
         for ($i = 9; $i < 27; $i++)
             $contents[$i] = $variable;
 

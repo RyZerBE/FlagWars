@@ -2,7 +2,6 @@
 
 namespace matze\flagwars;
 
-use baubolp\core\provider\AsyncExecutor;
 use matze\flagwars\command\SetupCommand;
 use matze\flagwars\command\StartCommand;
 use matze\flagwars\entity\FlagEntity;
@@ -38,15 +37,14 @@ use mysqli;
 use pocketmine\entity\Entity;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
+use ryzerbe\core\util\async\AsyncExecutor;
 use ryzerbe\statssystem\provider\StatsAsyncProvider;
-use ryzerbe\statssystem\provider\StatsProvider;
-use ryzerbe\statssystem\StatsSystem;
 
 class Loader extends PluginBase {
     public const STATS_CATEGORY = "FlagWars";
 
     /** @var Loader|null */
-    private static $instance = null;
+    private static ?Loader $instance = null;
 
     public function onEnable(): void {
         self::$instance = $this;

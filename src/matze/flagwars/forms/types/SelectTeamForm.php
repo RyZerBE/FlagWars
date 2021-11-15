@@ -6,7 +6,6 @@ use jojoe77777\FormAPI\SimpleForm;
 use matze\flagwars\FlagWars;
 use matze\flagwars\forms\Form;
 use matze\flagwars\game\GameManager;
-use matze\flagwars\game\Team;
 use matze\flagwars\utils\Settings;
 use pocketmine\Player;
 
@@ -43,7 +42,6 @@ class SelectTeamForm extends Form {
             $player->sendMessage("Team selected: " . $team->getColor() . $team->getName());//todo: message
         });
         $form->setTitle("§f§lFlagWars");
-        /** @var Team $team */
         foreach ($game->getTeams() as $team) {
             $form->addButton($team->getColor() . $team->getName() . "§7[" . ($team->isFull() ? "§c" : "§e") . count($team->getPlayers()) . "§e/§c" . Settings::$players_per_team . "§7]", -1, "", $team->getName());
         }

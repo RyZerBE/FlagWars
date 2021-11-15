@@ -6,9 +6,11 @@ namespace matze\flagwars\shop\categories;
 
 use matze\flagwars\game\Team;
 use matze\flagwars\shop\ShopCategory;
+use pocketmine\block\BlockIds;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\Item;
+use pocketmine\item\ItemIds;
 use pocketmine\utils\TextFormat;
 
 class SwordCategory extends ShopCategory
@@ -18,12 +20,12 @@ class SwordCategory extends ShopCategory
     {
         $contents = $this->categoryList();
 
-        $sword1 = Item::get(Item::GOLDEN_SWORD, 0, 1)->setCustomName(TextFormat::GOLD . "Sword I");
-        $sword2 = Item::get(Item::GOLDEN_SWORD, 0, 1)->setCustomName(TextFormat::GOLD . "Sword II");
-        $sword3 = Item::get(Item::IRON_SWORD, 0, 1)->setCustomName(TextFormat::GOLD . "Sword III");
-        $woodenSword = Item::get(Item::WOODEN_SWORD, 0, 1)->setCustomName(TextFormat::GOLD . "Holzschwert");
+        $sword1 = Item::get(ItemIds::GOLDEN_SWORD)->setCustomName(TextFormat::GOLD . "Sword I");
+        $sword2 = Item::get(ItemIds::GOLDEN_SWORD)->setCustomName(TextFormat::GOLD . "Sword II");
+        $sword3 = Item::get(ItemIds::IRON_SWORD)->setCustomName(TextFormat::GOLD . "Sword III");
+        $woodenSword = Item::get(ItemIds::WOODEN_SWORD)->setCustomName(TextFormat::GOLD . "Holzschwert");
 
-        $rod = Item::get(Item::FISHING_ROD, 0, 1)->setCustomName(TextFormat::YELLOW . "Rod");
+        $rod = Item::get(ItemIds::FISHING_ROD)->setCustomName(TextFormat::YELLOW . "Rod");
 
         $sword1->setLore([TextFormat::RED . TextFormat::BOLD . '1 ' . TextFormat::YELLOW . "Iron"]);
         $sword2->setLore([TextFormat::RED . TextFormat::BOLD . '3 ' . TextFormat::YELLOW . "Iron"]);
@@ -46,7 +48,7 @@ class SwordCategory extends ShopCategory
 
         $rod->addEnchantment(new EnchantmentInstance($unbreaking));
 
-        $variable = Item::get(Item::GLASS_PANE, 0, 1)->setCustomName("");
+        $variable = Item::get(BlockIds::GLASS_PANE)->setCustomName("");
         for ($i = 9; $i < 27; $i++) {
             $contents[$i] = $variable;
         }

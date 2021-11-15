@@ -6,9 +6,11 @@ namespace matze\flagwars\shop\categories;
 
 use matze\flagwars\game\Team;
 use matze\flagwars\shop\ShopCategory;
+use pocketmine\block\BlockIds;
 use pocketmine\item\enchantment\Enchantment;
 use pocketmine\item\enchantment\EnchantmentInstance;
 use pocketmine\item\Item;
+use pocketmine\item\ItemIds;
 use pocketmine\utils\TextFormat;
 
 class ToolsCategory extends ShopCategory
@@ -17,10 +19,10 @@ class ToolsCategory extends ShopCategory
     public function getItems(?Team $team): array
     {
         $contents = $this->categoryList();
-        $shear = Item::get(Item::SHEARS, 0, 1)->setCustomName(TextFormat::GOLD."Schere");
+        $shear = Item::get(ItemIds::SHEARS)->setCustomName(TextFormat::GOLD."Schere");
         $effi = Enchantment::getEnchantment(Enchantment::EFFICIENCY);
 
-        $variable = Item::get(Item::GLASS_PANE, 0, 1)->setCustomName("");
+        $variable = Item::get(BlockIds::GLASS_PANE)->setCustomName("");
         for ($i = 9; $i < 27; $i++)
             $contents[$i] = $variable;
 
