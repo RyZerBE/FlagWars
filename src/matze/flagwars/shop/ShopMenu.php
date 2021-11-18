@@ -7,6 +7,7 @@ namespace matze\flagwars\shop;
 use matze\flagwars\FlagWars;
 use matze\flagwars\player\FlagWarsPlayer;
 use muqsit\invmenu\InvMenu;
+use muqsit\invmenu\session\PlayerManager;
 use muqsit\invmenu\transaction\InvMenuTransaction;
 use muqsit\invmenu\transaction\InvMenuTransactionResult;
 use pocketmine\block\BlockIds;
@@ -96,6 +97,7 @@ class ShopMenu
     {
         if($this->player->getPlayer() == null || !$this->player->getPlayer()->isConnected()) return;
 
+        PlayerManager::getNonNullable($this->player->getPlayer())->getNetwork()->setGraphicWaitDuration(10);
         $category = $this->getCategory();
         $this->menu->getInventory()->setContents($category->getItems($this->player->getTeam()));
         $this->menu->send($this->player->getPlayer(), $category->getCustomName());
