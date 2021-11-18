@@ -15,8 +15,12 @@ use pocketmine\item\ItemIds;
 use pocketmine\network\mcpe\protocol\PlaySoundPacket;
 use pocketmine\Player;
 use pocketmine\Server;
+use ryzerbe\core\language\LanguageProvider;
+use ryzerbe\core\provider\PartyProvider;
+use ryzerbe\core\RyZerBE;
 use ryzerbe\core\util\async\AsyncExecutor;
 use ryzerbe\core\util\ItemUtils;
+use ryzerbe\core\util\Settings;
 
 class FlagWarsPlayer {
 
@@ -251,28 +255,68 @@ class FlagWarsPlayer {
     public function load(): void
     {
         $name = $this->getPlayer()->getName();
-        AsyncExecutor::submitMySQLAsyncTask("FlagWars", function (mysqli $mysqli) use ($name) {
+        $mysqlData = Settings::$mysqlLoginData;
+        AsyncExecutor::submitMySQLAsyncTask("FlagWars", function (mysqli $mysqli) use ($name, $mysqlData) {
             $res = $mysqli->query("SELECT * FROM kits WHERE playername='$name'");
 
+            $pData = [];
             if ($res->num_rows > 0)
-                return $res->fetch_assoc();
+                $pData["kits"] = $res->fetch_assoc();
             else
                 $mysqli->query("INSERT INTO `kits`(`playername`, `selected_kit`, `kits`) VALUES ('$name', '', '')");
 
-            return null;
+
+            $coreDB = new mysqli($mysqlData["host"], $mysqlData["username"], $mysqlData["password"], "RyZerCore");
+            $party = PartyProvider::getPartyByPlayer($coreDB, $name);
+            if($party !== null) {
+                $members = PartyProvider::getPartyMembers($coreDB, $party);
+                if($members > 1){
+                    $pData["party"]["owner"] = $party;
+                    $pData["party"]["members"] = $members;
+                }
+            }
+
+            $coreDB->close();
+
+            return $pData;
         }, function (Server $server, $result) use ($name) {
             if ($result === null) return;
             $player = $server->getPlayer($name);
             if($player === null) return;
 
             $fwPlayer = FlagWars::getPlayer($player);
-            $kits = explode(";", $result["kits"]);
-            $selected_kit = $result["selected_kit"];
+            $kits = explode(";", $result["kits"]["kits"]);
+            $selected_kit = $result["kits"]["selected_kit"];
 
             if (strlen($selected_kit) > 0)
                 $fwPlayer->setKit(GameManager::getInstance()->getKit($selected_kit));
 
             $fwPlayer->setUnlockedKits($kits);
+            if(isset($loadedData["party"])) {
+                $members = $loadedData["party"]["members"];
+                $teamName = GameManager::getInstance()->partyTeam[$loadedData["party"]["owner"]] ?? null;
+                if($teamName !== null) {
+                    $team = GameManager::getInstance()->getTeam($teamName);
+                    $team?->join($fwPlayer);
+                    $fwPlayer->getPlayer()->sendMessage(RyZerBE::PREFIX.LanguageProvider::getMessageContainer("party-join-team", $fwPlayer->getPlayer(), ["#team" => $team->getColor().$team->getName()]));
+                    return;
+                }
+                $found = false;
+                foreach(GameManager::getInstance()->getTeams() as $team){
+                    if($team->isFull()) continue;
+                    if((\matze\flagwars\utils\Settings::$players_per_team - count($team->getPlayers())) < count($members)) continue;
+
+                    GameManager::getInstance()->partyTeam[$loadedData["party"]["owner"]] = $team->getName();
+                    $team->join($fwPlayer);
+                    $fwPlayer->getPlayer()->sendMessage(RyZerBE::PREFIX.LanguageProvider::getMessageContainer("party-join-team", $fwPlayer->getPlayer(), ["#team" => $team->getColor().$team->getName()]));
+                    $found = true;
+                    break;
+                }
+
+                if(!$found) {
+                    $fwPlayer->getPlayer()->sendMessage(RyZerBE::PREFIX.LanguageProvider::getMessageContainer("no-free-team-party", $fwPlayer->getPlayer()));
+                }
+            }
             $fwPlayer->getPlayer()->playSound("random.levelup", 5.0, 1.0, [$fwPlayer->getPlayer()]);
         });
     }

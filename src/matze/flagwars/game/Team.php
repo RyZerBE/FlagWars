@@ -2,10 +2,14 @@
 
 namespace matze\flagwars\game;
 
+use matze\flagwars\FlagWars;
+use matze\flagwars\player\FlagWarsPlayer;
 use matze\flagwars\utils\Settings;
 use pocketmine\level\Location;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
+use ryzerbe\core\language\LanguageProvider;
+use ryzerbe\core\player\RyZerPlayerProvider;
 
 class Team {
 
@@ -85,6 +89,20 @@ class Team {
      */
     public function isFull(): bool {
         return count($this->getPlayers()) >= Settings::$players_per_team;
+    }
+
+    /**
+     * @param FlagWarsPlayer $player
+     */
+    public function join(FlagWarsPlayer $player){
+        $rbePlayer = RyZerPlayerProvider::getRyzerPlayer($player->getPlayer());
+        if($rbePlayer === null) return;
+
+        $this->addPlayer($player->getPlayer());
+        $player->setTeam($this);
+        $player->getPlayer()->sendMessage(FlagWars::PREFIX.LanguageProvider::getMessageContainer("team-joined", $player->getPlayer()->getName(), ["#team" => $this->getColor().$this->getName()]));
+        $player->getPlayer()->setNameTag($this->getColor().$rbePlayer->getName(true));
+        $player->getPlayer()->setDisplayName($this->getColor().$rbePlayer->getName(true));
     }
 
     /**

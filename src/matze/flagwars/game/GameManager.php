@@ -61,6 +61,8 @@ class GameManager {
 
     /** @var array  */
     private array $teams = [];
+    /** @var array  */
+    public array $partyTeam = [];
 
     /**
      * @return Team[]
