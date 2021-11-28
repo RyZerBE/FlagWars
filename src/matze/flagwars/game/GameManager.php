@@ -31,6 +31,7 @@ use ryzerbe\core\util\ItemUtils;
 use ryzerbe\core\util\LocationUtils;
 use ryzerbe\core\util\Vector3Utils;
 use ryzerbe\statssystem\provider\StatsAsyncProvider;
+use function array_key_first;
 
 class GameManager {
     use InstantiableTrait;
@@ -469,7 +470,7 @@ class GameManager {
         foreach ($winners as $team) $winner = $team;
 
         if($winner === null)
-            $winner = $this->getTeams()[0];
+            $winner = $this->getTeams()[array_key_first($this->getTeams())] ?? null;
 
        /* $replay = ReplayManager::getInstance()->getReplayByLevel($this->getMap()->getSpectatorLocation()->getLevel());
         $replay->stopRecording();*/
@@ -481,10 +482,13 @@ class GameManager {
             $fwPlayer->reset();
             $fwPlayer->getLobbyItems();
 
-            $player->sendTitle($winner->getColor()."Team ".$winner->getName(), "HGW <3");
+            if($winner !== null) {
+                $player->sendTitle($winner->getColor()."Team ".$winner->getName(), "HGW <3");
+            }
+
             $player->playSound("firework.launch", 5.0, 1.0, [$player]);
             if($fwPlayer->isSpectator()) continue;
-            if($fwPlayer->getTeam()->getName() === $winner->getName()){
+            if($fwPlayer->getTeam()->getName() === $winner?->getName()){
                 CoinProvider::addCoins($player->getName(), rand(100, 300));
                 RyZerPlayerProvider::getRyzerPlayer($player->getName())->getNetworkLevel()->addProgress(50);
                 StatsAsyncProvider::appendStatistic($player->getName(), Loader::STATS_CATEGORY, "wins", 1);
