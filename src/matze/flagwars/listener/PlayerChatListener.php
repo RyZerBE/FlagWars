@@ -33,7 +33,7 @@ class PlayerChatListener implements Listener
         $fwPlayer = FlagWars::getPlayer($player);
 
         if (($ryzerPlayer = RyZerPlayerProvider::getRyzerPlayer($player->getName())) != null) {
-            if ($ryzerPlayer->getMute() === null) {
+            if ($ryzerPlayer->getMute() !== null) {
                 $event->setCancelled();
                 return;
             }
