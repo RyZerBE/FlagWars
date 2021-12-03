@@ -78,6 +78,29 @@ class PlayerInteractListener implements Listener {
                     CloudBridge::getCloudProvider()->dispatchProxyCommand($player->getName(), "hub");
                     break;
                 }
+                case "player_teleporter":
+                {
+                    if($player->hasItemCooldown($item)) return;
+                    $player->resetItemCooldown($item, 20);
+
+                    $form = new SimpleForm(function(Player $player, $data): void{
+                        if($data === null) return;
+
+                        $tpPlayer = $player->getServer()->getPlayerExact($data);
+                        if($tpPlayer === null) return;
+                        if($tpPlayer->isSpectator()) return;
+
+                        $player->teleport($tpPlayer);
+                    });
+
+                    foreach(FlagWars::getPlayers() as $gamePlayer) {
+                        if($gamePlayer->getPlayer()->isSpectator()) continue;
+                        $form->addButton($gamePlayer->getPlayer()->getDisplayName(), -1, "", $gamePlayer->getPlayer()->getName());
+                    }
+
+                    $form->sendToPlayer($player);
+                    break;
+                }
             }
         }
 
