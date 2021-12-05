@@ -2,6 +2,8 @@
 
 namespace matze\flagwars\game;
 
+use BauboLP\Cloud\CloudBridge;
+use BauboLP\Cloud\Provider\CloudProvider;
 use matze\flagwars\entity\FlagEntity;
 use matze\flagwars\entity\ShopEntity;
 use matze\flagwars\entity\SpawnerEntity;
@@ -255,6 +257,7 @@ class GameManager {
                 break;
             }
             case self::STATE_INGAME: {
+                CloudBridge::getCloudProvider()->addServerToBlackList(CloudProvider::getServer());
                 $this->startGame();
                 break;
             }

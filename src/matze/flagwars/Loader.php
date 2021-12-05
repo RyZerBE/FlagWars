@@ -2,6 +2,8 @@
 
 namespace matze\flagwars;
 
+use BauboLP\Cloud\CloudBridge;
+use BauboLP\Cloud\Provider\CloudProvider;
 use matze\flagwars\command\SetupCommand;
 use matze\flagwars\command\StartCommand;
 use matze\flagwars\entity\FlagEntity;
@@ -80,6 +82,10 @@ class Loader extends PluginBase {
             "rounds" => 0,
             "flags" => 0,
         ]);
+    }
+    
+    public function onDisable(){
+        CloudBridge::getCloudProvider()->removeServerFromBlackList(CloudProvider::getServer());
     }
 
     /**
