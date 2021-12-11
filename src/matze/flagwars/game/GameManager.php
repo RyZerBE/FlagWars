@@ -101,10 +101,8 @@ class GameManager {
         if(count($teams) <= 0) {
             return null;
         }
-        ksort($teams);
-        $teams = array_flip($teams);
-        $team = array_shift($teams);
-        return $this->getTeam($team);
+        arsort($teams);
+        return $this->getTeam(array_key_first($teams));
     }
 
     /** @var array  */

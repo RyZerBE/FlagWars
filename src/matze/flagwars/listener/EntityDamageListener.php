@@ -5,6 +5,7 @@ namespace matze\flagwars\listener;
 use matze\flagwars\FlagWars;
 use matze\flagwars\game\GameManager;
 use matze\flagwars\shop\ShopManager;
+use matze\flagwars\utils\Settings;
 use pocketmine\entity\object\PrimedTNT;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
@@ -23,6 +24,9 @@ class EntityDamageListener implements Listener {
         $game = GameManager::getInstance();
 
         if(!$game->isIngame()) {
+            if($event->getCause() === EntityDamageEvent::CAUSE_VOID) {
+                $player->teleport(Settings::$waiting_lobby_location);
+            }
             $event->setCancelled();
             return;
         }

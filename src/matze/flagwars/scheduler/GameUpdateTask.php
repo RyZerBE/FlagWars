@@ -157,7 +157,7 @@ class GameUpdateTask extends Task {
                     Scoreboard::setLine($player, 1);
                     $score = 2;
                     foreach ($game->getTeams() as $team) {
-                        Scoreboard::setLine($player, $score, ($team->isPlayer($player) ? "§l" : "") . $team->getColor() . $team->getName() . "§r §7(" . $team->getFlagsSaved() . "/" . Settings::$flag_to_win . ")");
+                        Scoreboard::setLine($player, $score, ($team->isPlayer($player) ? "●" : "○") . $team->getColor() . $team->getName() . "§r §7(" . $team->getFlagsSaved() . "/" . Settings::$flag_to_win . ")");
                         $score++;
                     }
                     Scoreboard::setLine($player, ++$score);
