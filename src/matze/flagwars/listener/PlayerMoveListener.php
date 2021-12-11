@@ -35,8 +35,12 @@ class PlayerMoveListener implements Listener {
             $team->addFlagsSaved();
             $game->setFlag(false);
             $player->playSound("random.levelup", 5.0, 1.0, [$player]);
-            CoinProvider::addCoins($player->getName(), 50);
-            RyZerPlayerProvider::getRyzerPlayer($player->getName())->getNetworkLevel()->addProgress(25);
+
+            foreach($team->getPlayers() as $teamPlayer) {
+                CoinProvider::addCoins($teamPlayer->getName(), 50);
+                RyZerPlayerProvider::getRyzerPlayer($teamPlayer->getName())->getNetworkLevel()->addProgress(25);
+            }
+
             StatsAsyncProvider::appendStatistic($player->getName(), Loader::STATS_CATEGORY, "flags", 1);
             foreach (Server::getInstance()->getOnlinePlayers() as $onlinePlayer)
                 $onlinePlayer->sendMessage(FlagWars::PREFIX.LanguageProvider::getMessageContainer('fw-flag-saved', $onlinePlayer->getName(), ["#team" => $team->getColor()."Team ".$team->getName()]));
