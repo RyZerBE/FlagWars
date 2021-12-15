@@ -40,6 +40,11 @@ class PlayerInteractListener implements Listener {
         $level = $player->getLevel();
         $name = $player->getName();
 
+        if($block->getId() === BlockIds::BEACON) {
+            $event->setCancelled();
+            return;
+        }
+
         if(!isset($this->cooldown[$name])) {
             $this->cooldown[$name] = 0;
         }
