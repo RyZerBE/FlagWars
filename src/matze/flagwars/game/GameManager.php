@@ -28,12 +28,16 @@ use pocketmine\Server;
 use pocketmine\utils\TextFormat;
 use ryzerbe\core\player\RyZerPlayerProvider;
 use ryzerbe\core\provider\CoinProvider;
+use ryzerbe\core\provider\VIPJoinProvider;
 use ryzerbe\core\util\async\AsyncExecutor;
 use ryzerbe\core\util\ItemUtils;
 use ryzerbe\core\util\LocationUtils;
 use ryzerbe\core\util\Vector3Utils;
 use ryzerbe\statssystem\provider\StatsAsyncProvider;
 use function array_key_first;
+use function array_rand;
+use function in_array;
+use function krsort;
 
 class GameManager {
     use InstantiableTrait;
@@ -255,6 +259,7 @@ class GameManager {
                 break;
             }
             case self::STATE_INGAME: {
+                VIPJoinProvider::disable();
                 CloudBridge::getCloudProvider()->addServerToBlackList(CloudProvider::getServer());
                 $this->startGame();
                 break;
@@ -345,26 +350,7 @@ class GameManager {
 
     public function loadMap(): void {
         //I hate those things....
-        $mapVotes = [];
-        $maps = [];
-        foreach ($this->getMapPool() as $mapName => $map) {
-            $mapVotes[$mapName] = 0;
-            $maps[] = $mapName;
-        }
-        foreach ($this->getPlayers() as $player) {
-            $fwPlayer = FlagWars::getPlayer($player);
-            if(!in_array($fwPlayer->getMapVote(), $maps)) continue;
-            $mapVotes[$fwPlayer->getMapVote()]++;
-        }
-        krsort($mapVotes);
-        $maps = [];
-        $index = 1;
-        foreach ($mapVotes as $map => $votes) {
-            if(!isset($maps[$index])) $maps[$index] = [];
-            $maps[$index][] = $map;
-        }
-        $topMaps = $maps[1];
-        $map = $topMaps[array_rand($topMaps)];
+        $map = $this->getTopMap();
         AsyncExecutor::submitMySQLAsyncTask("Lobby", function () use ($map): void {
             if(is_dir("worlds/" . $map)) {
                 FileUtils::delete("worlds/" . $map);
@@ -384,6 +370,29 @@ class GameManager {
                 $player->sendTitle(TextFormat::GOLD.$game->getMap()->getName());
             }
         });
+    }
+
+    public function getTopMap(): string{
+        $mapVotes = [];
+        $maps = [];
+        foreach ($this->getMapPool() as $mapName => $map) {
+            $mapVotes[$mapName] = 0;
+            $maps[] = $mapName;
+        }
+        foreach ($this->getPlayers() as $player) {
+            $fwPlayer = FlagWars::getPlayer($player);
+            if(!in_array($fwPlayer->getMapVote(), $maps)) continue;
+            $mapVotes[$fwPlayer->getMapVote()]++;
+        }
+        krsort($mapVotes);
+        $maps = [];
+        $index = 1;
+        foreach ($mapVotes as $map => $votes) {
+            if(!isset($maps[$index])) $maps[$index] = [];
+            $maps[$index][] = $map;
+        }
+        $topMaps = $maps[1];
+        return $topMaps[array_rand($topMaps)];
     }
 
     /** @var Map|null */

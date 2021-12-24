@@ -39,6 +39,7 @@ use mysqli;
 use pocketmine\entity\Entity;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
+use ryzerbe\core\provider\VIPJoinProvider;
 use ryzerbe\core\util\async\AsyncExecutor;
 use ryzerbe\statssystem\provider\StatsAsyncProvider;
 
@@ -60,6 +61,7 @@ class Loader extends PluginBase {
         $this->initListener();
         $this->initCommands();
         $this->initEntities();
+        VIPJoinProvider::enable(GameManager::getInstance()->getMaxPlayers());
 
         $this->getScheduler()->scheduleRepeatingTask(new GameUpdateTask(), 1);
 

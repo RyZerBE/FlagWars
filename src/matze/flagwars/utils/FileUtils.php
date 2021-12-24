@@ -58,8 +58,7 @@ class FileUtils {
      * @param string $destination
      */
     public static function copyAsync(string $source, string $destination): void {
-        AsyncExecutor::submitMySQLAsyncTask("Lobby",
-            function () use ($source, $destination): void {
+        AsyncExecutor::submitAsyncTask(function () use ($source, $destination): void {
                 FileUtils::copy($source, $destination);
             }
         );
@@ -69,7 +68,7 @@ class FileUtils {
      * @param string $path
      */
     public static function deleteAsync(string $path): void {
-        AsyncExecutor::submitMySQLAsyncTask("Lobby",
+        AsyncExecutor::submitAsyncTask(
             function () use ($path): void {
                 FileUtils::delete($path);
             }

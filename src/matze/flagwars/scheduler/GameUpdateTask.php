@@ -17,6 +17,7 @@ use pocketmine\scheduler\Task;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
 use ryzerbe\core\language\LanguageProvider;
+use function is_null;
 
 class GameUpdateTask extends Task {
 
@@ -81,6 +82,19 @@ class GameUpdateTask extends Task {
             case $game::STATE_WAITING: {
                 foreach (Server::getInstance()->getOnlinePlayers() as $player) {
                     if($player->isCreative()) continue;//For setup
+                    $fwPlayer = FlagWars::getPlayer($player);
+                    if($fwPlayer === null) continue;
+                    Scoreboard::sendScoreboard($player, "§r§l§fFlagWars");
+                    $score = 2;
+                    Scoreboard::setLine($player, ++$score);
+                    Scoreboard::setLine($player, ++$score, "§7○ Kit");
+                    Scoreboard::setLine($player, ++$score, "§f⇨ "."§r§a" . (is_null($fwPlayer->getKit()) ? "???" : $fwPlayer->getKit()->getName()));
+                    Scoreboard::setLine($player, ++$score, "§r§7○ Map");
+                    Scoreboard::setLine($player, ++$score, "§f⇨ "."§r§6".GameManager::getInstance()->getTopMap());
+                    Scoreboard::setLine($player, ++$score, "§r§7○ Team");
+                    Scoreboard::setLine($player, ++$score, "§f⇨ ".(($fwPlayer->getTeam() === null) ? TextFormat::RED."???" : $fwPlayer->getTeam()->getColor().$fwPlayer->getTeam()->getName()));
+                    Scoreboard::setLine($player, ++$score);
+                    Scoreboard::setLine($player, ++$score, TextFormat::AQUA."ryzer.be");
                     $player->sendTip(LanguageProvider::getMessageContainer('wait-of-players-tip', $player->getName(), ["#needed" => $missingPlayers]) . str_repeat(".", $this->points));//todo: popup
                 }
                 if($missingPlayers > 0 && !$game->isForceStart()) {
@@ -113,6 +127,21 @@ class GameUpdateTask extends Task {
                 $game->tickCountdown();
                 if($game->getCountdown() <= 0) {
                     $game->setState($game::STATE_INGAME);
+                }
+                foreach (Server::getInstance()->getOnlinePlayers() as $player) {
+                    $fwPlayer = FlagWars::getPlayer($player);
+                    if($fwPlayer === null) continue;
+                    Scoreboard::sendScoreboard($player, "§r§l§fFlagWars");
+                    $score = 2;
+                    Scoreboard::setLine($player, ++$score);
+                    Scoreboard::setLine($player, ++$score, "§7○ Kit");
+                    Scoreboard::setLine($player, ++$score, "§f⇨ "."§r§a" . (is_null($fwPlayer->getKit()) ? "???" : $fwPlayer->getKit()->getName()));
+                    Scoreboard::setLine($player, ++$score, "§r§7○ Map");
+                    Scoreboard::setLine($player, ++$score, "§f⇨ "."§r§6".GameManager::getInstance()->getTopMap());
+                    Scoreboard::setLine($player, ++$score, "§r§7○ Team");
+                    Scoreboard::setLine($player, ++$score, "§f⇨ ".(($fwPlayer->getTeam() === null) ? TextFormat::RED."???" : $fwPlayer->getTeam()->getColor().$fwPlayer->getTeam()->getName()));
+                    Scoreboard::setLine($player, ++$score);
+                    Scoreboard::setLine($player, ++$score, TextFormat::AQUA."ryzer.be");
                 }
                 break;
             }

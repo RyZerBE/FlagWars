@@ -36,7 +36,7 @@ class PlayerJoinListener implements Listener {
                 $game->addPlayer($player);
                 $fwPlayer->getLobbyItems();
                 foreach (Server::getInstance()->getOnlinePlayers() as $onlinePlayer) {
-                    $onlinePlayer->sendMessage(FlagWars::PREFIX.TextFormat::WHITE."[".TextFormat::GREEN."+".TextFormat::WHITE."] ".$player->getNameTag().TextFormat::RESET.TextFormat::GRAY."(" . count($game->getPlayers()) . "/" . $game->getMaxPlayers() . ")");//todo: message
+                    $onlinePlayer->sendMessage(FlagWars::PREFIX.TextFormat::WHITE."[".TextFormat::GREEN."+".TextFormat::WHITE."] ".$player->getDisplayName().TextFormat::RESET.TextFormat::GRAY."(" . count($game->getPlayers()) . "/" . $game->getMaxPlayers() . ")");//todo: message
                 }
                 break;
             }
