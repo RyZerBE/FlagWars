@@ -8,6 +8,7 @@ use matze\flagwars\forms\Form;
 use matze\flagwars\game\GameManager;
 use matze\flagwars\utils\Settings;
 use pocketmine\Player;
+use ryzerbe\core\language\LanguageProvider;
 
 class SelectTeamForm extends Form {
 
@@ -28,7 +29,7 @@ class SelectTeamForm extends Form {
 
             if($team->isPlayer($player)) return;
             if($team->isFull()) {
-                $player->sendMessage("Team full.");//todo: message
+                $player->sendMessage(FlagWars::PREFIX.LanguageProvider::getMessageContainer("team-full", $player->getName(), ["#team" => $team->getColor().$team->getName()]));//todo: message
                 return;
             }
             $team->addPlayer($player);
@@ -36,10 +37,8 @@ class SelectTeamForm extends Form {
             if(!is_null($pTeam)) {
                 $pTeam->removePlayer($player);
             }
-            $fwPlayer->setTeam($team);
+            $team->join($fwPlayer);
             $fwPlayer->playSound("random.orb");
-
-            $player->sendMessage("Team selected: " . $team->getColor() . $team->getName());//todo: message
         });
         $form->setTitle("§f§lFlagWars");
         foreach ($game->getTeams() as $team) {
