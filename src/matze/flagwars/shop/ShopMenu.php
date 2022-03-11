@@ -11,12 +11,14 @@ use muqsit\invmenu\session\PlayerManager;
 use muqsit\invmenu\transaction\InvMenuTransaction;
 use muqsit\invmenu\transaction\InvMenuTransactionResult;
 use pocketmine\block\BlockIds;
+use pocketmine\item\Armor;
 use pocketmine\item\Item;
 use pocketmine\item\ItemIds;
 use pocketmine\item\LeatherBoots;
 use pocketmine\item\LeatherCap;
 use pocketmine\item\LeatherPants;
 use pocketmine\item\LeatherTunic;
+use pocketmine\Player;
 use pocketmine\utils\TextFormat;
 
 class ShopMenu
@@ -35,6 +37,7 @@ class ShopMenu
             ->setName(TextFormat::RED . "REWE " . TextFormat::GRAY . "- " . TextFormat::RED . "Besser leben!")
             ->setListener(function (InvMenuTransaction $transaction): InvMenuTransactionResult {
                 $clickedItem = $transaction->getItemClicked();
+                /** @var Player $player */
                 $player = $transaction->getPlayer();
                 $itemName = TextFormat::clean($clickedItem->getCustomName());
                 $fwPlayer = FlagWars::getPlayer($player);
@@ -73,10 +76,20 @@ class ShopMenu
                         $color = ShopManager::teamColorIntoColor($teamColor);
                         $item->setCustomColor($color);
                     }
-                    if($item->getId() === BlockIds::WOOL)
-                        $item = Item::get(BlockIds::WOOL, $item->getDamage(), $item->getCount());
 
-                    $player->getInventory()->addItem($item);
+                    if($item->getId() === BlockIds::WOOL){
+                        $item = Item::get(BlockIds::WOOL, $item->getDamage(), $item->getCount());
+                    }
+
+                    if($item instanceof Armor) {
+                        if($player->getArmorInventory()->isSlotEmpty($item->getArmorSlot())) {
+                            $player->getArmorInventory()->setItem($item->getArmorSlot(), $item);
+                        } else {
+                            $player->getInventory()->addItem($item);
+                        }
+                    } else {
+                        $player->getInventory()->addItem($item);
+                    }
                     $player->playSound("note.bass", 1, 2, [$player]);
                 }else {
                     $player->playSound("note.bass", 1, 1, [$player]);

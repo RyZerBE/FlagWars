@@ -112,6 +112,8 @@ class FlagWarsPlayer {
         $player->setMaxHealth(20);
         $player->setHealth($player->getMaxHealth());
         $player->setFood($player->getMaxFood());
+        $player->setExhaustion(0.0);
+        $player->setSaturation(20.0);
         $player->setXpLevel(0);
         $player->setXpProgress(0);
         $player->setImmobile(false);

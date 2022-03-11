@@ -79,21 +79,12 @@ class FlagEntity extends Human {
                 return parent::onUpdate($currentTick);
             }
 
-           /* $this->getDataPropertyManager()->setVector3(Entity::DATA_RIDER_SEAT_POSITION, $this->getHeadPosition($carrier), 0);
-            $this->getDataPropertyManager()->setByte(Entity::DATA_CONTROLLING_RIDER_SEAT_NUMBER, 0);
-
-            $pk = new SetActorLinkPacket();
-            $pk->link = new EntityLink($carrier->id, $this->getId(), EntityLink::TYPE_RIDER, true, true);
-            $this->server->broadcastPacket(Server::getInstance()->getOnlinePlayers(), $pk);
-            $this->setPosition($carrier->add($this->getHeadPosition($carrier)));
-
-            $this->yaw = $carrier->yaw;*/
             $this->updateMovement();
 
             $kit = $fwCarrier->getKit();
             if(!is_null($kit)) {
                 if(!$kit->manipulatesFlagMovement()) {
-                    $carrier->addEffect(new EffectInstance(Effect::getEffect(Effect::SLOWNESS), 99999, 1, false));
+                    $carrier->addEffect(new EffectInstance(Effect::getEffect(Effect::SLOWNESS), 99999, 3, false));
                 }
             }
 
