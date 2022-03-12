@@ -287,8 +287,8 @@ class FlagWarsPlayer {
             if($player === null) return;
 
             $fwPlayer = FlagWars::getPlayer($player);
-            $kits = explode(";", $result["kits"]["kits"]);
-            $selected_kit = $result["kits"]["selected_kit"];
+            $kits = explode(";", $result["kits"]["kits"] ?? "");
+            $selected_kit = $result["kits"]["selected_kit"] ?? "";
 
             if (strlen($selected_kit) > 0)
                 $fwPlayer->setKit(GameManager::getInstance()->getKit($selected_kit));

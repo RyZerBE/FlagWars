@@ -24,10 +24,9 @@ class CutterKit extends Kit {
     public function getItems(Player $player): array {
         return [
             ItemUtils::addEnchantments(Item::get(ItemIds::SHEARS), [
-                Enchantment::EFFICIENCY => 5
+                Enchantment::EFFICIENCY => 3
             ])
         ];
-        #TODO: Nerf? Damage item? Maybe. #CONTENTS
     }
 
     /**

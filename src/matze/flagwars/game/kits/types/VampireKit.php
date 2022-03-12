@@ -39,8 +39,7 @@ class VampireKit extends Kit {
         $fwPlayer = FlagWars::getPlayer($player);
 
         $killer = $fwPlayer->getLastDamager();
-        if(is_null($killer)) return;
-        if(!$this->isPlayer($killer)) return;
+        if($killer === null || !$this->isPlayer($killer)) return;
         $killer->setHealth($killer->getHealth() + 5);
         $fwKiller = FlagWars::getPlayer($killer);
 

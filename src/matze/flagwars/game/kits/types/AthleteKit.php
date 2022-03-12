@@ -44,7 +44,7 @@ class AthleteKit extends Kit {
             $player->removeEffect(Effect::SLOWNESS);
             return;
         }
-        $player->addEffect(new EffectInstance(Effect::getEffect(Effect::SLOWNESS), 99999, 1, false));
+        $player->addEffect(new EffectInstance(Effect::getEffect(Effect::SLOWNESS), 99999, 3, false));
     }
 
     /**
