@@ -21,6 +21,7 @@ use pocketmine\Player;
 use pocketmine\Server;
 use pocketmine\utils\TextFormat;
 use ryzerbe\core\language\LanguageProvider;
+use ryzerbe\core\player\PMMPPlayer;
 use ryzerbe\core\util\ItemUtils;
 
 class PlayerInteractListener implements Listener {
@@ -175,8 +176,9 @@ class PlayerInteractListener implements Listener {
         }else if($action === PlayerInteractEvent::RIGHT_CLICK_AIR) {
             switch ($item->getId()) {
                 case ItemIds::GHAST_TEAR:
+                    /** @var PMMPPlayer $player */
                     $player->getInventory()->removeItem(Item::get(ItemIds::GHAST_TEAR));
-                    $player->knockBack($player, 0, $player->getDirectionVector()->getX(), $player->getDirectionVector()->getZ(), 1.6);
+                    $player->boost(1, 1.6);
                     break;
                 case BlockIds::LEVER:
                     FlagWarsProvider::createWall($player);
