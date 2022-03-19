@@ -16,6 +16,7 @@ use pocketmine\level\particle\FloatingTextParticle;
 use pocketmine\level\sound\PopSound;
 use pocketmine\math\Vector3;
 use pocketmine\nbt\tag\CompoundTag;
+use pocketmine\network\mcpe\protocol\ActorEventPacket;
 use pocketmine\Player;
 use pocketmine\Server;
 use ryzerbe\core\util\Vector3Utils;
@@ -93,6 +94,7 @@ class SpawnerEntity extends ItemEntity implements ChunkLoader {
         $spawnDelay = $this->namedtag->getInt("Delay", 10);
         $color = $this->namedtag->getString("Color", "§a");
         $item = $this->getItem();
+        $lastCount = $item->getCount();
 
         $amount = $item->getCount();
         $this->setNameTag("§r§l" . $color  . $amount);
@@ -132,7 +134,8 @@ class SpawnerEntity extends ItemEntity implements ChunkLoader {
         }
         if($collidingEntities > 0) {
             $item->setCount(0);
-            return parent::onUpdate($currentTick);
+        } elseif($lastCount !== $item->getCount()) {
+            $this->broadcastEntityEvent(ActorEventPacket::ITEM_ENTITY_MERGE, $item->getCount());
         }
         return parent::onUpdate($currentTick);
     }
